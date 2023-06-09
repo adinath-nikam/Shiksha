@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>874921514581-a7rmbhvnhfohk9jc8lb2mo1brgn9i912.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.874921514581-a7rmbhvnhfohk9jc8lb2mo1brgn9i912</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>874921514581-80k0ob7vlk8coc3m8tufar0rk56b9sci.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBDPlHIlNACtFCL7SQftcnWhMYOa6jkAaA</string>
+	<key>GCM_SENDER_ID</key>
+	<string>874921514581</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.adinath.shiksha</string>
+	<key>PROJECT_ID</key>
+	<string>trash-add22</string>
+	<key>STORAGE_BUCKET</key>
+	<string>trash-add22.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:874921514581:ios:b8fc20abbeaf7e4e6d66dc</string>
+	<key>DATABASE_URL</key>
+	<string>https://trash-add22-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
