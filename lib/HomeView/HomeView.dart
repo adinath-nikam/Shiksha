@@ -52,6 +52,8 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
 
+    getUserInfo();
+
     FirebaseDatabase.instance
         .ref('SHIKSHA_APP/EXTRAS/WOTD')
         .once()

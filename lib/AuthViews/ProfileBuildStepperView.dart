@@ -15,6 +15,8 @@ import '../Components/CommonComponentWidgets.dart';
 import '../colors/colors.dart';
 import 'package:flutter/scheduler.dart';
 
+import '../main.dart';
+
 
 class ProfileBuildStepperView extends StatefulWidget {
   @override
@@ -571,8 +573,8 @@ class _ProfileBuildStepperViewState extends State<ProfileBuildStepperView> {
 
           }).whenComplete(() {
             // Navigator.of(context).pop();
-            // Navigator.of(context)
-            //     .pushReplacement(new MaterialPageRoute(builder: (builder) => const TabView()));
+            Navigator.of(context)
+                .pushReplacement(new MaterialPageRoute(builder: (builder) => const MyApp()));
           });
 
 
