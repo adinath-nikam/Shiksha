@@ -13,6 +13,7 @@ import 'package:shiksha/firebase_options.dart';
 import 'package:shiksha/ChatGPT/utils/Chatgpt.dart';
 import 'AuthViews/SingInView.dart';
 import 'package:flutter/material.dart';
+import 'ChatGPT/page/AppOpenPage.dart';
 import 'Components/Constants.dart';
 import 'Models/ModelProfileData.dart';
 import 'colors/colors.dart';
@@ -26,24 +27,17 @@ import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await dotenv.load(fileName: ".env");
 
   await GetStorage.init();
   await ChatGPT.initChatGPT();
 
   runApp(
-    MaterialApp(
-      color: PrimaryWhiteColor,
-      debugShowCheckedModeBanner: false,
-      builder: EasyLoading.init(),
-      home: ChangeNotifierProvider(
-        create: (context) => AIChatStore(),
-        child: const MyApp(),
-      ),
-    ),
+      const MyApp(),
   );
 }
 
@@ -67,26 +61,39 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: PrimaryWhiteColor,
-        body: firebaseAuthServices.firebaseUser == null
-            ? const SignInView()
-            : StreamBuilder<ModelProfileData?>(
-                stream: getUserInfo(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasData) {
-                    return const TabView();
-                  } else if (snapshot.hasError) {
-                    return ProfileBuildStepperView();
-                  } else {
-                    return const Center(child: ErrorView());
-                  }
-                }),
+
+    return ChangeNotifierProvider(
+      create: (context) => AIChatStore(),
+      child: MaterialApp(
+        color: PrimaryWhiteColor,
+        debugShowCheckedModeBanner: false,
+        builder: EasyLoading.init(),
+        home:
+        // SplashPage(),
+        SafeArea(
+          child: Scaffold(
+            backgroundColor: PrimaryWhiteColor,
+            body: firebaseAuthServices.firebaseUser == null
+                ? const SignInView()
+                : StreamBuilder<ModelProfileData?>(
+                    stream: getUserInfo(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasData) {
+                        return const TabView();
+                      } else if (snapshot.hasError) {
+                        return ProfileBuildStepperView();
+                      } else {
+                        return const Center(child: ErrorView());
+                      }
+                    }),
+          ),
+        ),
       ),
     );
   }

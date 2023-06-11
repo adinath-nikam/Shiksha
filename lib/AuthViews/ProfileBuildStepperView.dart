@@ -324,8 +324,7 @@ class _ProfileBuildStepperViewState extends State<ProfileBuildStepperView> {
                                     builder: (context, snapshot) {
                                       List<String>? collegesList = [];
                                       Map<dynamic, dynamic> values1 = snapshot
-                                          .data
-                                          ?.snapshot
+                                          .data!.snapshot
                                           .value as Map<dynamic, dynamic>;
                                       values1.forEach((key, value) {
                                         collegesList.add(value);

@@ -83,7 +83,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final store = Provider.of<AIChatStore>(context, listen: true);
-
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
