@@ -92,6 +92,14 @@ dependencies:
   google_maps_flutter: ^2.2.5
   custom_marker: ^1.0.0
 
+  flutter_barcode_scanner: ^2.0.0
+  flutter_widget_from_html:
+  flip_card: ^0.7.0
+  xml: ^6.3.0
+
+  requests: ^4.7.0
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

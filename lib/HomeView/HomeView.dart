@@ -22,6 +22,7 @@ import '../Components/CommonComponentWidgets.dart';
 import '../Components/Constants.dart';
 import '../Components/ShowSnackBar.dart';
 import '../FirebaseServices/FirebaseService.dart';
+import '../LibraryViews/LibraryDashboardView.dart';
 import '../Models/ModelEvent.dart';
 import '../Models/ModelEventNew.dart';
 import '../colors/colors.dart';
@@ -722,7 +723,8 @@ class _HomeViewState extends State<HomeView> {
         color: PrimaryWhiteColor,
         size: 35,
       ),
-        Activity: HomePage()
+        Activity:
+        LibraryDashboardView()
     );
 
     ExpansionMenuItems item4 = ExpansionMenuItems(
