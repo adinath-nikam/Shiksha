@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import '../Components/CommonComponentWidgets.dart';
 import '../colors/colors.dart';
@@ -15,47 +14,9 @@ class LibraryIssuedBooksView extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
           backgroundColor: PrimaryWhiteColor,
-          appBar: AppBar(
-            systemOverlayStyle: SystemUiOverlayStyle.light,
-            toolbarHeight: 60,
-            automaticallyImplyLeading: false,
-            titleSpacing: 0,
-            title: Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Container(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Icon(
-                        MdiIcons.arrowLeft,
-                        color: PrimaryDarkColor,
-                        size: 30,
-                      )),
-                ),
-                const SizedBox(width: 24),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(5.0),
-                  clipBehavior: Clip.antiAlias,
-                  child: const Image(
-                    width: 30,
-                    height: 30,
-                    image: AssetImage('assets/images/1.png'),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                CustomText(
-                  text: "ISSUED BOOKS",
-                  color: PrimaryDarkColor,
-                  textSize: 20,
-                )
-              ],
-            ),
-            backgroundColor: Colors.white,
-            elevation: 0.5,
-          ),
+          appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(60.0),
+              child: customAppBar(context, "ISSUED BOOKS")),
           body: issuedBooksList.isNotEmpty
               ? Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10),

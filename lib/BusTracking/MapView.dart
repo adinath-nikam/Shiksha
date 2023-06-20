@@ -242,9 +242,7 @@ class _MapScreenViewState extends State<MapScreenView> {
             backgroundColor: PrimaryDarkColor,
             onPressed: () async {
               getUserCurrentLocation().then((value) async {
-                print(value.latitude.toString() +
-                    " " +
-                    value.longitude.toString());
+                print("${value.latitude} ${value.longitude}");
 
                 initMarker(GeoPoint(value.latitude, value.longitude) as dynamic,
                     "My Location");

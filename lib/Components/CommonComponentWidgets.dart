@@ -6,6 +6,7 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -211,5 +212,49 @@ showVersionDialog(context) async {
         ],
       );
     },
+  );
+}
+
+
+Widget customAppBar(BuildContext context, String appbarTitle){
+  return AppBar(
+    systemOverlayStyle: SystemUiOverlayStyle.light,
+    automaticallyImplyLeading: false,
+    titleSpacing: 0,
+    title: Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Container(
+              padding: const EdgeInsets.only(left: 10),
+              child: Icon(
+                MdiIcons.arrowLeft,
+                color: PrimaryDarkColor,
+                size: 30,
+              )),
+        ),
+        const SizedBox(width: 24),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(5.0),
+          clipBehavior: Clip.antiAlias,
+          child: const Image(
+            width: 30,
+            height: 30,
+            image: AssetImage('assets/images/1.png'),
+          ),
+        ),
+        const SizedBox(width: 8),
+        CustomText(
+          text: appbarTitle,
+          color: PrimaryDarkColor,
+          textSize: 20,
+        )
+      ],
+    ),
+    backgroundColor: PrimaryWhiteColor,
+    elevation: 0.5,
   );
 }

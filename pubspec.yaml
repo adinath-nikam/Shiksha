@@ -98,6 +98,7 @@ dependencies:
   xml: ^6.3.0
 
   requests: ^4.7.0
+  webview_flutter: ^4.2.2
 
 
 dev_dependencies:

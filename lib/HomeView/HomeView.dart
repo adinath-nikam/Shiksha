@@ -18,16 +18,18 @@ import 'package:shiksha/Models/ModelProfileData.dart';
 
 import '../BusTracking/MapView.dart';
 import '../ClubsViews/AddEventView.dart';
+import '../CodeCompilerViews/code_compiler_dashboard_view.dart';
 import '../Components/CommonComponentWidgets.dart';
 import '../Components/Constants.dart';
 import '../Components/ShowSnackBar.dart';
 import '../FirebaseServices/FirebaseService.dart';
-import '../LibraryViews/LibraryDashboardView.dart';
+import '../LibraryViews/library_dashboard_view.dart';
 import '../Models/ModelEvent.dart';
 import '../Models/ModelEventNew.dart';
 import '../colors/colors.dart';
 import '../NewsViews/NewsView.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 
 import 'package:http/http.dart' as http;
 
@@ -150,19 +152,6 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Future<void> fetchRecipes() async {
-    final url = Uri.parse('https://word-of-the-day2.p.rapidapi.com/word/today');
-    final response = await http.get(
-      url,
-      headers: {
-        'x-rapidapi-key': 'bda2cc3c1fmsh8559c343b9d14eap1f0bccjsn206e12df23bb',
-        'x-rapidapi-host': 'word-of-the-day2.p.rapidapi.com',
-      },
-    );
-    print(jsonDecode(response.body));
-    dynamic data = response.body;
-    print(data);
-  }
 
   Widget EventsListView() {
     return StreamBuilder<QuerySnapshot>(
@@ -640,15 +629,6 @@ class _HomeViewState extends State<HomeView> {
                         borderRadius: BorderRadius.circular(5)),
                     child:
 
-                        // Center(
-                        //     child: Text(
-                        //   '$i',
-                        //   style: TextStyle(
-                        //       fontSize: 16.0,
-                        //       fontFamily: "ProductSans-Bold",
-                        //       color: PrimaryWhiteColor),
-                        // ))
-
                         ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
                       child: Image.network(
@@ -695,25 +675,25 @@ class _HomeViewState extends State<HomeView> {
 
   Widget ExpansionMenu(BuildContext context, var emojiParser) {
     ExpansionMenuItems item1 = ExpansionMenuItems(
-        title: "AI BOT",
+        title: "AI Bot",
         img: Icon(
           Icons.adb_outlined,
           color: PrimaryWhiteColor,
           size: 35,
         ),
-      Activity: HomePage()
+      Activity: const HomePage()
 
     );
 
-    // ExpansionMenuItems item2 = ExpansionMenuItems(
-    //   title: "News",
-    //   img: Icon(
-    //     Icons.newspaper_outlined,
-    //     color: PrimaryWhiteColor,
-    //     size: 35,
-    //   ),
-    //     Activity: NewsView()
-    // );
+    ExpansionMenuItems item2 = ExpansionMenuItems(
+      title: "Compiler",
+      img: Icon(
+        MdiIcons.codeTags,
+        color: PrimaryWhiteColor,
+        size: 35,
+      ),
+        Activity: const CodeCompilerDashBoard()
+    );
 
 
     ExpansionMenuItems item3 = ExpansionMenuItems(
@@ -724,7 +704,7 @@ class _HomeViewState extends State<HomeView> {
         size: 35,
       ),
         Activity:
-        LibraryDashboardView()
+        LibraryDashboardView(appUserUSN: modelProfileData.getStudentUSN)
     );
 
     ExpansionMenuItems item4 = ExpansionMenuItems(
@@ -739,9 +719,9 @@ class _HomeViewState extends State<HomeView> {
 
     List<ExpansionMenuItems> ExpansionMenuItemsList = [
       item1,
-      // item2,
-      item4,
+      item2,
       item3,
+      item4,
     ];
 
     return Column(
@@ -752,7 +732,7 @@ class _HomeViewState extends State<HomeView> {
             child: Card(
               color: PrimaryDarkColor,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(10),
               ),
               child: Column(
                 children: <Widget>[
@@ -797,7 +777,7 @@ class _HomeViewState extends State<HomeView> {
                                         padding: EdgeInsets.all(10),
                                         decoration: BoxDecoration(
                                           borderRadius:
-                                              BorderRadius.circular(24.0),
+                                              BorderRadius.circular(10),
                                           color:
                                               PrimaryWhiteColor.withAlpha(50),
                                         ),
