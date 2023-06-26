@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import '../Components/CommonComponentWidgets.dart';
+import '../Components/common_component_widgets.dart';
 import '../colors/colors.dart';
 
 class LibraryHistoryView extends StatelessWidget {
@@ -15,7 +15,7 @@ class LibraryHistoryView extends StatelessWidget {
         child: Scaffold(
             appBar: PreferredSize(
                 preferredSize: const Size.fromHeight(60.0),
-                child: customAppBar(context, "HISTORY")),
+                child: appBarCommon(context, "HISTORY")),
             body: libraryBooksIssueHistory != null
                 ? Center(
                     child: SingleChildScrollView(
@@ -27,10 +27,10 @@ class LibraryHistoryView extends StatelessWidget {
                     ),
                   )
                 : Center(
-                    child: CustomText(
+                    child: customTextBold(
                         text: 'No Books Circulation...',
                         textSize: 18,
-                        color: PrimaryDarkColor),
+                        color: primaryDarkColor),
                   )));
   }
 }

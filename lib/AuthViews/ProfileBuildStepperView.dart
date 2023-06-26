@@ -6,12 +6,12 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shiksha/Components/Constants.dart';
-import 'package:shiksha/FirebaseServices/FirebaseService.dart';
-import 'package:shiksha/HomeView/TabView.dart';
+import 'package:shiksha/Components/constants.dart';
+import 'package:shiksha/FirebaseServices/firebase_service.dart';
+import 'package:shiksha/HomeView/main_tab_view.dart';
 import 'package:shiksha/Models/ModelProfileData.dart';
 
-import '../Components/CommonComponentWidgets.dart';
+import '../Components/common_component_widgets.dart';
 import '../colors/colors.dart';
 import 'package:flutter/scheduler.dart';
 
@@ -101,7 +101,7 @@ class _ProfileBuildStepperViewState extends State<ProfileBuildStepperView> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: PrimaryWhiteColor,
+        backgroundColor: primaryWhiteColor,
         body: Container(
           padding: const EdgeInsets.symmetric(vertical: 0),
           child: Column(
@@ -109,10 +109,10 @@ class _ProfileBuildStepperViewState extends State<ProfileBuildStepperView> {
               const SizedBox(
                 height: 50,
               ),
-              CustomText(
+              customTextBold(
                   text: "Let's Build Your Profile!",
                   textSize: 26,
-                  color: PrimaryDarkColor),
+                  color: primaryDarkColor),
               const SizedBox(
                 height: 20,
               ),
@@ -120,7 +120,7 @@ class _ProfileBuildStepperViewState extends State<ProfileBuildStepperView> {
                 child: Theme(
                   data: ThemeData(
                       colorScheme:
-                      ColorScheme.light(primary: PrimaryDarkColor)),
+                      ColorScheme.light(primary: primaryDarkColor)),
                   child: Form(
                     key: _formKey,
                     child: Stepper(
@@ -132,14 +132,14 @@ class _ProfileBuildStepperViewState extends State<ProfileBuildStepperView> {
                       onStepCancel: cancel,
                       steps: <Step>[
                         Step(
-                          title: CustomText(
+                          title: customTextBold(
                               text: "Personal Details",
                               textSize: 15,
-                              color: PrimaryDarkColor),
-                          subtitle: CustomText(
+                              color: primaryDarkColor),
+                          subtitle: customTextBold(
                               text: "Username, USN, Phone, D.O.B",
                               textSize: 10,
-                              color: PrimaryDarkColor.withAlpha(100)),
+                              color: primaryDarkColor.withAlpha(100)),
                           content: Column(
                             children: <Widget>[
                               Column(
@@ -161,7 +161,7 @@ class _ProfileBuildStepperViewState extends State<ProfileBuildStepperView> {
                                         ),
                                         filled: true,
                                         fillColor:
-                                        PrimaryDarkColor.withOpacity(0.1),
+                                        primaryDarkColor.withOpacity(0.1),
                                       ),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
@@ -192,7 +192,7 @@ class _ProfileBuildStepperViewState extends State<ProfileBuildStepperView> {
                                         ),
                                         filled: true,
                                         fillColor:
-                                        PrimaryDarkColor.withOpacity(0.1),
+                                        primaryDarkColor.withOpacity(0.1),
                                       ),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
@@ -223,7 +223,7 @@ class _ProfileBuildStepperViewState extends State<ProfileBuildStepperView> {
                                         ),
                                         filled: true,
                                         fillColor:
-                                        PrimaryDarkColor.withOpacity(0.1),
+                                        primaryDarkColor.withOpacity(0.1),
                                       ),
                                       validator: (value) {
                                         if (value==null || value.isEmpty) {
@@ -258,7 +258,7 @@ class _ProfileBuildStepperViewState extends State<ProfileBuildStepperView> {
                                         ),
                                         filled: true,
                                         fillColor:
-                                        PrimaryDarkColor.withOpacity(0.1),
+                                        primaryDarkColor.withOpacity(0.1),
                                       ),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
@@ -278,14 +278,14 @@ class _ProfileBuildStepperViewState extends State<ProfileBuildStepperView> {
                               : StepState.disabled,
                         ),
                         Step(
-                          title: CustomText(
+                          title: customTextBold(
                               text: "Gender",
                               textSize: 15,
-                              color: PrimaryDarkColor),
-                          subtitle: CustomText(
+                              color: primaryDarkColor),
+                          subtitle: customTextBold(
                               text: "Select Gender",
                               textSize: 10,
-                              color: PrimaryDarkColor.withAlpha(100)),
+                              color: primaryDarkColor.withAlpha(100)),
                           content: Row(
                             children: <Widget>[
                               CustomRadioButton("Male", 1),
@@ -299,19 +299,19 @@ class _ProfileBuildStepperViewState extends State<ProfileBuildStepperView> {
                               : StepState.disabled,
                         ),
                         Step(
-                          title: CustomText(
+                          title: customTextBold(
                               text: "College Details",
                               textSize: 15,
-                              color: PrimaryDarkColor),
-                          subtitle: CustomText(
+                              color: primaryDarkColor),
+                          subtitle: customTextBold(
                               text: "College, Branch, Semester",
                               textSize: 10,
-                              color: PrimaryDarkColor.withAlpha(100)),
+                              color: primaryDarkColor.withAlpha(100)),
                           content: Column(
                             children: <Widget>[
                               Container(
                                 decoration: BoxDecoration(
-                                    color: PrimaryDarkColor.withAlpha(100),
+                                    color: primaryDarkColor.withAlpha(100),
                                     borderRadius: BorderRadius.circular(10)),
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 10, horizontal: 20),
@@ -336,18 +336,18 @@ class _ProfileBuildStepperViewState extends State<ProfileBuildStepperView> {
 
                                           underline: SizedBox(),
                                           // value: dropdownValue,
-                                          hint: CustomText(
+                                          hint: customTextBold(
                                               text: COLLEGE_DROPDOWN_INTIAL_VALUE,
                                               textSize: 12,
-                                              color: PrimaryDarkColor),
-                                          dropdownColor: PrimaryDarkColor,
+                                              color: primaryDarkColor),
+                                          dropdownColor: primaryDarkColor,
                                           icon: const Icon(
                                             Icons.arrow_drop_down_circle,
                                           ),
                                           iconSize: 30,
                                           elevation: 16,
                                           style: TextStyle(
-                                              color: PrimaryDarkColor),
+                                              color: primaryDarkColor),
                                           onChanged: (String? newValue) {
                                             setState(() {
                                               COLLEGE_DROPDOWN_INTIAL_VALUE = newValue!;
@@ -362,7 +362,7 @@ class _ProfileBuildStepperViewState extends State<ProfileBuildStepperView> {
                                                   child: Text(
                                                     value,
                                                     style: TextStyle(
-                                                        color: PrimaryWhiteColor),
+                                                        color: primaryWhiteColor),
                                                   ),
                                                 );
                                               }).toList(),
@@ -377,7 +377,7 @@ class _ProfileBuildStepperViewState extends State<ProfileBuildStepperView> {
                               ),
                               Container(
                                 decoration: BoxDecoration(
-                                    color: PrimaryDarkColor.withAlpha(100),
+                                    color: primaryDarkColor.withAlpha(100),
                                     borderRadius: BorderRadius.circular(10)),
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 10, horizontal: 20),
@@ -404,18 +404,18 @@ class _ProfileBuildStepperViewState extends State<ProfileBuildStepperView> {
 
                                           underline: SizedBox(),
                                           // value: dropdownValue,
-                                          hint: CustomText(
+                                          hint: customTextBold(
                                               text: BRANCH_DROPDOWN_INTIAL_VALUE,
                                               textSize: 12,
-                                              color: PrimaryDarkColor),
-                                          dropdownColor: PrimaryDarkColor,
+                                              color: primaryDarkColor),
+                                          dropdownColor: primaryDarkColor,
                                           icon: const Icon(
                                             Icons.arrow_drop_down_circle,
                                           ),
                                           iconSize: 30,
                                           elevation: 16,
                                           style: TextStyle(
-                                              color: PrimaryDarkColor),
+                                              color: primaryDarkColor),
                                           onChanged: (String? newValue) {
                                             setState(() {
                                               BRANCH_DROPDOWN_INTIAL_VALUE = newValue!;
@@ -430,7 +430,7 @@ class _ProfileBuildStepperViewState extends State<ProfileBuildStepperView> {
                                                   child: Text(
                                                     value,
                                                     style: TextStyle(
-                                                        color: PrimaryWhiteColor),
+                                                        color: primaryWhiteColor),
                                                   ),
                                                 );
                                               }).toList(),
@@ -445,7 +445,7 @@ class _ProfileBuildStepperViewState extends State<ProfileBuildStepperView> {
                               ),
                               Container(
                                 decoration: BoxDecoration(
-                                    color: PrimaryDarkColor.withAlpha(100),
+                                    color: primaryDarkColor.withAlpha(100),
                                     borderRadius: BorderRadius.circular(10)),
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 10, horizontal: 20),
@@ -472,18 +472,18 @@ class _ProfileBuildStepperViewState extends State<ProfileBuildStepperView> {
 
                                           underline: const SizedBox(),
                                           // value: dropdownValue,
-                                          hint: CustomText(
+                                          hint: customTextBold(
                                               text: SEMESTER_DROPDOWN_INTIAL_VALUE,
                                               textSize: 12,
-                                              color: PrimaryDarkColor),
-                                          dropdownColor: PrimaryDarkColor,
+                                              color: primaryDarkColor),
+                                          dropdownColor: primaryDarkColor,
                                           icon: const Icon(
                                             Icons.arrow_drop_down_circle,
                                           ),
                                           iconSize: 30,
                                           elevation: 16,
                                           style: TextStyle(
-                                              color: PrimaryDarkColor),
+                                              color: primaryDarkColor),
                                           onChanged: (String? newValue) {
                                             setState(() {
                                               SEMESTER_DROPDOWN_INTIAL_VALUE = newValue!;
@@ -498,7 +498,7 @@ class _ProfileBuildStepperViewState extends State<ProfileBuildStepperView> {
                                                   child: Text(
                                                     value,
                                                     style: TextStyle(
-                                                        color: PrimaryWhiteColor),
+                                                        color: primaryWhiteColor),
                                                   ),
                                                 );
                                               }).toList(),
@@ -598,8 +598,8 @@ class _ProfileBuildStepperViewState extends State<ProfileBuildStepperView> {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: (value == index)
-              ? PrimaryDarkColor
-              : PrimaryDarkColor.withAlpha(100),
+              ? primaryDarkColor
+              : primaryDarkColor.withAlpha(100),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
         onPressed: () {
@@ -612,8 +612,8 @@ class _ProfileBuildStepperViewState extends State<ProfileBuildStepperView> {
           text,
           style: TextStyle(
             color: (value == index)
-                ? PrimaryWhiteColor
-                : PrimaryDarkColor.withAlpha(100),
+                ? primaryWhiteColor
+                : primaryDarkColor.withAlpha(100),
           ),
         ),
       ),

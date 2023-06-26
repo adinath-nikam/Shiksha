@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import '../colors/colors.dart';
-import 'CommonComponentWidgets.dart';
-import 'ShowSnackBar.dart';
+import 'common_component_widgets.dart';
 
 class AuthButtons extends StatelessWidget {
   final String buttonText;
@@ -47,13 +46,13 @@ Widget CustomButton(
     width: double.infinity,
     child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: PrimaryDarkColor,
+          backgroundColor: primaryDarkColor,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
         onPressed: () async {
           final connectivityResult = await Connectivity().checkConnectivity();
           if (connectivityResult == ConnectivityResult.none) {
-            showSnackBar(context, "You're not Connected to Internet.", PrimaryRedColor);
+            showSnackBar(context, "You're not Connected to Internet.", primaryRedColor);
           } else {
             if(activity != null){
               Navigator.of(context).push(MaterialPageRoute(builder: (builder)=> activity));
@@ -62,7 +61,7 @@ Widget CustomButton(
             }
           }
         },
-        child: CustomText(text: text, textSize: 14, color: PrimaryWhiteColor)),
+        child: customTextBold(text: text, textSize: 14, color: primaryWhiteColor)),
   );
 }
 
@@ -78,13 +77,13 @@ Widget CustomDeleteButton(
     width: double.infinity,
     child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: PrimaryRedColor,
+          backgroundColor: primaryRedColor,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
         onPressed: () async {
           final connectivityResult = await Connectivity().checkConnectivity();
           if (connectivityResult == ConnectivityResult.none) {
-            showSnackBar(context, "You're not Connected to Internet.", PrimaryRedColor);
+            showSnackBar(context, "You're not Connected to Internet.", primaryRedColor);
           } else {
             if(activity != null){
               Navigator.of(context).push(MaterialPageRoute(builder: (builder)=> activity));
@@ -97,11 +96,11 @@ Widget CustomDeleteButton(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CustomText(text: text, textSize: 14, color: PrimaryWhiteColor),
-            SizedBox(width: 20,),
+            customTextBold(text: text, textSize: 14, color: primaryWhiteColor),
+            const SizedBox(width: 20,),
             Icon(
-              MdiIcons.delete,
-              color: PrimaryWhiteColor,
+              Icons.delete,
+              color: primaryWhiteColor,
             )
           ],
         )),

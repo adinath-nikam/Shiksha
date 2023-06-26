@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import '../Components/CommonComponentWidgets.dart';
+import '../Components/common_component_widgets.dart';
 import '../colors/colors.dart';
 
 class LibraryFinesView extends StatelessWidget {
@@ -12,10 +12,10 @@ class LibraryFinesView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          backgroundColor: PrimaryWhiteColor,
+          backgroundColor: primaryWhiteColor,
           appBar: PreferredSize(
               preferredSize: const Size.fromHeight(60.0),
-              child: customAppBar(context, "FINES")),
+              child: appBarCommon(context, "FINES")),
           body: booksFinesList.isNotEmpty
               ? Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -25,49 +25,49 @@ class LibraryFinesView extends StatelessWidget {
                 key: ValueKey(booksFinesList[index]['issuedBookTitle']),
                 margin: const EdgeInsets.symmetric(
                     vertical: 10, horizontal: 15),
-                color: PrimaryDarkColor.withOpacity(0.8),
+                color: primaryDarkColor.withOpacity(0.8),
                 elevation: 5,
                 child: ListTile(
                   contentPadding: const EdgeInsets.all(10),
                   leading: Icon(
                     MdiIcons.book,
                     size: 40,
-                    color: PrimaryWhiteColor,
+                    color: primaryWhiteColor,
                   ),
-                  title: CustomTextRegular(
+                  title: customTextRegular(
                       text:
                       "${booksFinesList[index]['finedBokTitle']}",
                       textSize: 18,
-                      color: PrimaryWhiteColor),
+                      color: primaryWhiteColor),
                   subtitle: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Divider(
                         height: 30,
-                        color: PrimaryWhiteColor,
+                        color: primaryWhiteColor,
                       ),
-                      CustomTextRegular(
+                      customTextRegular(
                           text:
                           "Issue Date:\t\t\t${booksFinesList[index]['finedBookIssueDate']}",
                           textSize: 14,
-                          color: PrimaryWhiteColor),
+                          color: primaryWhiteColor),
                       const SizedBox(
                         height: 5,
                       ),
-                      CustomTextRegular(
+                      customTextRegular(
                           text:
                           "Due Date:\t\t\t${booksFinesList[index]['finedBookIssueDate']}",
                           textSize: 14,
-                          color: PrimaryWhiteColor),
+                          color: primaryWhiteColor),
                       Divider(
                         height: 30,
-                        color: PrimaryWhiteColor,
+                        color: primaryWhiteColor,
                       ),
                       Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
-                          color: PrimaryWhiteColor,
+                          color: primaryWhiteColor,
                         ),
                         padding: const EdgeInsets.symmetric(
                             vertical: 8, horizontal: 8),
@@ -75,10 +75,10 @@ class LibraryFinesView extends StatelessWidget {
                           children: [
                             Icon(
                               MdiIcons.currencyRupee,
-                              color: PrimaryRedColor,
+                              color: primaryRedColor,
                             ),
                             const SizedBox(width: 10,),
-                            CustomText(text: booksFinesList[index]['finedBookAmount'], textSize: 18, color: PrimaryRedColor)
+                            customTextBold(text: booksFinesList[index]['finedBookAmount'], textSize: 18, color: primaryRedColor)
                           ],
                         ),
                       ),
@@ -86,7 +86,7 @@ class LibraryFinesView extends StatelessWidget {
                       Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
-                          color: PrimaryWhiteColor,
+                          color: primaryWhiteColor,
                         ),
                         padding: const EdgeInsets.symmetric(
                             vertical: 8, horizontal: 8),
@@ -94,10 +94,10 @@ class LibraryFinesView extends StatelessWidget {
                           children: [
                             Icon(
                               MdiIcons.bookmarkCheckOutline,
-                              color: PrimaryDarkColor,
+                              color: primaryDarkColor,
                             ),
                             const SizedBox(width: 10,),
-                            CustomText(text: booksFinesList[index]['finedBookStatus'], textSize: 18, color: PrimaryRedColor)
+                            customTextBold(text: booksFinesList[index]['finedBookStatus'], textSize: 18, color: primaryRedColor)
                           ],
                         ),
                       ),
@@ -108,10 +108,10 @@ class LibraryFinesView extends StatelessWidget {
             ),
           )
               : Center(
-            child: CustomText(
+            child: customTextBold(
                 text: 'No Fined Books...',
                 textSize: 18,
-                color: PrimaryDarkColor),
+                color: primaryDarkColor),
           )),
     );
   }

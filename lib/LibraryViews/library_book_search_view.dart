@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:requests/requests.dart';
-import '../Components/CommonComponentWidgets.dart';
+import '../Components/common_component_widgets.dart';
 import '../colors/colors.dart';
 import 'package:collection/collection.dart';
 import 'package:html/parser.dart' show parse;
@@ -57,8 +57,8 @@ class _LibraryBookSearchViewState extends State<LibraryBookSearchView> {
       context: context,
       builder: (context) {
         return AlertDialog(
-            title: CustomText(
-                text: 'Search by', textSize: 18, color: PrimaryDarkColor),
+            title: customTextBold(
+                text: 'Search by', textSize: 18, color: primaryDarkColor),
             content: StatefulBuilder(
               builder: (BuildContext context,
                   void Function(void Function()) setState) {
@@ -69,10 +69,10 @@ class _LibraryBookSearchViewState extends State<LibraryBookSearchView> {
                       mainAxisSize: MainAxisSize.min,
                       children: _listSearchByOptions
                           .map((option) => RadioListTile(
-                                title: CustomTextRegular(
+                                title: customTextRegular(
                                     text: option.searchByOptionTitle,
                                     textSize: 14,
-                                    color: PrimaryDarkColor),
+                                    color: primaryDarkColor),
                                 value: option.searchByOptionTitle,
                                 onChanged: (value) {
                                   setState(() {
@@ -143,7 +143,7 @@ class _LibraryBookSearchViewState extends State<LibraryBookSearchView> {
         child: Scaffold(
             appBar: PreferredSize(
                 preferredSize: const Size.fromHeight(60.0),
-                child: customAppBar(context, "SEARCH BOOKS")),
+                child: appBarCommon(context, "SEARCH BOOKS")),
             body: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Column(
@@ -157,35 +157,35 @@ class _LibraryBookSearchViewState extends State<LibraryBookSearchView> {
                       controller: textController,
                       decoration: InputDecoration(
                         prefixIcon: Container(
-                          color: PrimaryDarkColor,
+                          color: primaryDarkColor,
                           padding: const EdgeInsets.all(8.0),
                           margin: const EdgeInsets.only(right: 10),
                           child: IconButton(
-                            color: PrimaryDarkColor,
+                            color: primaryDarkColor,
                             onPressed: () {
                               searchByOptionsDialog(context);
                             },
                             tooltip: 'Search by',
                             icon: Icon(
                               MdiIcons.sort,
-                              color: PrimaryWhiteColor,
+                              color: primaryWhiteColor,
                             ),
                           ),
                         ),
                         border: const OutlineInputBorder(),
                         hintText: 'Search Books here...',
                         suffixIcon: Container(
-                            color: PrimaryDarkColor,
+                            color: primaryDarkColor,
                             padding: const EdgeInsets.all(8.0),
                             child: IconButton(
-                              color: PrimaryDarkColor,
+                              color: primaryDarkColor,
                               onPressed: () {
                                 searchBook(textController.text.toString());
                               },
                               tooltip: 'Search',
                               icon: Icon(
                                 MdiIcons.magnify,
-                                color: PrimaryWhiteColor,
+                                color: primaryWhiteColor,
                               ),
                             )),
                       ),
@@ -200,20 +200,20 @@ class _LibraryBookSearchViewState extends State<LibraryBookSearchView> {
                                   listBookSearchResult[index]['bookTitle']),
                               margin: const EdgeInsets.symmetric(
                                   vertical: 10, horizontal: 15),
-                              color: PrimaryDarkColor.withOpacity(0.8),
+                              color: primaryDarkColor.withOpacity(0.8),
                               elevation: 5,
                               child: ListTile(
                                 contentPadding: const EdgeInsets.all(10),
                                 leading: Icon(
                                   MdiIcons.book,
                                   size: 40,
-                                  color: PrimaryWhiteColor,
+                                  color: primaryWhiteColor,
                                 ),
-                                title: CustomTextRegular(
+                                title: customTextRegular(
                                     text:
                                         "${listBookSearchResult[index]['bookTitle']}",
                                     textSize: 18,
-                                    color: PrimaryWhiteColor),
+                                    color: primaryWhiteColor),
                                 subtitle: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -226,11 +226,11 @@ class _LibraryBookSearchViewState extends State<LibraryBookSearchView> {
                                       style: TextStyle(
                                           fontStyle: FontStyle.italic,
                                           fontSize: 12,
-                                          color: PrimaryWhiteColor),
+                                          color: primaryWhiteColor),
                                     ),
                                     Divider(
                                       height: 30,
-                                      color: PrimaryWhiteColor,
+                                      color: primaryWhiteColor,
                                     ),
                                     Row(
                                       children: [
@@ -238,11 +238,11 @@ class _LibraryBookSearchViewState extends State<LibraryBookSearchView> {
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(5),
-                                            color: PrimaryWhiteColor,
+                                            color: primaryWhiteColor,
                                           ),
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 8, horizontal: 8),
-                                          child: CustomText(
+                                          child: customTextBold(
                                               text: listBookSearchResult[index]
                                                           ['bookAvailability']
                                                       .toString()
@@ -251,14 +251,14 @@ class _LibraryBookSearchViewState extends State<LibraryBookSearchView> {
                                                   ? 'AVAILABLE'
                                                   : 'UNAVAILABLE',
                                               textSize: 10,
-                                              color: PrimaryDarkColor),
+                                              color: primaryDarkColor),
                                         ),
                                         const SizedBox(
                                           width: 10,
                                         ),
                                         Icon(
                                           MdiIcons.arrowRightThick,
-                                          color: PrimaryWhiteColor,
+                                          color: primaryWhiteColor,
                                         ),
                                         const SizedBox(
                                           width: 10,
@@ -267,11 +267,11 @@ class _LibraryBookSearchViewState extends State<LibraryBookSearchView> {
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(5),
-                                            color: PrimaryWhiteColor,
+                                            color: primaryWhiteColor,
                                           ),
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 8, horizontal: 8),
-                                          child: CustomText(
+                                          child: customTextBold(
                                               text: listBookSearchResult[index]
                                                           ['bookLibrary']
                                                       .toString()
@@ -281,7 +281,7 @@ class _LibraryBookSearchViewState extends State<LibraryBookSearchView> {
                                                   ? 'CENTRAL LIBRARY'
                                                   : 'STUDENT LENDING LIBRARY',
                                               textSize: 10,
-                                              color: PrimaryDarkColor),
+                                              color: primaryDarkColor),
                                         ),
                                       ],
                                     ),
@@ -293,10 +293,10 @@ class _LibraryBookSearchViewState extends State<LibraryBookSearchView> {
                         )
                       : Container(
                           margin: const EdgeInsets.all(100),
-                          child: CustomText(
+                          child: customTextBold(
                               text: searchResultText,
                               textSize: 18,
-                              color: PrimaryDarkColor),
+                              color: primaryDarkColor),
                         )
                 ],
               ),

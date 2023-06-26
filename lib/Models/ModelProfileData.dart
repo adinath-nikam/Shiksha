@@ -5,10 +5,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiksha/AuthViews/ProfileBuildStepperView.dart';
-import 'package:shiksha/FirebaseServices/FirebaseService.dart';
-import 'package:shiksha/HomeView/HomeView.dart';
+import 'package:shiksha/FirebaseServices/firebase_service.dart';
+import 'package:shiksha/HomeView/home_view.dart';
+import 'package:shiksha/Models/utilty_shared_preferences.dart';
 
-import '../HomeView/TabView.dart';
+import '../HomeView/main_tab_view.dart';
+import 'model_user_data.dart';
 
 final FirebaseAuthServices firebaseAuthServices = FirebaseAuthServices();
 
@@ -193,7 +195,6 @@ class ModelProfileData {
 }
 
 
-// Retrieve User Data from Firebase RTDB and Stream
 late ModelProfileData modelProfileData;
 
 Stream<ModelProfileData?> getUserInfo() {
@@ -202,3 +203,5 @@ Stream<ModelProfileData?> getUserInfo() {
     return modelProfileData = ModelProfileData.fromJson(event.snapshot.value as Map<dynamic, dynamic>);
   });
 }
+
+

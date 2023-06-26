@@ -7,9 +7,9 @@ import 'package:shiksha/LibraryViews/library_fines_view.dart';
 import 'package:shiksha/LibraryViews/library_history_view.dart';
 import 'package:shiksha/LibraryViews/library_issued_books_view.dart';
 import 'package:syncfusion_flutter_barcodes/barcodes.dart';
-import '../BusTracking/MapView.dart';
-import '../ChatGPT/page/HomePage.dart';
-import '../Components/CommonComponentWidgets.dart';
+import '../BusTracking/bus_track_map_view.dart';
+import '../ChatGPT/page/chat_gpt_home_Page.dart';
+import '../Components/common_component_widgets.dart';
 import '../colors/colors.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:html/parser.dart' show parse;
@@ -228,17 +228,17 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
       child: Scaffold(
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(60.0),
-            child: customAppBar(context, "LIBRARY")),
+            child: appBarCommon(context, "LIBRARY")),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
             barcodeScan();
           },
-          label: CustomText(
-              text: "Scan ID", textSize: 16, color: PrimaryWhiteColor),
-          backgroundColor: PrimaryDarkColor,
+          label: customTextBold(
+              text: "Scan ID", textSize: 16, color: primaryWhiteColor),
+          backgroundColor: primaryDarkColor,
           icon: Icon(
             MdiIcons.barcodeScan,
-            color: PrimaryWhiteColor,
+            color: primaryWhiteColor,
           ),
         ),
         body: FutureBuilder<bool>(
@@ -265,11 +265,11 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: PrimaryDarkColor,
+                            color: primaryDarkColor,
                           ),
                           padding: EdgeInsets.all(2),
                           child: Card(
-                            color: PrimaryWhiteColor,
+                            color: primaryWhiteColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -294,7 +294,7 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
                                       errorWidget: (context, url, error) =>
                                           Icon(
                                         MdiIcons.alertCircleOutline,
-                                        color: PrimaryWhiteColor,
+                                        color: primaryWhiteColor,
                                       ),
                                     ),
                                   ),
@@ -327,23 +327,23 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
                                             decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(10.0),
-                                              color: PrimaryDarkColor.withAlpha(
+                                              color: primaryDarkColor.withAlpha(
                                                   50),
                                             ),
                                             padding: EdgeInsets.symmetric(
                                                 vertical: 5, horizontal: 10),
-                                            child: CustomText(
+                                            child: customTextBold(
                                                 text: category,
                                                 textSize: 14,
-                                                color: PrimaryDarkColor),
+                                                color: primaryDarkColor),
                                           ),
                                           SizedBox(
                                             height: 10,
                                           ),
-                                          CustomText(
+                                          customTextBold(
                                               text: username,
                                               textSize: 22,
-                                              color: PrimaryDarkColor),
+                                              color: primaryDarkColor),
                                           const SizedBox(
                                             height: 20,
                                           ),
@@ -373,11 +373,11 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: PrimaryDarkColor,
+                            color: primaryDarkColor,
                           ),
                           padding: EdgeInsets.all(2),
                           child: Card(
-                            color: PrimaryWhiteColor,
+                            color: primaryWhiteColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -391,15 +391,15 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
                                     children: [
                                       Icon(
                                         MdiIcons.schoolOutline,
-                                        color: PrimaryDarkColor,
+                                        color: primaryDarkColor,
                                       ),
                                       SizedBox(
                                         width: 10,
                                       ),
-                                      CustomText(
+                                      customTextBold(
                                           text: stream,
                                           textSize: 16,
-                                          color: PrimaryDarkColor)
+                                          color: primaryDarkColor)
                                     ],
                                   ),
                                   SizedBox(
@@ -409,15 +409,15 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
                                     children: [
                                       Icon(
                                         MdiIcons.emailOutline,
-                                        color: PrimaryDarkColor,
+                                        color: primaryDarkColor,
                                       ),
                                       SizedBox(
                                         width: 10,
                                       ),
-                                      CustomText(
+                                      customTextBold(
                                           text: email,
                                           textSize: 16,
-                                          color: PrimaryDarkColor)
+                                          color: primaryDarkColor)
                                     ],
                                   ),
                                   SizedBox(
@@ -427,15 +427,15 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
                                     children: [
                                       Icon(
                                         MdiIcons.phone,
-                                        color: PrimaryDarkColor,
+                                        color: primaryDarkColor,
                                       ),
                                       SizedBox(
                                         width: 10,
                                       ),
-                                      CustomText(
+                                      customTextBold(
                                           text: phone,
                                           textSize: 16,
-                                          color: PrimaryDarkColor)
+                                          color: primaryDarkColor)
                                     ],
                                   ),
                                   SizedBox(
@@ -445,35 +445,35 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
                                     children: [
                                       Icon(
                                         MdiIcons.humanMale,
-                                        color: PrimaryDarkColor,
+                                        color: primaryDarkColor,
                                       ),
                                       SizedBox(
                                         width: 10,
                                       ),
-                                      CustomText(
+                                      customTextBold(
                                           text: gender,
                                           textSize: 16,
-                                          color: PrimaryDarkColor)
+                                          color: primaryDarkColor)
                                     ],
                                   ),
                                   Divider(
                                     height: 50,
-                                    color: PrimaryDarkColor,
+                                    color: primaryDarkColor,
                                   ),
                                   Row(
                                     children: [
                                       Icon(
                                         MdiIcons.currencyRupee,
-                                        color: PrimaryRedColor,
+                                        color: primaryRedColor,
                                         size: 30,
                                       ),
                                       SizedBox(
                                         width: 10,
                                       ),
-                                      CustomText(
+                                      customTextBold(
                                           text: fine,
                                           textSize: 30,
-                                          color: PrimaryRedColor)
+                                          color: primaryRedColor)
                                     ],
                                   ),
                                 ],
@@ -501,7 +501,7 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
         title: "SEARCH",
         img: Icon(
           MdiIcons.bookSearchOutline,
-          color: PrimaryWhiteColor,
+          color: primaryWhiteColor,
           size: 25,
         ),
         Activity: LibraryBookSearchView());
@@ -510,7 +510,7 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
         title: "FINES",
         img: Icon(
           MdiIcons.currencyRupee,
-          color: PrimaryWhiteColor,
+          color: primaryWhiteColor,
           size: 25,
         ),
         Activity: LibraryFinesView(
@@ -521,7 +521,7 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
         title: "BOOKS",
         img: Icon(
           MdiIcons.bookshelf,
-          color: PrimaryWhiteColor,
+          color: primaryWhiteColor,
           size: 25,
         ),
         Activity: LibraryIssuedBooksView(
@@ -532,7 +532,7 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
         title: "HISTORY",
         img: Icon(
           MdiIcons.history,
-          color: PrimaryWhiteColor,
+          color: primaryWhiteColor,
           size: 25,
         ),
         Activity: LibraryHistoryView(
@@ -544,7 +544,7 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
         title: "ABOUT",
         img: Icon(
           MdiIcons.informationVariant,
-          color: PrimaryWhiteColor,
+          color: primaryWhiteColor,
           size: 25,
         ),
         Activity: MapScreenView());
@@ -580,7 +580,7 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
-                        color: PrimaryDarkColor,
+                        color: primaryDarkColor,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -589,10 +589,10 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
                           data.img,
 
                           //SizedBox(height: 12.0,),
-                          CustomText(
+                          customTextBold(
                               text: data.title,
                               textSize: 14,
-                              color: PrimaryWhiteColor)
+                              color: primaryWhiteColor)
                         ],
                       ),
                     ),

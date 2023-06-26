@@ -1,0 +1,781 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
+import 'package:flutter_emoji/flutter_emoji.dart';
+import 'package:intl/intl.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:shiksha/Admin/admin_view.dart';
+import 'package:shiksha/Models/ModelProfileData.dart';
+import 'package:shiksha/Models/model_user_data.dart';
+import '../BusTracking/bus_track_map_view.dart';
+import '../CodeCompilerViews/code_compiler_dashboard_view.dart';
+import '../Components/common_component_widgets.dart';
+import '../Components/constants.dart';
+import '../FirebaseServices/firebase_service.dart';
+import '../LibraryViews/library_dashboard_view.dart';
+import '../Models/model_event.dart';
+import '../colors/colors.dart';
+import '../ChatGPT/page/chat_gpt_home_Page.dart';
+
+class HomeView extends StatefulWidget {
+  const HomeView({Key? key}) : super(key: key);
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  final FirebaseAuthServices firebaseAuthServices = FirebaseAuthServices();
+  var emojiParser = EmojiParser();
+
+  String word = 'Loading..', pos = 'Loading..', mean = 'Loading..';
+  late final Map wordOfTheDay;
+
+  @override
+  void initState() {
+    super.initState();
+
+    getUserInfo();
+
+    FirebaseDatabase.instance
+        .ref('SHIKSHA_APP/EXTRAS/WOTD')
+        .once()
+        .then((value) {
+      wordOfTheDay = value.snapshot.value as Map;
+
+      setState(() {
+        word = wordOfTheDay['WORD'];
+        pos = wordOfTheDay['POS'];
+        mean = wordOfTheDay['MEANING'];
+      });
+    });
+
+    // fetchRecipes();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+        child: Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            // MainHomeCarouselSlider(
+            //     EnlargeCenterCard: true, InfiniteScroll: true),
+            campaignListView(),
+            expansionMenu(context, emojiParser),
+
+            getWordOfTheDay(),
+
+            Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                child: customTextBold(
+                    text: "Upcoming Events",
+                    textSize: 16,
+                    color: primaryDarkColor)),
+            SizedBox(height: 150, child: eventsListView()),
+            recentJobPosting(),
+            const SizedBox(
+              height: 25,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: modelUserData.getUserIsAdmin
+          ? FloatingActionButton.extended(
+              elevation: 0.0,
+              icon: const Icon(Icons.admin_panel_settings),
+              backgroundColor: primaryGreenColor,
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (builder) => const AdminView()),
+                );
+              },
+              label: customTextBold(
+                  text: "Admin", textSize: 14, color: primaryWhiteColor),
+            )
+          : null,
+    ));
+  }
+
+  Widget getWordOfTheDay() {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        color: primaryDarkColor.withAlpha(50),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          customTextBold(
+              text: 'Word of the Day!🌻',
+              textSize: 12,
+              color: primaryDarkColor),
+          const SizedBox(
+            height: 10,
+          ),
+          customTextBold(text: "“ $word ”", textSize: 24, color: primaryDarkColor),
+          customTextBold(text: pos, textSize: 10, color: primaryDarkColor),
+          const SizedBox(
+            height: 10,
+          ),
+          customTextBold(text: mean, textSize: 14, color: primaryDarkColor),
+        ],
+      ),
+    );
+  }
+
+  Widget eventsListView() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection(DB_ROOT_NAME)
+          .doc(EVENTS_CONSTANT)
+          .collection(modelUserData.getUserCollege)
+          .limit(10)
+          .orderBy('eventStartDate', descending: true)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              backgroundColor: primaryWhiteColor,
+            ),
+          );
+        } else if (snapshot.hasData && snapshot.data != null) {
+          return ListView(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            children: snapshot.data!.docs
+                .map((data) => eventListViewItem(context, data))
+                .toList(),
+          );
+        } else if (snapshot.data == null) {
+          return Center(
+            child: customTextBold(
+                text: "No Recent Events",
+                textSize: 20,
+                color: primaryDarkColor),
+          );
+        } else {
+          return const Text("Error");
+        }
+      },
+    );
+  }
+
+  Widget eventListViewItem(BuildContext context, DocumentSnapshot data) {
+    final ModelEventNew modelEvent = ModelEventNew.fromSnapshot(data);
+
+    return Padding(
+        key: ValueKey(modelEvent.eventName),
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: GestureDetector(
+          onTap: () =>
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+            ModelEventNew e = ModelEventNew.fromData(
+                modelEvent.id,
+                modelEvent.userId,
+                modelEvent.eventName,
+                modelEvent.eventStartDate,
+                modelEvent.eventStartTime,
+                modelEvent.eventVenue,
+                modelEvent.eventDescription,
+                modelEvent.eventInstructions,
+                modelEvent.eventGoogleFormLink,
+                modelEvent.eventPostedDate,
+                modelEvent.eventClub);
+            return e;
+          })),
+          child: calenderCardItem(modelEvent),
+        ));
+  }
+
+  Widget calenderCardItem(ModelEventNew modelEvent) {
+    final startDate =
+        DateFormat("yyyy-MM-dd").parse(modelEvent.eventStartDate!);
+    final postedDate =
+        DateFormat("yyyy-MM-dd").parse(modelEvent.eventPostedDate!);
+
+    final monthString = DateFormat('MMMM').format(startDate);
+    final dayString = DateFormat('EEE').format(startDate);
+    final dayNumber = DateFormat('dd').format(startDate);
+
+    final postedYearNumber = DateFormat('yyyy').format(postedDate);
+
+    return Row(
+      children: [
+        const SizedBox(
+          width: 15,
+        ),
+        SizedBox(
+          height: 120,
+          width: 120,
+          child: Card(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(10), bottom: Radius.zero),
+                    color: primaryDarkColor,
+                  ),
+                  width: double.maxFinite,
+                  height: 30,
+                  child: Center(
+                      child: customTextBold(
+                          text: monthString,
+                          textSize: 14,
+                          color: primaryWhiteColor)),
+                ),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    child: Column(
+                      children: [
+                        customTextBold(
+                            text: dayString,
+                            textSize: 12,
+                            color: primaryDarkColor),
+                        customTextBold(
+                            text: dayNumber,
+                            textSize: 20,
+                            color: primaryDarkColor),
+                        customTextBold(
+                            text: postedYearNumber,
+                            textSize: 12,
+                            color: primaryDarkColor),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 8,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.vertical(
+                        top: Radius.zero, bottom: Radius.circular(10)),
+                    color: primaryDarkColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  //***********
+  Widget campaignListView() {
+    return StreamBuilder<QuerySnapshot>(
+      stream:
+          FirebaseFirestore.instance.collection("CAMPAIGNS_DATA").snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const SizedBox();
+        } else if (snapshot.hasData) {
+          return CarouselSlider.builder(
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (BuildContext context, a, b) {
+                if ((snapshot.data!.docs[a].data()
+                    as Map<String, dynamic>)['isActive']) {
+                  return Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: const EdgeInsets.only(right: 10),
+                    decoration: BoxDecoration(
+                        color: primaryDarkColor,
+                        borderRadius: BorderRadius.circular(5)),
+                    child: GestureDetector(
+                      onTap: () {
+                        try {
+                          launch((snapshot.data!.docs[a].data()
+                                  as Map<String, dynamic>)['campaignURL']
+                              .toString());
+                        } catch (e) {
+                          debugPrint(e.toString());
+                        }
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: CachedNetworkImage(
+                          imageUrl: (snapshot.data!.docs[a].data()
+                                  as Map<String, dynamic>)['campaignImgURL']
+                              .toString(),
+                          fit: BoxFit.fill,
+                          progressIndicatorBuilder: (context, url,
+                                  downloadProgress) =>
+                              const Center(child: CircularProgressIndicator()),
+                          errorWidget: (context, url, error) => Icon(
+                            MdiIcons.alertCircleOutline,
+                            color: primaryWhiteColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
+                  return const SizedBox();
+                }
+              },
+              options: CarouselOptions(
+                height: 150,
+                aspectRatio: 16 / 9,
+                viewportFraction: 0.8,
+                initialPage: 0,
+                enableInfiniteScroll: true,
+                reverse: false,
+                autoPlay: true,
+                autoPlayInterval: const Duration(seconds: 8),
+                autoPlayAnimationDuration: const Duration(milliseconds: 1000),
+                autoPlayCurve: Curves.fastOutSlowIn,
+                enlargeCenterPage: true,
+                scrollDirection: Axis.horizontal,
+              ));
+        } else {
+          return const SizedBox();
+        }
+      },
+    );
+  }
+
+  //***********
+
+  Widget recentJobPosting() {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: customTextBold(
+                        text: "Recent Posts",
+                        textSize: 16,
+                        color: primaryDarkColor))),
+          ],
+        ),
+        Container(
+          margin: const EdgeInsets.only(left: 15, right: 10),
+          child: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection(DB_ROOT_NAME)
+                .doc(WORK_CONSTANTS)
+                .collection(WORK_CONSTANTS_OFFCAMPUS)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const SizedBox();
+              } else if (snapshot.hasData) {
+                return CarouselSlider.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (BuildContext context, a, b) {
+                      return Padding(
+                          key: ValueKey((snapshot.data!.docs[a].data()
+                                  as Map<String, dynamic>)['workTitle']
+                              .toString()),
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              color: primaryWhiteColor,
+                              elevation: 5,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 20),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                          child: Image.network(
+                                            (snapshot.data!.docs[a].data()
+                                                        as Map<String,
+                                                            dynamic>)[
+                                                    'workImageURL']
+                                                .toString(),
+                                            fit: BoxFit.fitWidth,
+                                            height: 55,
+                                            width: 55,
+                                            loadingBuilder:
+                                                (BuildContext context,
+                                                    Widget child,
+                                                    ImageChunkEvent?
+                                                        loadingProgress) {
+                                              if (loadingProgress == null) {
+                                                return child;
+                                              }
+                                              return Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  value: loadingProgress
+                                                              .expectedTotalBytes !=
+                                                          null
+                                                      ? loadingProgress
+                                                              .cumulativeBytesLoaded /
+                                                          loadingProgress
+                                                              .expectedTotalBytes!
+                                                      : null,
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 20,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            customTextBold(
+                                                text: (snapshot.data!.docs[a]
+                                                                .data()
+                                                            as Map<String,
+                                                                dynamic>)[
+                                                        'workTitle']
+                                                    .toString(),
+                                                textSize: 14,
+                                                color: primaryDarkColor),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            customTextBold(
+                                                text: (snapshot.data!.docs[a]
+                                                                .data()
+                                                            as Map<String,
+                                                                dynamic>)[
+                                                        'workCompanyName']
+                                                    .toString(),
+                                                textSize: 12,
+                                                color: primaryDarkColor
+                                                    .withOpacity(0.5)),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            customTextBold(
+                                                text: (snapshot.data!.docs[a]
+                                                                .data()
+                                                            as Map<String,
+                                                                dynamic>)[
+                                                        'workCompensation']
+                                                    .toString(),
+                                                textSize: 10,
+                                                color: primaryDarkColor),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5.0),
+                                            color:
+                                                primaryDarkColor.withAlpha(50),
+                                          ),
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 5, horizontal: 5),
+                                          child: customTextBold(
+                                              text: (snapshot.data!.docs[a]
+                                                          .data()
+                                                      as Map<String,
+                                                          dynamic>)['workType']
+                                                  .toString(),
+                                              textSize: 12,
+                                              color: primaryDarkColor),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              )));
+                    },
+                    options: CarouselOptions(
+                      padEnds: false,
+                      height: 170,
+                      // aspectRatio: 21 / 9,
+                      viewportFraction: 0.6,
+                      initialPage: 0,
+                      enableInfiniteScroll: false,
+                      reverse: false,
+                      autoPlay: false,
+                      autoPlayInterval: const Duration(seconds: 8),
+                      autoPlayAnimationDuration:
+                          const Duration(milliseconds: 1000),
+                      autoPlayCurve: Curves.fastOutSlowIn,
+                      enlargeCenterPage: false,
+                      scrollDirection: Axis.horizontal,
+                    ));
+              } else {
+                return const SizedBox();
+              }
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget recentClubPostCarouselSlider(
+      {required bool enlargeCenterCard, required bool infiniteScroll}) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: customTextBold(
+                        text: "Recent Posts",
+                        textSize: 16,
+                        color: primaryDarkColor))),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton.icon(
+                      onPressed: () {},
+                      icon: Icon(
+                        MdiIcons.playCircleOutline,
+                        color: primaryLightBlueColor,
+                      ),
+                      label: customTextBold(
+                          text: "See all",
+                          textSize: 12,
+                          color: primaryLightBlueColor)),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        CarouselSlider(
+            items: [1, 2].map((i) {
+              return Builder(
+                builder: (BuildContext context) {
+                  return Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: const EdgeInsets.only(right: 10, left: 20),
+                    decoration: BoxDecoration(
+                        color: primaryDarkColor,
+                        borderRadius: BorderRadius.circular(5)),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: Image.network(
+                        "https://images.unsplash.com/photo-1679473379899-20654f983d1e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1172&q=80",
+                        fit: BoxFit.fill,
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes!
+                                  : null,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  );
+                },
+              );
+            }).toList(),
+            options: CarouselOptions(
+              padEnds: false,
+              height: 120,
+              // aspectRatio: 21 / 9,
+              viewportFraction: 0.6,
+              initialPage: 0,
+              enableInfiniteScroll: false,
+              reverse: false,
+              autoPlay: false,
+              autoPlayInterval: const Duration(seconds: 8),
+              autoPlayAnimationDuration: const Duration(milliseconds: 1000),
+              autoPlayCurve: Curves.fastOutSlowIn,
+              enlargeCenterPage: enlargeCenterCard,
+              scrollDirection: Axis.horizontal,
+            )),
+      ],
+    );
+  }
+
+  Widget expansionMenu(BuildContext context, var emojiParser) {
+    ExpansionMenuItems item1 = ExpansionMenuItems(
+        title: "AI Bot",
+        img: Icon(
+          Icons.adb_outlined,
+          color: primaryWhiteColor,
+          size: 35,
+        ),
+        activity: const HomePage());
+
+    ExpansionMenuItems item2 = ExpansionMenuItems(
+        title: "Compiler",
+        img: Icon(
+          MdiIcons.codeTags,
+          color: primaryWhiteColor,
+          size: 35,
+        ),
+        activity: const CodeCompilerDashBoard());
+
+    ExpansionMenuItems item3 = ExpansionMenuItems(
+        title: "Library",
+        img: Icon(
+          Icons.book,
+          color: primaryWhiteColor,
+          size: 35,
+        ),
+        activity: LibraryDashboardView(appUserUSN: modelUserData.getUserUSN));
+
+    ExpansionMenuItems item4 = ExpansionMenuItems(
+        title: "Track Bus",
+        img: Icon(
+          MdiIcons.busMarker,
+          color: primaryWhiteColor,
+          size: 35,
+        ),
+        activity: const MapScreenView());
+
+    List<ExpansionMenuItems> expansionMenuItemsList = [
+      item1,
+      item2,
+      item3,
+      item4,
+    ];
+
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          child: Card(
+            color: primaryDarkColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  child: ExpansionTile(
+                    initiallyExpanded: true,
+                    trailing: Icon(
+                      MdiIcons.menu,
+                      color: primaryWhiteColor,
+                    ),
+                    title: Align(
+                        alignment: Alignment.centerLeft,
+                        child: customTextBold(
+                            text: "Menu",
+                            textSize: 16,
+                            color: primaryWhiteColor)),
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          children: <Widget>[
+                            GridView.count(
+                                shrinkWrap: true,
+                                childAspectRatio: 1.0,
+                                crossAxisCount: 3,
+                                crossAxisSpacing: 15,
+                                mainAxisSpacing: 20,
+                                children: expansionMenuItemsList.map((data) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (builder) =>
+                                                  data.activity));
+                                    },
+                                    child: Container(
+                                      height: 150.0,
+                                      width: 150.0,
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: primaryWhiteColor.withAlpha(50),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: <Widget>[
+                                          // Text(
+                                          //   emojiParser.emojify(':bus:'),
+                                          //   style: TextStyle(fontSize: 24),
+                                          // ),
+
+                                          data.img,
+
+                                          //SizedBox(height: 12.0,),
+                                          customTextBold(
+                                              text: data.title,
+                                              textSize: 14,
+                                              color: primaryWhiteColor)
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }).toList())
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+      ],
+    );
+  }
+}
+
+class ExpansionMenuItems {
+  late String title;
+  late Icon img;
+  late Widget activity;
+
+  ExpansionMenuItems(
+      {required this.title, required this.img, required this.activity});
+}

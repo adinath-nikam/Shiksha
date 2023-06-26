@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import '../Components/CommonComponentWidgets.dart';
+import '../Components/common_component_widgets.dart';
 import '../colors/colors.dart';
 
 class LibraryIssuedBooksView extends StatelessWidget {
@@ -13,10 +13,10 @@ class LibraryIssuedBooksView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          backgroundColor: PrimaryWhiteColor,
+          backgroundColor: primaryWhiteColor,
           appBar: PreferredSize(
               preferredSize: const Size.fromHeight(60.0),
-              child: customAppBar(context, "ISSUED BOOKS")),
+              child: appBarCommon(context, "ISSUED BOOKS")),
           body: issuedBooksList.isNotEmpty
               ? Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -26,20 +26,20 @@ class LibraryIssuedBooksView extends StatelessWidget {
                       key: ValueKey(issuedBooksList[index]['issuedBookTitle']),
                       margin: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 15),
-                      color: PrimaryDarkColor.withOpacity(0.8),
+                      color: primaryDarkColor.withOpacity(0.8),
                       elevation: 5,
                       child: ListTile(
                         contentPadding: const EdgeInsets.all(10),
                         leading: Icon(
                           MdiIcons.book,
                           size: 40,
-                          color: PrimaryWhiteColor,
+                          color: primaryWhiteColor,
                         ),
-                        title: CustomTextRegular(
+                        title: customTextRegular(
                             text:
                                 "${issuedBooksList[index]['issuedBookTitle']}",
                             textSize: 18,
-                            color: PrimaryWhiteColor),
+                            color: primaryWhiteColor),
                         subtitle: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,41 +52,41 @@ class LibraryIssuedBooksView extends StatelessWidget {
                               style: TextStyle(
                                   fontStyle: FontStyle.italic,
                                   fontSize: 12,
-                                  color: PrimaryWhiteColor),
+                                  color: primaryWhiteColor),
                             ),
                             Divider(
                               height: 30,
-                              color: PrimaryWhiteColor,
+                              color: primaryWhiteColor,
                             ),
-                            CustomTextRegular(
+                            customTextRegular(
                                 text:
                                     "Issue Date:\t\t\t${issuedBooksList[index]['bookIssueDate']}",
                                 textSize: 14,
-                                color: PrimaryWhiteColor),
+                                color: primaryWhiteColor),
                             const SizedBox(
                               height: 5,
                             ),
-                            CustomTextRegular(
+                            customTextRegular(
                                 text:
                                     "Due Date:\t\t\t${issuedBooksList[index]['bookDueDate']}",
                                 textSize: 14,
-                                color: PrimaryWhiteColor),
+                                color: primaryWhiteColor),
                             Divider(
                               height: 30,
-                              color: PrimaryWhiteColor,
+                              color: primaryWhiteColor,
                             ),
                             Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
-                                color: PrimaryWhiteColor,
+                                color: primaryWhiteColor,
                               ),
                               padding: const EdgeInsets.symmetric(
                                   vertical: 8, horizontal: 8),
-                              child: CustomText(
+                              child: customTextBold(
                                   text: issuedBooksList[index]
                                       ['issuedBookLibrary'],
                                   textSize: 10,
-                                  color: PrimaryDarkColor),
+                                  color: primaryDarkColor),
                             ),
                           ],
                         ),
@@ -95,10 +95,10 @@ class LibraryIssuedBooksView extends StatelessWidget {
                   ),
                 )
               : Center(
-                  child: CustomText(
+                  child: customTextBold(
                       text: 'No Issued Books...',
                       textSize: 18,
-                      color: PrimaryDarkColor),
+                      color: primaryDarkColor),
                 )),
     );
   }

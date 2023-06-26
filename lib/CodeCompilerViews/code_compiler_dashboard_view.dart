@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../Components/common_component_widgets.dart';
+
 
 class CodeCompilerDashBoard extends StatefulWidget {
   const CodeCompilerDashBoard({Key? key}) : super(key: key);
@@ -10,6 +12,7 @@ class CodeCompilerDashBoard extends StatefulWidget {
 }
 
 class _CodeCompilerDashBoardState extends State<CodeCompilerDashBoard> {
+
 
   WebViewController controller = WebViewController();
 
@@ -22,7 +25,7 @@ class _CodeCompilerDashBoardState extends State<CodeCompilerDashBoard> {
     controller.runJavaScript("document.getElementsByClassName('header')[0].style.display='none';");
     controller.setNavigationDelegate(
         NavigationDelegate(
-            onPageFinished                    : (String url){
+            onPageFinished:(String url){
               controller.runJavaScript("document.getElementsByClassName('header')[0].style.display='none';");
             }
         ));
@@ -33,6 +36,9 @@ class _CodeCompilerDashBoardState extends State<CodeCompilerDashBoard> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(60.0),
+            child: appBarCommon(context, "COMPILER")),
         body: WebViewWidget(controller: controller,
         ),
       ),
