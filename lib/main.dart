@@ -5,6 +5,7 @@ import 'package:shiksha/Components/AuthButtons.dart';
 import 'package:shiksha/Components/common_component_widgets.dart';
 import 'package:shiksha/HomeView/main_tab_view.dart';
 import 'package:shiksha/Models/model_user_data.dart';
+import 'package:shiksha/Models/model_work.dart';
 import 'package:shiksha/Models/utilty_shared_preferences.dart';
 import 'package:shiksha/firebase_options.dart';
 import 'package:shiksha/ChatGPT/utils/chat_gpt.dart';
@@ -18,16 +19,49 @@ import 'package:get_storage/get_storage.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
-void main() async {
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+
+  print("Handling a background message: ${message.messageId}");
+}
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await dotenv.load(fileName: ".env");
-
   await GetStorage.init();
   await ChatGPT.initChatGPT();
 
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  print('User granted permission: ${settings.authorizationStatus}');
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print('Got a message whilst in the foreground!');
+    print('Message data: ${message.data}');
+
+    if (message.notification != null) {
+      print('Message also contained a notification: ${message.notification}');
+    }
+  });
+  
   runApp(
     const MyApp(),
   );
@@ -53,14 +87,6 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  Future<bool> checkIfUserDataExist() async {
-    if (await UtilitySharedPreferences().check('SP_SHIKSHA_USER_DATA')) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -74,22 +100,21 @@ class _MyAppState extends State<MyApp> {
               backgroundColor: primaryWhiteColor,
               body: firebaseAuthServices.firebaseUser == null
                   ? const SignInView()
-                  : FutureBuilder(
-                      future: getUserData(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<ModelUserData> snapshot) {
-                        if (!snapshot.hasData) {
-                          return Center(
-                              child: CircularProgressIndicator(
-                            color: primaryDarkColor,
-                          ));
-                        } else if (snapshot.data != null) {
-                          return const TabView();
-                        } else {
-                          return const CollegeSelectView();
-                        }
-                      },
-                    )),
+                  : StreamBuilder<ModelUserData?>(
+                  stream: getUserData(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasData) {
+                      return const TabView();
+                    } else if (snapshot.hasError) {
+                      print(snapshot.hasError);
+                      return const CollegeSelectView();
+                    } else {
+                      return const Center(child: ErrorView());
+                    }
+                  }),
+          ),
         ),
       ),
     );

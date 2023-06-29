@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shiksha/Components/common_component_widgets.dart';
+import 'package:shiksha/Models/model_user_data.dart';
 import 'package:shiksha/colors/colors.dart';
 import 'campaign_view.dart';
 
@@ -154,10 +155,11 @@ class _AppUsersState extends State<AppUsers> {
                         shrinkWrap: true,
                         itemCount: snapshot.data!.snapshot.children.length,
                         itemBuilder: (context, index) {
+                          print(snapshot.data!.snapshot.value as dynamic);
                           return ListTile(
                             title: ExpansionTile(
                               title: customTextBold(
-                                  text: list[index]['StudentUID'],
+                                  text: list[index]['userUID'],
                                   textSize: 14,
                                   color: primaryDarkColor),
                               children: [
@@ -171,35 +173,34 @@ class _AppUsersState extends State<AppUsers> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                            "Username: $list[index]['StudentUsername']"),
+                                            "USN: ${list[index]['userUSN']}"),
                                         Text(
-                                            "Email: $list[index]['StudentEmail']"),
+                                            "College: ${list[index]['userCollege']}"),
                                         Text(
-                                            "Branch: $list[index]['StudentBranch']"),
+                                            "Stream: ${list[index]['userStream']}"),
                                         Text(
-                                            "Semester: $list[index]['StudentSemester']"),
-                                        Text(
-                                            "Phone: $list[index]['StudentPhone']"),
+                                            "Semester: ${list[index]['userSemester']}"),
                                         Row(
                                           children: [
                                             Text(
-                                                "Can Post Event: ${list[index]['CanPostEvent']}"),
+                                                "Can Post Event: ${list[index]['userCanPostEvent']}"),
                                             StatefulBuilder(builder:
                                                 (BuildContext context,
                                                     StateSetter setState) {
                                               return Center(
                                                 child: Switch(
                                                   value: list[index]
-                                                      ['CanPostEvent'],
+                                                      ['userCanPostEvent'],
                                                   onChanged: (value) {
                                                     setState(() {
                                                       FirebaseDatabase.instance
                                                           .ref(
                                                               "SHIKSHA_APP/USERS_DATA")
                                                           .child(list[index]
-                                                              ['StudentUID'])
+                                                              ['userUID'])
                                                           .update({
-                                                        'CanPostEvent': value
+                                                        'userCanPostEvent':
+                                                            value
                                                       });
                                                     });
                                                   },
@@ -214,23 +215,23 @@ class _AppUsersState extends State<AppUsers> {
                                         Row(
                                           children: [
                                             Text(
-                                                "Can Post Job: ${list[index]['CanPostJob']}"),
+                                                "Can Post Job: ${list[index]['userCanPostJob']}"),
                                             StatefulBuilder(builder:
                                                 (BuildContext context,
                                                     StateSetter setState) {
                                               return Center(
                                                 child: Switch(
                                                   value: list[index]
-                                                      ['CanPostJob'],
+                                                      ['userCanPostJob'],
                                                   onChanged: (value) {
                                                     setState(() {
                                                       FirebaseDatabase.instance
                                                           .ref(
                                                               "SHIKSHA_APP/USERS_DATA")
                                                           .child(list[index]
-                                                              ['StudentUID'])
+                                                              ['userUID'])
                                                           .update({
-                                                        'CanPostJob': value
+                                                        'userCanPostJob': value
                                                       });
                                                     });
                                                   },
@@ -245,22 +246,23 @@ class _AppUsersState extends State<AppUsers> {
                                         Row(
                                           children: [
                                             Text(
-                                                "Is Admin: ${list[index]['IsAdmin']}"),
+                                                "Is Admin: ${list[index]['userIsAdmin']}"),
                                             StatefulBuilder(builder:
                                                 (BuildContext context,
                                                     StateSetter setState) {
                                               return Center(
                                                 child: Switch(
-                                                  value: list[index]['IsAdmin'],
+                                                  value: list[index]
+                                                      ['userIsAdmin'],
                                                   onChanged: (value) {
                                                     setState(() {
                                                       FirebaseDatabase.instance
                                                           .ref(
                                                               "SHIKSHA_APP/USERS_DATA")
                                                           .child(list[index]
-                                                              ['StudentUID'])
+                                                              ['userUID'])
                                                           .update({
-                                                        'IsAdmin': value
+                                                        'userIsAdmin': value
                                                       });
                                                     });
                                                   },

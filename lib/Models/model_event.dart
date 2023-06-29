@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:shiksha/Models/model_user_data.dart';
 
 
 import '../Components/AuthButtons.dart';
@@ -236,7 +237,7 @@ class ModelEventNewState extends State<ModelEventNew> {
 
 
               if (widget.userId == firebaseAuthServices.firebaseUser?.uid ||
-                  modelProfileData.getIsAdmin)
+                  modelUserData.getUserIsAdmin)
                 CustomDeleteButton(
                     text: "DELETE",
                     buttonHeight: 60,
@@ -245,7 +246,7 @@ class ModelEventNewState extends State<ModelEventNew> {
                       FirebaseFirestore.instance
                           .collection(DB_ROOT_NAME)
                           .doc(EVENTS_CONSTANT)
-                          .collection(modelProfileData.getStudentCollege)
+                          .collection(modelUserData.getUserCollege)
                           .doc(widget.id)
                           .delete()
                           .whenComplete(() {

@@ -4,17 +4,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
-import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shiksha/Admin/admin_view.dart';
-import 'package:shiksha/Models/ModelProfileData.dart';
 import 'package:shiksha/Models/model_user_data.dart';
 import '../BusTracking/bus_track_map_view.dart';
 import '../CodeCompilerViews/code_compiler_dashboard_view.dart';
 import '../Components/common_component_widgets.dart';
 import '../Components/constants.dart';
-import '../FirebaseServices/firebase_service.dart';
 import '../LibraryViews/library_dashboard_view.dart';
 import '../Models/model_event.dart';
 import '../colors/colors.dart';
@@ -28,9 +25,6 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  final FirebaseAuthServices firebaseAuthServices = FirebaseAuthServices();
-  var emojiParser = EmojiParser();
-
   String word = 'Loading..', pos = 'Loading..', mean = 'Loading..';
   late final Map wordOfTheDay;
 
@@ -38,7 +32,7 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
 
-    getUserInfo();
+    getUserData();
 
     FirebaseDatabase.instance
         .ref('SHIKSHA_APP/EXTRAS/WOTD')
@@ -52,8 +46,6 @@ class _HomeViewState extends State<HomeView> {
         mean = wordOfTheDay['MEANING'];
       });
     });
-
-    // fetchRecipes();
   }
 
   @override
@@ -65,20 +57,10 @@ class _HomeViewState extends State<HomeView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            // MainHomeCarouselSlider(
-            //     EnlargeCenterCard: true, InfiniteScroll: true),
             campaignListView(),
-            expansionMenu(context, emojiParser),
-
+            expansionMenu(context),
             getWordOfTheDay(),
 
-            Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                child: customTextBold(
-                    text: "Upcoming Events",
-                    textSize: 16,
-                    color: primaryDarkColor)),
             SizedBox(height: 150, child: eventsListView()),
             recentJobPosting(),
             const SizedBox(
@@ -123,7 +105,8 @@ class _HomeViewState extends State<HomeView> {
           const SizedBox(
             height: 10,
           ),
-          customTextBold(text: "“ $word ”", textSize: 24, color: primaryDarkColor),
+          customTextBold(
+              text: "“ $word ”", textSize: 24, color: primaryDarkColor),
           customTextBold(text: pos, textSize: 10, color: primaryDarkColor),
           const SizedBox(
             height: 10,
@@ -151,21 +134,29 @@ class _HomeViewState extends State<HomeView> {
               backgroundColor: primaryWhiteColor,
             ),
           );
-        } else if (snapshot.hasData && snapshot.data != null) {
-          return ListView(
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            children: snapshot.data!.docs
-                .map((data) => eventListViewItem(context, data))
-                .toList(),
+        } else if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
+          return Column(
+            children: [
+              Container(
+                  padding:
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  child: customTextBold(
+                      text: "Upcoming Events",
+                      textSize: 16,
+                      color: primaryDarkColor)),
+              Expanded(
+                child: ListView(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  children: snapshot.data!.docs
+                      .map((data) => eventListViewItem(context, data))
+                      .toList(),
+                ),
+              ),
+            ],
           );
-        } else if (snapshot.data == null) {
-          return Center(
-            child: customTextBold(
-                text: "No Recent Events",
-                textSize: 20,
-                color: primaryDarkColor),
-          );
+        } else if (snapshot.data!.docs.isEmpty) {
+          return const SizedBox();
         } else {
           return const Text("Error");
         }
@@ -356,19 +347,7 @@ class _HomeViewState extends State<HomeView> {
   Widget recentJobPosting() {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: customTextBold(
-                        text: "Recent Posts",
-                        textSize: 16,
-                        color: primaryDarkColor))),
-          ],
-        ),
+
         Container(
           margin: const EdgeInsets.only(left: 15, right: 10),
           child: StreamBuilder<QuerySnapshot>(
@@ -380,159 +359,176 @@ class _HomeViewState extends State<HomeView> {
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return const SizedBox();
-              } else if (snapshot.hasData) {
-                return CarouselSlider.builder(
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (BuildContext context, a, b) {
-                      return Padding(
-                          key: ValueKey((snapshot.data!.docs[a].data()
-                                  as Map<String, dynamic>)['workTitle']
-                              .toString()),
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              color: primaryWhiteColor,
-                              elevation: 5,
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 20),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
+              } else if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
+                return Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: customTextBold(
+                                    text: "Recent Posts",
+                                    textSize: 16,
+                                    color: primaryDarkColor))),
+                      ],
+                    ),
+                    CarouselSlider.builder(
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (BuildContext context, a, b) {
+                          return Padding(
+                              key: ValueKey((snapshot.data!.docs[a].data()
+                                      as Map<String, dynamic>)['workTitle']
+                                  .toString()),
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  color: primaryWhiteColor,
+                                  elevation: 5,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 20),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          child: Image.network(
-                                            (snapshot.data!.docs[a].data()
-                                                        as Map<String,
-                                                            dynamic>)[
-                                                    'workImageURL']
-                                                .toString(),
-                                            fit: BoxFit.fitWidth,
-                                            height: 55,
-                                            width: 55,
-                                            loadingBuilder:
-                                                (BuildContext context,
-                                                    Widget child,
-                                                    ImageChunkEvent?
-                                                        loadingProgress) {
-                                              if (loadingProgress == null) {
-                                                return child;
-                                              }
-                                              return Center(
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  value: loadingProgress
-                                                              .expectedTotalBytes !=
-                                                          null
-                                                      ? loadingProgress
-                                                              .cumulativeBytesLoaded /
-                                                          loadingProgress
-                                                              .expectedTotalBytes!
-                                                      : null,
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                              child: Image.network(
+                                                (snapshot.data!.docs[a].data()
+                                                            as Map<String,
+                                                                dynamic>)[
+                                                        'workImageURL']
+                                                    .toString(),
+                                                fit: BoxFit.fitWidth,
+                                                height: 55,
+                                                width: 55,
+                                                loadingBuilder:
+                                                    (BuildContext context,
+                                                        Widget child,
+                                                        ImageChunkEvent?
+                                                            loadingProgress) {
+                                                  if (loadingProgress == null) {
+                                                    return child;
+                                                  }
+                                                  return Center(
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      value: loadingProgress
+                                                                  .expectedTotalBytes !=
+                                                              null
+                                                          ? loadingProgress
+                                                                  .cumulativeBytesLoaded /
+                                                              loadingProgress
+                                                                  .expectedTotalBytes!
+                                                          : null,
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 20,
+                                            ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                customTextBold(
+                                                    text: (snapshot.data!.docs[a]
+                                                                    .data()
+                                                                as Map<String,
+                                                                    dynamic>)[
+                                                            'workTitle']
+                                                        .toString(),
+                                                    textSize: 14,
+                                                    color: primaryDarkColor),
+                                                const SizedBox(
+                                                  height: 5,
                                                 ),
-                                              );
-                                            },
-                                          ),
+                                                customTextBold(
+                                                    text: (snapshot.data!.docs[a]
+                                                                    .data()
+                                                                as Map<String,
+                                                                    dynamic>)[
+                                                            'workCompanyName']
+                                                        .toString(),
+                                                    textSize: 12,
+                                                    color: primaryDarkColor
+                                                        .withOpacity(0.5)),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                customTextBold(
+                                                    text: (snapshot.data!.docs[a]
+                                                                    .data()
+                                                                as Map<String,
+                                                                    dynamic>)[
+                                                            'workCompensation']
+                                                        .toString(),
+                                                    textSize: 10,
+                                                    color: primaryDarkColor),
+                                              ],
+                                            )
+                                          ],
                                         ),
                                         const SizedBox(
-                                          width: 20,
+                                          height: 20,
                                         ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            customTextBold(
-                                                text: (snapshot.data!.docs[a]
-                                                                .data()
-                                                            as Map<String,
-                                                                dynamic>)[
-                                                        'workTitle']
-                                                    .toString(),
-                                                textSize: 14,
-                                                color: primaryDarkColor),
-                                            const SizedBox(
-                                              height: 5,
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5.0),
+                                                color:
+                                                    primaryDarkColor.withAlpha(50),
+                                              ),
+                                              padding: const EdgeInsets.symmetric(
+                                                  vertical: 5, horizontal: 5),
+                                              child: customTextBold(
+                                                  text: (snapshot.data!.docs[a]
+                                                              .data()
+                                                          as Map<String,
+                                                              dynamic>)['workType']
+                                                      .toString(),
+                                                  textSize: 12,
+                                                  color: primaryDarkColor),
                                             ),
-                                            customTextBold(
-                                                text: (snapshot.data!.docs[a]
-                                                                .data()
-                                                            as Map<String,
-                                                                dynamic>)[
-                                                        'workCompanyName']
-                                                    .toString(),
-                                                textSize: 12,
-                                                color: primaryDarkColor
-                                                    .withOpacity(0.5)),
-                                            const SizedBox(
-                                              height: 5,
-                                            ),
-                                            customTextBold(
-                                                text: (snapshot.data!.docs[a]
-                                                                .data()
-                                                            as Map<String,
-                                                                dynamic>)[
-                                                        'workCompensation']
-                                                    .toString(),
-                                                textSize: 10,
-                                                color: primaryDarkColor),
                                           ],
-                                        )
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(5.0),
-                                            color:
-                                                primaryDarkColor.withAlpha(50),
-                                          ),
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 5, horizontal: 5),
-                                          child: customTextBold(
-                                              text: (snapshot.data!.docs[a]
-                                                          .data()
-                                                      as Map<String,
-                                                          dynamic>)['workType']
-                                                  .toString(),
-                                              textSize: 12,
-                                              color: primaryDarkColor),
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
-                              )));
-                    },
-                    options: CarouselOptions(
-                      padEnds: false,
-                      height: 170,
-                      // aspectRatio: 21 / 9,
-                      viewportFraction: 0.6,
-                      initialPage: 0,
-                      enableInfiniteScroll: false,
-                      reverse: false,
-                      autoPlay: false,
-                      autoPlayInterval: const Duration(seconds: 8),
-                      autoPlayAnimationDuration:
-                          const Duration(milliseconds: 1000),
-                      autoPlayCurve: Curves.fastOutSlowIn,
-                      enlargeCenterPage: false,
-                      scrollDirection: Axis.horizontal,
-                    ));
+                                  )));
+                        },
+                        options: CarouselOptions(
+                          padEnds: false,
+                          height: 170,
+                          // aspectRatio: 21 / 9,
+                          viewportFraction: 0.6,
+                          initialPage: 0,
+                          enableInfiniteScroll: false,
+                          reverse: false,
+                          autoPlay: false,
+                          autoPlayInterval: const Duration(seconds: 8),
+                          autoPlayAnimationDuration:
+                              const Duration(milliseconds: 1000),
+                          autoPlayCurve: Curves.fastOutSlowIn,
+                          enlargeCenterPage: false,
+                          scrollDirection: Axis.horizontal,
+                        )),
+                  ],
+                );
               } else {
                 return const SizedBox();
               }
@@ -543,97 +539,8 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Widget recentClubPostCarouselSlider(
-      {required bool enlargeCenterCard, required bool infiniteScroll}) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: customTextBold(
-                        text: "Recent Posts",
-                        textSize: 16,
-                        color: primaryDarkColor))),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton.icon(
-                      onPressed: () {},
-                      icon: Icon(
-                        MdiIcons.playCircleOutline,
-                        color: primaryLightBlueColor,
-                      ),
-                      label: customTextBold(
-                          text: "See all",
-                          textSize: 12,
-                          color: primaryLightBlueColor)),
-                ],
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        CarouselSlider(
-            items: [1, 2].map((i) {
-              return Builder(
-                builder: (BuildContext context) {
-                  return Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: const EdgeInsets.only(right: 10, left: 20),
-                    decoration: BoxDecoration(
-                        color: primaryDarkColor,
-                        borderRadius: BorderRadius.circular(5)),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: Image.network(
-                        "https://images.unsplash.com/photo-1679473379899-20654f983d1e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1172&q=80",
-                        fit: BoxFit.fill,
-                        loadingBuilder: (BuildContext context, Widget child,
-                            ImageChunkEvent? loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Center(
-                            child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes!
-                                  : null,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  );
-                },
-              );
-            }).toList(),
-            options: CarouselOptions(
-              padEnds: false,
-              height: 120,
-              // aspectRatio: 21 / 9,
-              viewportFraction: 0.6,
-              initialPage: 0,
-              enableInfiniteScroll: false,
-              reverse: false,
-              autoPlay: false,
-              autoPlayInterval: const Duration(seconds: 8),
-              autoPlayAnimationDuration: const Duration(milliseconds: 1000),
-              autoPlayCurve: Curves.fastOutSlowIn,
-              enlargeCenterPage: enlargeCenterCard,
-              scrollDirection: Axis.horizontal,
-            )),
-      ],
-    );
-  }
 
-  Widget expansionMenu(BuildContext context, var emojiParser) {
+  Widget expansionMenu(BuildContext context) {
     ExpansionMenuItems item1 = ExpansionMenuItems(
         title: "AI Bot",
         img: Icon(
@@ -643,16 +550,8 @@ class _HomeViewState extends State<HomeView> {
         ),
         activity: const HomePage());
 
-    ExpansionMenuItems item2 = ExpansionMenuItems(
-        title: "Compiler",
-        img: Icon(
-          MdiIcons.codeTags,
-          color: primaryWhiteColor,
-          size: 35,
-        ),
-        activity: const CodeCompilerDashBoard());
 
-    ExpansionMenuItems item3 = ExpansionMenuItems(
+    ExpansionMenuItems item2 = ExpansionMenuItems(
         title: "Library",
         img: Icon(
           Icons.book,
@@ -661,7 +560,7 @@ class _HomeViewState extends State<HomeView> {
         ),
         activity: LibraryDashboardView(appUserUSN: modelUserData.getUserUSN));
 
-    ExpansionMenuItems item4 = ExpansionMenuItems(
+    ExpansionMenuItems item3 = ExpansionMenuItems(
         title: "Track Bus",
         img: Icon(
           MdiIcons.busMarker,
@@ -674,7 +573,6 @@ class _HomeViewState extends State<HomeView> {
       item1,
       item2,
       item3,
-      item4,
     ];
 
     return Column(
@@ -736,14 +634,7 @@ class _HomeViewState extends State<HomeView> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
                                         children: <Widget>[
-                                          // Text(
-                                          //   emojiParser.emojify(':bus:'),
-                                          //   style: TextStyle(fontSize: 24),
-                                          // ),
-
                                           data.img,
-
-                                          //SizedBox(height: 12.0,),
                                           customTextBold(
                                               text: data.title,
                                               textSize: 14,

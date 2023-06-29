@@ -8,7 +8,6 @@ import 'package:shiksha/LibraryViews/library_history_view.dart';
 import 'package:shiksha/LibraryViews/library_issued_books_view.dart';
 import 'package:syncfusion_flutter_barcodes/barcodes.dart';
 import '../BusTracking/bus_track_map_view.dart';
-import '../ChatGPT/page/chat_gpt_home_Page.dart';
 import '../Components/common_component_widgets.dart';
 import '../colors/colors.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -115,16 +114,8 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
         var responsePatronReadingHistory = await Requests.get(
             'http://103.139.157.231:8080/cgi-bin/koha/members/readingrec.pl?borrowernumber=$patronID');
 
-        var responseBookSearch = await Requests.get(
-            'http://103.139.157.231:8080/cgi-bin/koha/catalogue/search.pl?count=25&sort_by=title_az&idx=ti&q=Os');
-
         dynamic responsePatronImage = await Requests.get(
             'http://103.139.157.231:8080/cgi-bin/koha/members/patronimage.pl?borrowernumber=$patronID');
-
-        // var r = await Requests.get('http://103.139.157.231:8080/cgi-bin/koha/svc/authentication?userid=app_admin&password=admin@app1');
-        // var r1 = await Requests.get('http://103.139.157.231/cgi-bin/koha/ilsdi.pl?service=GetPatronInfo&patron_id=5396&show_fines=1&show_loans=1');
-        // var r2 = await Requests.get('http://103.139.157.231:8080/cgi-bin/koha/members/readingrec.pl?borrowernumber=5396');
-        // dynamic r3 = await Requests.get('http://103.139.157.231:8080/cgi-bin/koha/members/patronimage.pl?borrowernumber=5156');
 
         final document = xml.XmlDocument.parse(responsePatronInfo.body);
         final document1 = parse(responsePatronReadingHistory.body)
@@ -393,7 +384,7 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
                                         MdiIcons.schoolOutline,
                                         color: primaryDarkColor,
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 10,
                                       ),
                                       customTextBold(
@@ -402,7 +393,7 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
                                           color: primaryDarkColor)
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
                                   Row(
@@ -411,7 +402,7 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
                                         MdiIcons.emailOutline,
                                         color: primaryDarkColor,
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 10,
                                       ),
                                       customTextBold(
@@ -420,7 +411,7 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
                                           color: primaryDarkColor)
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
                                   Row(
@@ -429,7 +420,7 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
                                         MdiIcons.phone,
                                         color: primaryDarkColor,
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 10,
                                       ),
                                       customTextBold(
@@ -438,7 +429,7 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
                                           color: primaryDarkColor)
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
                                   Row(
@@ -447,7 +438,7 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
                                         MdiIcons.humanMale,
                                         color: primaryDarkColor,
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 10,
                                       ),
                                       customTextBold(
@@ -467,7 +458,7 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
                                         color: primaryRedColor,
                                         size: 30,
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 10,
                                       ),
                                       customTextBold(
@@ -481,14 +472,14 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
                             ),
                           ),
                         )),
-                    LibraryMenu(context),
+                    libraryMenu(context),
                   ],
                 ),
               );
             } else if (snapshot.hasData && snapshot.data == false) {
-              return Text("No Patron");
+              return Center(child: customTextBold(text: "No Patron Found! with UID \n'${widget.appUserUSN}'", textSize: 22, color: primaryDarkColor),);
             } else {
-              return Text("Error");
+              return const Text("Error");
             }
           },
         ),
@@ -496,7 +487,7 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
     );
   }
 
-  Widget LibraryMenu(BuildContext context) {
+  Widget libraryMenu(BuildContext context) {
     LibraryMenuItems item1 = LibraryMenuItems(
         title: "SEARCH",
         img: Icon(

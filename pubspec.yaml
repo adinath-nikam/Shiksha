@@ -64,6 +64,8 @@ dependencies:
   firebase_remote_config: ^4.0.0
   chat_gpt_sdk: ^2.1.5
   http:
+  firebase_messaging: ^14.6.4
+  flutter_local_notifications: ^14.1.1
 
 
 

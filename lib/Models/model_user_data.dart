@@ -1,5 +1,9 @@
-import 'package:flutter/foundation.dart';
-import 'package:shiksha/Models/utilty_shared_preferences.dart';
+import 'dart:convert';
+
+import 'package:firebase_database/firebase_database.dart';
+import '../FirebaseServices/firebase_service.dart';
+
+final FirebaseAuthServices firebaseAuthServices = FirebaseAuthServices();
 
 class ModelUserData {
   late final String userUID;
@@ -104,30 +108,27 @@ class ModelUserData {
         'userIsAdmin': userIsAdmin,
       };
 
-  ModelUserData.fromJson(Map<String, dynamic> json)
-      : userUID = json['userUID'] as String,
-        userUSN = json['userUSN'] as String,
-        userCollege = json['userCollege'] as String,
-        userStream = json['userStream'] as String,
-        userSemester = json['userSemester'] as String,
-        userJoiningDate = json['userJoiningDate'] as String,
-        userCanPostEvent = json['userCanPostEvent'] as bool,
-        userCanPostJob = json['userCanPostJob'] as bool,
-        userIsAdmin = json['userIsAdmin'] as bool;
+  ModelUserData.fromJson(Map<dynamic, dynamic> json) {
+    userUID = json['userUID'] as String;
+    userUSN = json['userUSN'] as String;
+    userCollege = json['userCollege'] as String;
+    userStream = json['userStream'] as String;
+    userSemester = json['userSemester'] as String;
+    userJoiningDate = json['userJoiningDate'] as String;
+    userCanPostEvent = json['userCanPostEvent'] as bool;
+    userCanPostJob = json['userCanPostJob'] as bool;
+    userIsAdmin = json['userIsAdmin'] as bool;
+  }
 }
 
 late ModelUserData modelUserData;
 
-Future<ModelUserData> getUserData() async {
-  try {
-    modelUserData = ModelUserData.fromJson(
-        await UtilitySharedPreferences().read('SP_SHIKSHA_USER_DATA'));
-
-    return modelUserData;
-  } catch (e) {
-    if (kDebugMode) {
-      print(">>> $e");
-    }
-    return modelUserData;
-  }
+Stream<ModelUserData?> getUserData() {
+  return FirebaseDatabase.instance
+      .ref("SHIKSHA_APP/USERS_DATA/${firebaseAuthServices.firebaseUser!.uid}")
+      .onValue
+      .map((event) {
+    return modelUserData = ModelUserData.fromJson(
+        event.snapshot.value as Map<dynamic, dynamic>);
+  });
 }

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:shiksha/AuthViews/college_select_view.dart';
 import 'package:shiksha/Components/common_component_widgets.dart';
 import 'package:shiksha/Editors/profile_edit_view.dart';
 import 'package:shiksha/Models/model_user_data.dart';
@@ -97,19 +98,24 @@ class _ProfileViewContentState extends State<ProfileViewContent> {
                                               builder: (builder) =>
                                                   const EditProfileView()));
                                     },
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        customTextBold(
-                                            text: 'EDIT',
-                                            textSize: 16,
-                                            color: primaryLightBlueColor),
-                                        Icon(
-                                          Icons.settings,
-                                          color: primaryLightBlueColor,
-                                        ),
-                                      ],
+                                    child: GestureDetector(
+                                      onTap: (){
+                                        Navigator.of(context).push(MaterialPageRoute(builder: (builder)=> const CollegeSelectView()));
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          customTextBold(
+                                              text: 'EDIT',
+                                              textSize: 16,
+                                              color: primaryLightBlueColor),
+                                          Icon(
+                                            Icons.settings,
+                                            color: primaryLightBlueColor,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(

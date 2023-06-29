@@ -7,6 +7,7 @@ import 'package:shiksha/AuthViews/forgot_password_view.dart';
 import 'package:shiksha/AuthViews/signup_view.dart';
 import 'package:shiksha/Components/AuthButtons.dart';
 import 'package:shiksha/FirebaseServices/firebase_service.dart';
+import 'package:shiksha/Models/model_user_data.dart';
 import '../Components/common_component_widgets.dart';
 import '../HomeView/main_tab_view.dart';
 import '../Models/ModelProfileData.dart';
@@ -25,38 +26,6 @@ class _SignInViewState extends State<SignInView> {
   final TextEditingController emailController = TextEditingController();
   final GlobalKey<FormState> signInFormKey = GlobalKey();
   bool _obscureText = true;
-  checkProfileData(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool exists = prefs.containsKey('SHIKSHA_USER_PROFILE_DATA');
-    DatabaseReference databaseReference = FirebaseDatabase.instance.ref();
-    DatabaseEvent databaseEvent = await databaseReference
-        .child(
-            "SHIKSHA_APP/USERS_DATA/${firebaseAuthServices.firebaseUser?.uid}")
-        .once();
-
-    if (exists) {
-      Navigator.pop(context);
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (builder) => const TabView()));
-    } else {
-      if (databaseEvent.snapshot.value != null) {
-        Map<dynamic, dynamic> temp =
-            databaseEvent.snapshot.value as Map<dynamic, dynamic>;
-
-        ModelProfileData modelProfileData = ModelProfileData.fromJson(temp);
-
-        await prefs.setString(
-            'SHIKSHA_USER_PROFILE_DATA', jsonEncode(modelProfileData));
-        Navigator.pop(context);
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (builder) => const TabView()));
-      } else {
-        Navigator.pop(context);
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (builder) => const TabView()));
-      }
-    }
-  }
 
   @override
   void dispose() {

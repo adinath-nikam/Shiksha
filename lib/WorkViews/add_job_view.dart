@@ -194,7 +194,7 @@ class _AddJobViewState extends State<AddJobView> {
                       ),
                       const SizedBox(
                         height: 20,
-                      ),cd DesktopTextSelectionToolbar(anchor: anchor, children: children)
+                      ),
                       TextFormField(
                         decoration: InputDecoration(
                           hintText: "Enter Job Posting URL...",

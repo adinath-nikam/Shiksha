@@ -8,8 +8,8 @@ import 'package:shiksha/HomeView/main_tab_view.dart';
 import 'package:shiksha/Models/model_user_data.dart';
 import 'package:shiksha/colors/colors.dart';
 
+
 import '../Components/constants.dart';
-import '../Models/ModelProfileData.dart';
 import '../Models/utilty_shared_preferences.dart';
 
 class CollegeSelectView extends StatelessWidget {
@@ -444,6 +444,7 @@ class _USNSelectViewState extends State<USNSelectView> {
                           } else {
                             showLoaderDialog(context, "Building Profile...");
                             validateUSN = false;
+
                             modelUserData = ModelUserData(
                                 userUID: firebaseAuthServices.firebaseUser!.uid,
                                 userUSN: controllerTextEditUSN.text

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
 import 'package:shiksha/Components/AuthButtons.dart';
+import 'package:shiksha/Models/model_user_data.dart';
 import '../Components/common_component_widgets.dart';
 import '../Components/constants.dart';
 import '../Models/model_event.dart';
@@ -349,7 +350,7 @@ class _AddEventViewState extends State<AddEventViewNew> {
                               addEventFormKey.currentState!.save();
 
                               modelEvent.userId =
-                                  modelProfileData.getStudentUid;
+                                  modelUserData.getUserUID;
 
                               modelEvent.eventPostedDate =
                                   DateTime.now().toString();
@@ -358,7 +359,7 @@ class _AddEventViewState extends State<AddEventViewNew> {
                                 FirebaseFirestore.instance
                                     .collection(DB_ROOT_NAME)
                                     .doc(EVENTS_CONSTANT)
-                                    .collection(modelProfileData.StudentCollege)
+                                    .collection(modelUserData.getUserCollege)
                                     .doc()
                                     .set(modelEvent.toMap())
                                     .whenComplete(() {

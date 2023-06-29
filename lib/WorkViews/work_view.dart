@@ -99,11 +99,15 @@ class _WorkViewContentState extends State<WorkViewContent> {
           );
         } else {
           return Center(
-              child: Icon(
-            Icons.work_history_rounded,
-            size: 50,
-            color: primaryDarkColor,
-          ));
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.work_history_rounded, color: primaryDarkColor, size: 40,),
+                  const SizedBox(width: 10,),
+                  customTextBold(text: 'No Job Posts :(', textSize: 22, color: primaryDarkColor)
+                ],
+              )
+          );
         }
       },
     );
