@@ -70,14 +70,9 @@ class _TabViewState extends State<TabView> {
                 ),
                 label: "CODE"),
             BottomNavigationBarItem(
-                icon: Icon(
-                    Icons.event_outlined,
-                    size: 30),
-                label: "CLUBS"),
+                icon: Icon(Icons.event_outlined, size: 30), label: "CLUBS"),
             BottomNavigationBarItem(
-                icon: Icon(
-                    Icons.work_outline_rounded,
-                    size: 30),
+                icon: Icon(Icons.work_outline_rounded, size: 30),
                 label: "WORK"),
           ],
         ),

@@ -1,14 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shiksha/AuthViews/singin_view.dart';
-import 'package:shiksha/SettingsViews/about_us_view.dart';
-import 'package:shiksha/SettingsViews/privacy_policy_view.dart';
 import 'package:shiksha/colors/colors.dart';
 import '../AuthViews/forgot_password_view.dart';
 import '../Components/AuthButtons.dart';
 import '../Components/common_component_widgets.dart';
-import 't&c_view.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({Key? key}) : super(key: key);
@@ -70,7 +68,13 @@ class SettingsView extends StatelessWidget {
 
 
                           GestureDetector(
-                            onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (builder)=>const TCView())),
+                            onTap: (){
+                                try {
+                                  launch('https://github.com/adinath-nikam/Shiksha-Documentation/blob/main/docs/terms_and_conditions.md');
+                                } catch (e) {
+                                  debugPrint(e.toString());
+                                }
+                            },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -90,7 +94,13 @@ class SettingsView extends StatelessWidget {
 
 
                           GestureDetector(
-                            onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (builder)=>const PrivacyPolicyView())),
+                            onTap: (){
+                              try {
+                                launch('https://github.com/adinath-nikam/Shiksha-Documentation/blob/main/docs/privacy_policy.md');
+                              } catch (e) {
+                                debugPrint(e.toString());
+                              }
+                            },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -110,7 +120,13 @@ class SettingsView extends StatelessWidget {
 
 
                           GestureDetector(
-                            onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (builder)=>const AboutUsView())),
+                            onTap: (){
+                              try {
+                                launch('https://github.com/adinath-nikam/Shiksha-Documentation/blob/main/docs/about_us.md');
+                              } catch (e) {
+                                debugPrint(e.toString());
+                              }
+                            },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [

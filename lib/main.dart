@@ -5,14 +5,11 @@ import 'package:shiksha/Components/AuthButtons.dart';
 import 'package:shiksha/Components/common_component_widgets.dart';
 import 'package:shiksha/HomeView/main_tab_view.dart';
 import 'package:shiksha/Models/model_user_data.dart';
-import 'package:shiksha/Models/model_work.dart';
-import 'package:shiksha/Models/utilty_shared_preferences.dart';
 import 'package:shiksha/firebase_options.dart';
 import 'package:shiksha/ChatGPT/utils/chat_gpt.dart';
 import 'AuthViews/singin_view.dart';
 import 'package:flutter/material.dart';
 import 'AuthViews/college_select_view.dart';
-import 'Models/ModelProfileData.dart';
 import 'colors/colors.dart';
 import 'package:shiksha/ChatGPT/stores/ai_chat_store.dart';
 import 'package:get_storage/get_storage.dart';
@@ -20,18 +17,16 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
-
   print("Handling a background message: ${message.messageId}");
 }
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await dotenv.load(fileName: ".env");
@@ -45,7 +40,7 @@ Future<void> main() async {
     announcement: false,
     badge: true,
     carPlay: false,
-    criticalAlert: false,
+    criticalAlert: true,
     provisional: false,
     sound: true,
   );
@@ -61,7 +56,7 @@ Future<void> main() async {
       print('Message also contained a notification: ${message.notification}');
     }
   });
-  
+
   runApp(
     const MyApp(),
   );
@@ -97,23 +92,26 @@ class _MyAppState extends State<MyApp> {
         builder: EasyLoading.init(),
         home: SafeArea(
           child: Scaffold(
-              backgroundColor: primaryWhiteColor,
-              body: firebaseAuthServices.firebaseUser == null
-                  ? const SignInView()
-                  : StreamBuilder<ModelUserData?>(
-                  stream: getUserData(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasData) {
-                      return const TabView();
-                    } else if (snapshot.hasError) {
-                      print(snapshot.hasError);
-                      return const CollegeSelectView();
-                    } else {
-                      return const Center(child: ErrorView());
-                    }
-                  }),
+            backgroundColor: primaryWhiteColor,
+            body: firebaseAuthServices.firebaseUser == null
+                ? const SignInView()
+                : StreamBuilder<ModelUserData?>(
+                    stream: getUserData(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasData) {
+                        FlutterNativeSplash.remove();
+                        return const TabView();
+                      } else if (snapshot.hasError) {
+                        FlutterNativeSplash.remove();
+                        print(snapshot.hasError);
+                        return const CollegeSelectView();
+                      } else {
+                        FlutterNativeSplash.remove();
+                        return const Center(child: ErrorView());
+                      }
+                    }),
           ),
         ),
       ),

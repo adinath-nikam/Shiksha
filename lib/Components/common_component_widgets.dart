@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -130,6 +129,15 @@ Widget headerImage() {
       image: AssetImage("assets/images/logo_main.png"),
       height: 150,
       width: 150,
+    ),
+  );
+}
+
+Widget progressIndicator(){
+  return Center(
+    child: CircularProgressIndicator(
+      color: primaryWhiteColor,
+      backgroundColor: primaryDarkColor,
     ),
   );
 }

@@ -104,7 +104,7 @@ class _CodeCompilerDashBoardState extends State<CodeCompilerDashBoard> {
                                                 pageBuilder: (context,
                                                         animation,
                                                         secondaryAnimation) =>
-                                                    CompilerCProgramming(
+                                                    CompilerView(
                                                         url: list[index]
                                                             ['URL']),
                                                 transitionsBuilder: (
@@ -153,23 +153,23 @@ class _CodeCompilerDashBoardState extends State<CodeCompilerDashBoard> {
   }
 }
 
-class CompilerCProgramming extends StatefulWidget {
+class CompilerView extends StatefulWidget {
   final String url;
 
-  const CompilerCProgramming({Key? key, required this.url}) : super(key: key);
+  const CompilerView({Key? key, required this.url}) : super(key: key);
 
   @override
-  State<CompilerCProgramming> createState() => _CompilerCProgrammingState();
+  State<CompilerView> createState() => _CompilerViewState();
 }
 
-class _CompilerCProgrammingState extends State<CompilerCProgramming> {
+class _CompilerViewState extends State<CompilerView> {
+  bool _loading = false;
   WebViewController controller = WebViewController();
 
   @override
   void initState() {
     super.initState();
     controller.setJavaScriptMode(JavaScriptMode.unrestricted);
-    // controller.loadRequest(Uri.parse('https://www.programiz.com/c-programming/online-compiler/'));
     controller.loadRequest(Uri.parse(widget.url));
     controller.runJavaScript(
         "document.getElementsByClassName('header')[0].style.display='none';");
@@ -177,6 +177,9 @@ class _CompilerCProgrammingState extends State<CompilerCProgramming> {
         .setNavigationDelegate(NavigationDelegate(onPageFinished: (String url) {
       controller.runJavaScript(
           "document.getElementsByClassName('header')[0].style.display='none';");
+      setState(() {
+        _loading = true;
+      });
     }));
   }
 
@@ -187,8 +190,14 @@ class _CompilerCProgrammingState extends State<CompilerCProgramming> {
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(60.0),
             child: appBarCommon(context, "COMPILER")),
-        body: WebViewWidget(
-          controller: controller,
+        body: Stack(
+          children: [
+            _loading
+                ? WebViewWidget(
+                    controller: controller,
+                  )
+                : progressIndicator()
+          ],
         ),
       ),
     );

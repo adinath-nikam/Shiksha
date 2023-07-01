@@ -236,9 +236,7 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
           future: httpFuture,
           builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
             if (!snapshot.hasData) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return progressIndicator();
             } else if (snapshot.hasData && snapshot.data == true) {
               return Container(
                 padding:
@@ -279,9 +277,7 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
                                       fit: BoxFit.cover,
                                       progressIndicatorBuilder: (context, url,
                                               downloadProgress) =>
-                                          Center(
-                                              child:
-                                                  CircularProgressIndicator()),
+                                          progressIndicator(),
                                       errorWidget: (context, url, error) =>
                                           Icon(
                                         MdiIcons.alertCircleOutline,

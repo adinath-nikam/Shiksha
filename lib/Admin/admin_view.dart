@@ -1,8 +1,8 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:shiksha/Admin/word_of_the_day.dart';
 import 'package:shiksha/Components/common_component_widgets.dart';
-import 'package:shiksha/Models/model_user_data.dart';
 import 'package:shiksha/colors/colors.dart';
 import 'campaign_view.dart';
 
@@ -24,73 +24,107 @@ class _AdminViewState extends State<AdminView> {
                 preferredSize: const Size.fromHeight(60.0),
                 child: appBarCommon(context, "ADMIN")),
             backgroundColor: primaryWhiteColor,
-            body: Column(
-              children: [
-                GestureDetector(
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (builder) => const AppUsers())),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 10),
-                    height: 200,
-                    width: MediaQuery.of(context).size.width,
-                    child: Card(
-                      elevation: 10,
-                      color: primaryDarkColor,
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            customTextBold(
-                                text: "App Users",
-                                textSize: 24,
-                                color: primaryWhiteColor),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Icon(
-                              MdiIcons.account,
-                              color: primaryWhiteColor,
-                            ),
-                          ],
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (builder) => const AddWOTDView())),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 10),
+                      height: 200,
+                      width: MediaQuery.of(context).size.width,
+                      child: Card(
+                        elevation: 10,
+                        color: primaryDarkColor,
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              customTextBold(
+                                  text: "Update WOTD",
+                                  textSize: 24,
+                                  color: primaryWhiteColor),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Icon(
+                                MdiIcons.account,
+                                color: primaryWhiteColor,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                GestureDetector(
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (builder) => const CampaignView())),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 10),
-                    height: 200,
-                    width: MediaQuery.of(context).size.width,
-                    child: Card(
-                      elevation: 10,
-                      color: primaryDarkColor,
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            customTextBold(
-                                text: "Add Campaign",
-                                textSize: 24,
-                                color: primaryWhiteColor),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Icon(
-                              MdiIcons.post,
-                              color: primaryWhiteColor,
-                            ),
-                          ],
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (builder) => const AppUsers())),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 10),
+                      height: 200,
+                      width: MediaQuery.of(context).size.width,
+                      child: Card(
+                        elevation: 10,
+                        color: primaryDarkColor,
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              customTextBold(
+                                  text: "App Users",
+                                  textSize: 24,
+                                  color: primaryWhiteColor),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Icon(
+                                MdiIcons.account,
+                                color: primaryWhiteColor,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (builder) => const CampaignView())),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 10),
+                      height: 200,
+                      width: MediaQuery.of(context).size.width,
+                      child: Card(
+                        elevation: 10,
+                        color: primaryDarkColor,
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              customTextBold(
+                                  text: "Add Campaign",
+                                  textSize: 24,
+                                  color: primaryWhiteColor),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Icon(
+                                MdiIcons.post,
+                                color: primaryWhiteColor,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             )));
   }
 }

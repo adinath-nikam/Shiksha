@@ -21,6 +21,7 @@ class SignInView extends StatefulWidget {
 }
 
 class _SignInViewState extends State<SignInView> {
+
   final FirebaseAuthServices firebaseAuthServices = FirebaseAuthServices();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController emailController = TextEditingController();

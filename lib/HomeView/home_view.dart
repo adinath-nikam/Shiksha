@@ -9,7 +9,6 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:shiksha/Admin/admin_view.dart';
 import 'package:shiksha/Models/model_user_data.dart';
 import '../BusTracking/bus_track_map_view.dart';
-import '../CodeCompilerViews/code_compiler_dashboard_view.dart';
 import '../Components/common_component_widgets.dart';
 import '../Components/constants.dart';
 import '../LibraryViews/library_dashboard_view.dart';
@@ -60,7 +59,6 @@ class _HomeViewState extends State<HomeView> {
             campaignListView(),
             expansionMenu(context),
             getWordOfTheDay(),
-
             SizedBox(height: 150, child: eventsListView()),
             recentJobPosting(),
             const SizedBox(
@@ -128,18 +126,13 @@ class _HomeViewState extends State<HomeView> {
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              backgroundColor: primaryWhiteColor,
-            ),
-          );
+          return Center(child: progressIndicator());
         } else if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
           return Column(
             children: [
               Container(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                   child: customTextBold(
                       text: "Upcoming Events",
                       textSize: 16,
@@ -277,7 +270,7 @@ class _HomeViewState extends State<HomeView> {
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const SizedBox();
-        } else if (snapshot.hasData) {
+        } else if (snapshot.hasData && snapshot.data!.docs.length > 0) {
           return CarouselSlider.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (BuildContext context, a, b) {
@@ -306,9 +299,9 @@ class _HomeViewState extends State<HomeView> {
                                   as Map<String, dynamic>)['campaignImgURL']
                               .toString(),
                           fit: BoxFit.fill,
-                          progressIndicatorBuilder: (context, url,
-                                  downloadProgress) =>
-                              const Center(child: CircularProgressIndicator()),
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) =>
+                                  progressIndicator(),
                           errorWidget: (context, url, error) => Icon(
                             MdiIcons.alertCircleOutline,
                             color: primaryWhiteColor,
@@ -347,7 +340,6 @@ class _HomeViewState extends State<HomeView> {
   Widget recentJobPosting() {
     return Column(
       children: [
-
         Container(
           margin: const EdgeInsets.only(left: 15, right: 10),
           child: StreamBuilder<QuerySnapshot>(
@@ -393,7 +385,8 @@ class _HomeViewState extends State<HomeView> {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 10, horizontal: 20),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Row(
                                           mainAxisAlignment:
@@ -422,6 +415,9 @@ class _HomeViewState extends State<HomeView> {
                                                   return Center(
                                                     child:
                                                         CircularProgressIndicator(
+                                                      color: primaryWhiteColor,
+                                                      backgroundColor:
+                                                          primaryDarkColor,
                                                       value: loadingProgress
                                                                   .expectedTotalBytes !=
                                                               null
@@ -491,16 +487,19 @@ class _HomeViewState extends State<HomeView> {
                                               decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(5.0),
-                                                color:
-                                                    primaryDarkColor.withAlpha(50),
+                                                color: primaryDarkColor
+                                                    .withAlpha(50),
                                               ),
-                                              padding: const EdgeInsets.symmetric(
-                                                  vertical: 5, horizontal: 5),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 5,
+                                                      horizontal: 5),
                                               child: customTextBold(
                                                   text: (snapshot.data!.docs[a]
-                                                              .data()
-                                                          as Map<String,
-                                                              dynamic>)['workType']
+                                                                  .data()
+                                                              as Map<String,
+                                                                  dynamic>)[
+                                                          'workType']
                                                       .toString(),
                                                   textSize: 12,
                                                   color: primaryDarkColor),
@@ -539,7 +538,6 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-
   Widget expansionMenu(BuildContext context) {
     ExpansionMenuItems item1 = ExpansionMenuItems(
         title: "AI Bot",
@@ -549,7 +547,6 @@ class _HomeViewState extends State<HomeView> {
           size: 35,
         ),
         activity: const HomePage());
-
 
     ExpansionMenuItems item2 = ExpansionMenuItems(
         title: "Library",
