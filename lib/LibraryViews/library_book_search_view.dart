@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:requests/requests.dart';
 import '../Components/common_component_widgets.dart';
 import '../colors/colors.dart';
@@ -167,7 +166,7 @@ class _LibraryBookSearchViewState extends State<LibraryBookSearchView> {
                             },
                             tooltip: 'Search by',
                             icon: Icon(
-                              MdiIcons.sort,
+                              Icons.sort_rounded,
                               color: primaryWhiteColor,
                             ),
                           ),
@@ -184,7 +183,7 @@ class _LibraryBookSearchViewState extends State<LibraryBookSearchView> {
                               },
                               tooltip: 'Search',
                               icon: Icon(
-                                MdiIcons.magnify,
+                                Icons.search_rounded,
                                 color: primaryWhiteColor,
                               ),
                             )),
@@ -205,7 +204,7 @@ class _LibraryBookSearchViewState extends State<LibraryBookSearchView> {
                               child: ListTile(
                                 contentPadding: const EdgeInsets.all(10),
                                 leading: Icon(
-                                  MdiIcons.book,
+                                  Icons.book_rounded,
                                   size: 40,
                                   color: primaryWhiteColor,
                                 ),
@@ -257,7 +256,7 @@ class _LibraryBookSearchViewState extends State<LibraryBookSearchView> {
                                           width: 10,
                                         ),
                                         Icon(
-                                          MdiIcons.arrowRightThick,
+                                          Icons.arrow_forward_rounded,
                                           color: primaryWhiteColor,
                                         ),
                                         const SizedBox(

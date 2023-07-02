@@ -1,16 +1,10 @@
-import 'dart:convert';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:shiksha/AuthViews/forgot_password_view.dart';
 import 'package:shiksha/AuthViews/signup_view.dart';
 import 'package:shiksha/Components/AuthButtons.dart';
 import 'package:shiksha/FirebaseServices/firebase_service.dart';
-import 'package:shiksha/Models/model_user_data.dart';
 import '../Components/common_component_widgets.dart';
-import '../HomeView/main_tab_view.dart';
-import '../Models/ModelProfileData.dart';
 import '../colors/colors.dart';
 
 class SignInView extends StatefulWidget {
@@ -21,12 +15,17 @@ class SignInView extends StatefulWidget {
 }
 
 class _SignInViewState extends State<SignInView> {
-
   final FirebaseAuthServices firebaseAuthServices = FirebaseAuthServices();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final GlobalKey<FormState> signInFormKey = GlobalKey();
   bool _obscureText = true;
+
+  @override
+  void initState() {
+    super.initState();
+    FlutterNativeSplash.remove();
+  }
 
   @override
   void dispose() {
@@ -80,7 +79,7 @@ class _SignInViewState extends State<SignInView> {
                             controller: emailController,
                             decoration: InputDecoration(
                               hintText: "Enter Email...",
-                              prefixIcon: const Icon(MdiIcons.emailOutline),
+                              prefixIcon: const Icon(Icons.email_rounded),
                               contentPadding: const EdgeInsets.all(25.0),
                               border: const OutlineInputBorder(
                                 borderSide: BorderSide.none,
@@ -107,7 +106,7 @@ class _SignInViewState extends State<SignInView> {
                           ),
                           TextFormField(
                             decoration: InputDecoration(
-                              prefixIcon: const Icon(MdiIcons.lock),
+                              prefixIcon: const Icon(Icons.lock),
                               contentPadding: const EdgeInsets.all(25.0),
                               border: const OutlineInputBorder(
                                 borderSide: BorderSide.none,
@@ -122,8 +121,8 @@ class _SignInViewState extends State<SignInView> {
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   _obscureText
-                                      ? MdiIcons.toggleSwitch
-                                      : MdiIcons.toggleSwitchOffOutline,
+                                      ? Icons.toggle_off_rounded
+                                      : Icons.toggle_on_rounded,
                                   size: 30,
                                 ),
                                 onPressed: () {
@@ -182,8 +181,6 @@ class _SignInViewState extends State<SignInView> {
                                 email: emailController.text.trim(),
                                 password: passwordController.text.trim(),
                                 context: context);
-
-
                           }
                         },
                         buttonText: 'SIGN IN',

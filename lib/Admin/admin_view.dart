@@ -1,6 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shiksha/Admin/word_of_the_day.dart';
 import 'package:shiksha/Components/common_component_widgets.dart';
 import 'package:shiksha/colors/colors.dart';
@@ -28,8 +27,7 @@ class _AdminViewState extends State<AdminView> {
               child: Column(
                 children: [
                   GestureDetector(
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (builder) => const AddWOTDView())),
+                    onTap: () => Navigator.of(context).push(animatedRoute(const AddWOTDView())),
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 10),
@@ -50,7 +48,7 @@ class _AdminViewState extends State<AdminView> {
                                 width: 10,
                               ),
                               Icon(
-                                MdiIcons.account,
+                                Icons.wordpress_rounded,
                                 color: primaryWhiteColor,
                               ),
                             ],
@@ -60,8 +58,7 @@ class _AdminViewState extends State<AdminView> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (builder) => const AppUsers())),
+                    onTap: () => Navigator.of(context).push(animatedRoute(const AppUsers())),
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 10),
@@ -82,7 +79,7 @@ class _AdminViewState extends State<AdminView> {
                                 width: 10,
                               ),
                               Icon(
-                                MdiIcons.account,
+                                Icons.account_circle_rounded,
                                 color: primaryWhiteColor,
                               ),
                             ],
@@ -92,8 +89,7 @@ class _AdminViewState extends State<AdminView> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (builder) => const CampaignView())),
+                    onTap: () => Navigator.of(context).push(animatedRoute(const CampaignView())),
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 10),
@@ -114,7 +110,7 @@ class _AdminViewState extends State<AdminView> {
                                 width: 10,
                               ),
                               Icon(
-                                MdiIcons.post,
+                                Icons.signpost_rounded,
                                 color: primaryWhiteColor,
                               ),
                             ],
@@ -179,7 +175,7 @@ class _AppUsersState extends State<AppUsers> {
                                   'Users: ${snapshot.data!.snapshot.children.length}',
                               textSize: 16,
                               color: primaryWhiteColor),
-                          icon: const Icon(MdiIcons.accountCircleOutline),
+                          icon: const Icon(Icons.account_circle_rounded),
                         ),
                       ),
                     ),

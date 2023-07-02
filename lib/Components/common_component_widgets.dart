@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../HomeView/profile_view.dart';
 import '../SettingsViews/settings_view.dart';
 import '../colors/colors.dart';
@@ -78,13 +77,6 @@ Widget commonAlertDialog(BuildContext context, String buttonText, Icon icon,
   );
 }
 
-Widget madeInTAG() {
-  return Center(
-    child: customTextBold(
-        text: "Built in Belgaum ❤", textSize: 14, color: primaryDarkColor),
-  );
-}
-
 Widget termsAndConditionsText() {
   void launchTermsConditionsTab() async {
     try {
@@ -126,14 +118,14 @@ Widget headerImage() {
   return const Align(
     alignment: Alignment.center,
     child: Image(
-      image: AssetImage("assets/images/logo_main.png"),
+      image: AssetImage("assets/images/shiksha_logo_square_light.png"),
       height: 150,
       width: 150,
     ),
   );
 }
 
-Widget progressIndicator(){
+Widget progressIndicator() {
   return Center(
     child: CircularProgressIndicator(
       color: primaryWhiteColor,
@@ -272,7 +264,7 @@ Widget appBarHomeView({
           GestureDetector(
               onTap: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (builder) => const ProfileView()),
+                  animatedRoute(const ProfileView()),
                 );
               },
               child: Icon(
@@ -281,7 +273,7 @@ Widget appBarHomeView({
                 color: primaryDarkColor,
               )),
           const Image(
-            image: AssetImage("assets/images/logo_landscape.png"),
+            image: AssetImage("assets/images/shiksha_logo_horizontal_light.png"),
             height: 120,
             width: 120,
           ),
@@ -289,8 +281,7 @@ Widget appBarHomeView({
             padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
             child: GestureDetector(
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (builder) => const SettingsView()));
+                Navigator.of(context).push(animatedRoute(const SettingsView()));
               },
               child: Icon(
                 Icons.settings_rounded,
@@ -332,7 +323,7 @@ Widget appBarCommon(BuildContext context, String appbarTitle) {
           child: const Image(
             width: 30,
             height: 30,
-            image: AssetImage('assets/images/1.png'),
+            image: AssetImage('assets/images/क्षा_logo_dark.png'),
           ),
         ),
         const SizedBox(width: 8),
@@ -345,5 +336,20 @@ Widget appBarCommon(BuildContext context, String appbarTitle) {
     ),
     backgroundColor: primaryWhiteColor,
     elevation: 0.5,
+  );
+}
+
+Route animatedRoute(final Widget activity) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => activity,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(1, 0),
+          end: Offset.zero,
+        ).animate(animation),
+        child: child,
+      );
+    },
   );
 }

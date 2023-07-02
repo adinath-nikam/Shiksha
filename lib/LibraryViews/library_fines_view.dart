@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
 import '../Components/common_component_widgets.dart';
 import '../colors/colors.dart';
 
@@ -30,7 +28,7 @@ class LibraryFinesView extends StatelessWidget {
                 child: ListTile(
                   contentPadding: const EdgeInsets.all(10),
                   leading: Icon(
-                    MdiIcons.book,
+                    Icons.book_rounded,
                     size: 40,
                     color: primaryWhiteColor,
                   ),
@@ -74,7 +72,7 @@ class LibraryFinesView extends StatelessWidget {
                         child: Row(
                           children: [
                             Icon(
-                              MdiIcons.currencyRupee,
+                             Icons.currency_rupee_rounded,
                               color: primaryRedColor,
                             ),
                             const SizedBox(width: 10,),
@@ -93,11 +91,11 @@ class LibraryFinesView extends StatelessWidget {
                         child: Row(
                           children: [
                             Icon(
-                              MdiIcons.bookmarkCheckOutline,
+                              Icons.bookmark_rounded,
                               color: primaryDarkColor,
                             ),
                             const SizedBox(width: 10,),
-                            customTextBold(text: booksFinesList[index]['finedBookStatus'], textSize: 18, color: primaryRedColor)
+                            customTextBold(text: booksFinesList[index]['finedBookStatus'], textSize: 18, color: primaryDarkColor)
                           ],
                         ),
                       ),

@@ -1,4 +1,4 @@
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:shiksha/AuthViews/singin_view.dart';
 import 'package:shiksha/FirebaseServices/firebase_service.dart';
 import 'package:shiksha/colors/colors.dart';
@@ -40,6 +40,26 @@ class _SignupViewState extends State<SignupView> {
       password: passwordController.text.trim(),
       context: context,
     );
+  }
+
+  Future<bool> allowSignUp() async {
+    DataSnapshot dataSnapshot1 = await FirebaseDatabase.instance
+        .ref('SHIKSHA_APP/SIGNUP_LIMIT/LIMIT')
+        .get();
+    DataSnapshot dataSnapshot2 =
+        await FirebaseDatabase.instance.ref('SHIKSHA_APP/USERS_DATA').get();
+    int limit = dataSnapshot1.value as int;
+    int usersCount = dataSnapshot2.children.length;
+    if (usersCount >= limit) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -95,7 +115,7 @@ class _SignupViewState extends State<SignupView> {
                             controller: emailController,
                             decoration: InputDecoration(
                               hintText: "Enter Email...",
-                              prefixIcon: const Icon(MdiIcons.emailOutline),
+                              prefixIcon: const Icon(Icons.email_rounded),
                               contentPadding: const EdgeInsets.all(25.0),
                               border: const OutlineInputBorder(
                                 borderSide: BorderSide.none,
@@ -123,7 +143,7 @@ class _SignupViewState extends State<SignupView> {
                           ),
                           TextFormField(
                             decoration: InputDecoration(
-                              prefixIcon: const Icon(MdiIcons.lock),
+                              prefixIcon: const Icon(Icons.lock),
                               contentPadding: const EdgeInsets.all(25.0),
                               border: const OutlineInputBorder(
                                 borderSide: BorderSide.none,
@@ -138,8 +158,8 @@ class _SignupViewState extends State<SignupView> {
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   _obscureText
-                                      ? MdiIcons.toggleSwitch
-                                      : MdiIcons.toggleSwitchOffOutline,
+                                      ? Icons.toggle_off_rounded
+                                      : Icons.toggle_on_rounded,
                                   size: 30,
                                 ),
                                 onPressed: () {
@@ -159,7 +179,7 @@ class _SignupViewState extends State<SignupView> {
                           ),
                           TextFormField(
                             decoration: InputDecoration(
-                              prefixIcon: const Icon(MdiIcons.lock),
+                              prefixIcon: const Icon(Icons.lock),
                               contentPadding: const EdgeInsets.all(25.0),
                               border: const OutlineInputBorder(
                                 borderSide: BorderSide.none,
@@ -174,8 +194,8 @@ class _SignupViewState extends State<SignupView> {
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   _obscureText
-                                      ? MdiIcons.toggleSwitch
-                                      : MdiIcons.toggleSwitchOffOutline,
+                                      ? Icons.toggle_off_rounded
+                                      : Icons.toggle_on_rounded,
                                   size: 30,
                                 ),
                                 onPressed: () {
@@ -204,13 +224,17 @@ class _SignupViewState extends State<SignupView> {
                       AuthButtons(
                         buttonSize: 60,
                         buttonContext: context,
-                        buttonFunction: () {
-                          if (signUpFormKey.currentState!.validate()) {
-                            showLoaderDialog(context, "Signing Up..");
-                            firebaseAuthServices.signUpWithEmail(
-                                email: emailController.text.trim(),
-                                password: passwordController.text.trim(),
-                                context: context);
+                        buttonFunction: () async {
+                          if (await allowSignUp()) {
+                            if (signUpFormKey.currentState!.validate()) {
+                              showLoaderDialog(context, "Signing Up..");
+                              firebaseAuthServices.signUpWithEmail(
+                                  email: emailController.text.trim(),
+                                  password: passwordController.text.trim(),
+                                  context: context);
+                            }
+                          } else {
+                            showSnackBar(context, "Sorry", primaryRedColor);
                           }
                         },
                         buttonText: 'CREATE ACCOUNT',

@@ -1,15 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:shiksha/ClubsViews/edit_event_view.dart';
 import 'package:shiksha/Models/model_user_data.dart';
-
-
 import '../Components/AuthButtons.dart';
 import '../Components/common_component_widgets.dart';
 import '../Components/constants.dart';
 import '../colors/colors.dart';
-import 'ModelProfileData.dart';
 
 class ModelEventNew extends StatefulWidget {
   String? id;
@@ -38,9 +35,11 @@ class ModelEventNew extends StatefulWidget {
       this.eventInstructions,
       this.eventGoogleFormLink,
       this.eventPostedDate,
-      this.eventClub, {super.key});
+      this.eventClub,
+      {super.key});
 
-  ModelEventNew.fromMap(Map<String, dynamic> map, {super.key, required this.reference})
+  ModelEventNew.fromMap(Map<String, dynamic> map,
+      {super.key, required this.reference})
       :
         // assert(map['id'] != null),
         assert(map['userId'] != null),
@@ -113,16 +112,43 @@ class ModelEventNewState extends State<ModelEventNew> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.0),
-                  color: primaryDarkColor.withAlpha(50),
-                ),
-                child: customTextBold(
-                    text: widget.eventClub!,
-                    textSize: 16,
-                    color: primaryDarkColor),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.0),
+                      color: primaryDarkColor.withAlpha(50),
+                    ),
+                    child: customTextBold(
+                        text: widget.eventClub!,
+                        textSize: 16,
+                        color: primaryDarkColor),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        ModelEventNew e = ModelEventNew.fromData(
+                            widget.id,
+                            widget.userId,
+                            widget.eventName,
+                            widget.eventStartDate,
+                            widget.eventStartTime,
+                            widget.eventVenue,
+                            widget.eventDescription,
+                            widget.eventInstructions,
+                            widget.eventGoogleFormLink,
+                            widget.eventPostedDate,
+                            widget.eventClub);
+                        Navigator.of(context).push(animatedRoute(EditEventViewNew(modelEventNew: e)));
+                      },
+                      icon: Icon(
+                        Icons.settings_rounded,
+                        color: primaryDarkColor,
+                        size: 30,
+                      )),
+                ],
               ),
               const SizedBox(
                 height: 30,
@@ -143,8 +169,8 @@ class ModelEventNewState extends State<ModelEventNew> {
                         borderRadius: BorderRadius.circular(10.0),
                         color: primaryDarkColor.withAlpha(50),
                       ),
-                      padding:
-                          const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 20, horizontal: 20),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -234,8 +260,6 @@ class ModelEventNewState extends State<ModelEventNew> {
               const SizedBox(
                 height: 20,
               ),
-
-
               if (widget.userId == firebaseAuthServices.firebaseUser?.uid ||
                   modelUserData.getUserIsAdmin)
                 CustomDeleteButton(
@@ -261,7 +285,7 @@ class ModelEventNewState extends State<ModelEventNew> {
                                 context,
                                 "Delete Event Success!",
                                 Icon(
-                                  MdiIcons.calendarClockOutline,
+                                  Icons.event_available_rounded,
                                   color: primaryDarkColor,
                                   size: 50,
                                 ), () {
@@ -271,10 +295,6 @@ class ModelEventNewState extends State<ModelEventNew> {
                         );
                       });
                     })
-
-
-
-
             ],
           ),
         ),

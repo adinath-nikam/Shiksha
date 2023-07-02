@@ -347,7 +347,7 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget _renderMessageItem(Map message, int index) {
     String role = message['role'];
-    String defaultAvatar = 'assets/images/1.png';
+    String defaultAvatar = 'assets/images/क्षा_logo_dark.png';
     String defaultRoleName = 'BOT';
     Color defaultColor = const Color.fromRGBO(229, 245, 244, 1);
     Color defaultTextColor = Colors.black;

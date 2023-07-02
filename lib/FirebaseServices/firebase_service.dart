@@ -1,13 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-
 import 'package:shiksha/AuthViews/singin_view.dart';
-
 import 'package:shiksha/colors/colors.dart';
-
 import '../Components/common_component_widgets.dart';
-
 import '../main.dart';
 
 class FirebaseAuthServices {
@@ -24,8 +20,11 @@ class FirebaseAuthServices {
       await firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) {
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (builder) => SignInView()));
+
+        Navigator.of(context)
+            .push(animatedRoute(const SignInView()));
+
+
       });
       await sendEmailVerification(context);
     } on FirebaseAuthException catch (e) {
@@ -49,8 +48,8 @@ class FirebaseAuthServices {
       await firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password)
           .then((value) async {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (builder) => const MyApp()));
+        Navigator.of(context)
+            .push(animatedRoute(const MyApp()));
 
       });
     } on FirebaseAuthException catch (e) {

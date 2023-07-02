@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shiksha/Components/AuthButtons.dart';
 import 'package:shiksha/Components/common_component_widgets.dart';
-import 'package:shiksha/Models/ModelProfileData.dart';
 import 'package:shiksha/Models/model_user_data.dart';
 import '../colors/colors.dart';
 

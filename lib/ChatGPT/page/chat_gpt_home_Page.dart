@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage> {
                 child: const Image(
                   width: 30,
                   height: 30,
-                  image: AssetImage('assets/images/1.png'),
+                  image: AssetImage('assets/images/क्षा_logo_dark.png'),
                 ),
               ),
               const SizedBox(width: 8),

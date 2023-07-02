@@ -4,8 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:intl/intl.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shiksha/Admin/admin_view.dart';
 import 'package:shiksha/Models/model_user_data.dart';
 import '../BusTracking/bus_track_map_view.dart';
@@ -52,19 +52,26 @@ class _HomeViewState extends State<HomeView> {
     return SafeArea(
         child: Scaffold(
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            campaignListView(),
-            expansionMenu(context),
-            getWordOfTheDay(),
-            SizedBox(height: 150, child: eventsListView()),
-            recentJobPosting(),
-            const SizedBox(
-              height: 25,
+        child: AnimationLimiter(
+          child: AnimationConfiguration.synchronized(
+            child: SlideAnimation(
+              verticalOffset: MediaQuery.of(context).size.height,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  campaignListView(),
+                  expansionMenu(context),
+                  getWordOfTheDay(),
+                  SizedBox(height: 200, child: eventsListView()),
+                  recentJobPosting(),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                ],
+              ),
             ),
-          ],
+          ),
         ),
       ),
       floatingActionButton: modelUserData.getUserIsAdmin
@@ -73,9 +80,7 @@ class _HomeViewState extends State<HomeView> {
               icon: const Icon(Icons.admin_panel_settings),
               backgroundColor: primaryGreenColor,
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (builder) => const AdminView()),
-                );
+                Navigator.of(context).push(animatedRoute(const AdminView()));
               },
               label: customTextBold(
                   text: "Admin", textSize: 14, color: primaryWhiteColor),
@@ -164,8 +169,7 @@ class _HomeViewState extends State<HomeView> {
         key: ValueKey(modelEvent.eventName),
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: GestureDetector(
-          onTap: () =>
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          onTap: () {
             ModelEventNew e = ModelEventNew.fromData(
                 modelEvent.id,
                 modelEvent.userId,
@@ -178,8 +182,9 @@ class _HomeViewState extends State<HomeView> {
                 modelEvent.eventGoogleFormLink,
                 modelEvent.eventPostedDate,
                 modelEvent.eventClub);
-            return e;
-          })),
+
+            Navigator.of(context).push(animatedRoute(e));
+          },
           child: calenderCardItem(modelEvent),
         ));
   }
@@ -303,7 +308,7 @@ class _HomeViewState extends State<HomeView> {
                               (context, url, downloadProgress) =>
                                   progressIndicator(),
                           errorWidget: (context, url, error) => Icon(
-                            MdiIcons.alertCircleOutline,
+                            Icons.info_rounded,
                             color: primaryWhiteColor,
                           ),
                         ),
@@ -555,12 +560,13 @@ class _HomeViewState extends State<HomeView> {
           color: primaryWhiteColor,
           size: 35,
         ),
+        // activity: temp()
         activity: LibraryDashboardView(appUserUSN: modelUserData.getUserUSN));
 
     ExpansionMenuItems item3 = ExpansionMenuItems(
         title: "Track Bus",
         img: Icon(
-          MdiIcons.busMarker,
+          Icons.bus_alert_rounded,
           color: primaryWhiteColor,
           size: 35,
         ),
@@ -589,7 +595,7 @@ class _HomeViewState extends State<HomeView> {
                   child: ExpansionTile(
                     initiallyExpanded: true,
                     trailing: Icon(
-                      MdiIcons.menu,
+                      Icons.menu_rounded,
                       color: primaryWhiteColor,
                     ),
                     title: Align(
@@ -612,10 +618,8 @@ class _HomeViewState extends State<HomeView> {
                                 children: expansionMenuItemsList.map((data) {
                                   return GestureDetector(
                                     onTap: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (builder) =>
-                                                  data.activity));
+                                      Navigator.of(context)
+                                          .push(animatedRoute(data.activity));
                                     },
                                     child: Container(
                                       height: 150.0,

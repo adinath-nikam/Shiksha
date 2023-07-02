@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:custom_marker/marker_icon.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import '../Components/common_component_widgets.dart';
 import '../colors/colors.dart';
 
@@ -119,7 +118,7 @@ class _MapScreenViewState extends State<MapScreenView> {
       child: Scaffold(
           appBar: PreferredSize(
               preferredSize: const Size.fromHeight(60.0),
-              child: appBarCommon(context, "TRACK BUS")),
+              child: appBarCommon(context, "TRACK BUS (BETA)")),
           body: Stack(
             children: [
               GoogleMap(
@@ -153,7 +152,7 @@ class _MapScreenViewState extends State<MapScreenView> {
                     onPressed: () async {},
                     label: customTextBold(
                         text: busCount, textSize: 16, color: primaryWhiteColor),
-                    icon: const Icon(MdiIcons.bus),
+                    icon: const Icon(Icons.directions_bus),
                   ),
                 ),
               ),
@@ -174,7 +173,7 @@ class _MapScreenViewState extends State<MapScreenView> {
                               context,
                               "Experimental Feature!",
                               Icon(
-                                MdiIcons.alertOctagonOutline,
+                                Icons.info_rounded,
                                 color: primaryDarkColor,
                                 size: 50,
                               ), () {
@@ -183,7 +182,7 @@ class _MapScreenViewState extends State<MapScreenView> {
                         ),
                       );
                     },
-                    child: const Icon(MdiIcons.alertOctagonOutline),
+                    child: const Icon(Icons.info_rounded),
                   ),
                 ),
               ),
@@ -210,7 +209,7 @@ class _MapScreenViewState extends State<MapScreenView> {
                 });
               });
             },
-            child: const Icon(MdiIcons.crosshairsGps),
+            child: const Icon(Icons.gps_fixed_rounded),
           )),
     );
   }

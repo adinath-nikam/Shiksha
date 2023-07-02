@@ -10,14 +10,20 @@ import '../Components/constants.dart';
 import '../Models/model_event.dart';
 import '../colors/colors.dart';
 
-class AddEventViewNew extends StatefulWidget {
-  const AddEventViewNew({Key? key}) : super(key: key);
+class EditEventViewNew extends StatefulWidget {
+  final ModelEventNew modelEventNew;
+
+  const EditEventViewNew({Key? key, required this.modelEventNew})
+      : super(key: key);
+
   @override
-  State<AddEventViewNew> createState() => _AddEventViewState();
+  State<EditEventViewNew> createState() => _EditEventViewState();
 }
 
-class _AddEventViewState extends State<AddEventViewNew> {
+class _EditEventViewState extends State<EditEventViewNew> {
   final TextEditingController eventDateController = TextEditingController();
+  final TextEditingController eventStartTimeController =
+      TextEditingController();
   final TextEditingController semesterController = TextEditingController();
   final TextEditingController streamsController = TextEditingController();
   late String selectedEventDate;
@@ -28,6 +34,9 @@ class _AddEventViewState extends State<AddEventViewNew> {
   void initState() {
     super.initState();
     getClubs();
+    eventDateController.text = widget.modelEventNew.eventStartDate!;
+    eventStartTimeController.text = widget.modelEventNew.eventStartTime!;
+    modelEvent.eventClub = widget.modelEventNew.eventClub!;
   }
 
   @override
@@ -76,7 +85,7 @@ class _AddEventViewState extends State<AddEventViewNew> {
         child: Scaffold(
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(60.0),
-          child: appBarCommon(context, "ADD EVENT")),
+          child: appBarCommon(context, "EDIT EVENT")),
       body: SingleChildScrollView(
         child: Container(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -100,7 +109,7 @@ class _AddEventViewState extends State<AddEventViewNew> {
                           underline: const SizedBox(),
                           // value: dropdownValue,
                           hint: customTextBold(
-                              text: CLUB_DROPDOWN_INTIAL_VALUE,
+                              text: modelEvent.eventClub!,
                               textSize: 12,
                               color: primaryDarkColor),
                           dropdownColor: primaryDarkColor,
@@ -112,12 +121,12 @@ class _AddEventViewState extends State<AddEventViewNew> {
                           style: TextStyle(color: primaryDarkColor),
                           onChanged: (String? newValue) {
                             setState(() {
-                              CLUB_DROPDOWN_INTIAL_VALUE = newValue!;
-                              modelEvent.eventClub = CLUB_DROPDOWN_INTIAL_VALUE;
+                              modelEvent.eventClub = newValue;
                             });
                           },
 
-                          items: clubList?.map<DropdownMenuItem<String>>((String value) {
+                          items: clubList
+                              ?.map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: Text(
@@ -145,6 +154,7 @@ class _AddEventViewState extends State<AddEventViewNew> {
                           filled: true,
                           fillColor: primaryDarkColor.withOpacity(0.1),
                         ),
+                        initialValue: widget.modelEventNew.eventName,
                         onSaved: (value) {
                           modelEvent.eventName = value!;
                         },
@@ -186,6 +196,7 @@ class _AddEventViewState extends State<AddEventViewNew> {
                         height: 20,
                       ),
                       DateTimeField(
+                        controller: eventStartTimeController,
                         format: DateFormat.jm(),
                         decoration: InputDecoration(
                           hintText: "Select Event Start Time...",
@@ -224,6 +235,7 @@ class _AddEventViewState extends State<AddEventViewNew> {
                         height: 20,
                       ),
                       TextFormField(
+                        initialValue: widget.modelEventNew.eventVenue,
                         decoration: InputDecoration(
                           hintText: "Enter Event Venue...",
                           prefixIcon: const Icon(Icons.location_on_rounded),
@@ -251,6 +263,7 @@ class _AddEventViewState extends State<AddEventViewNew> {
                         height: 20,
                       ),
                       TextFormField(
+                        initialValue: widget.modelEventNew.eventDescription,
                         decoration: InputDecoration(
                           hintText: "Enter Event Description...",
                           prefixIcon: const Icon(Icons.info_rounded),
@@ -278,6 +291,7 @@ class _AddEventViewState extends State<AddEventViewNew> {
                         height: 20,
                       ),
                       TextFormField(
+                        initialValue: widget.modelEventNew.eventInstructions,
                         decoration: InputDecoration(
                           hintText: "Enter Event Instructions...",
                           prefixIcon: const Icon(Icons.speaker),
@@ -305,6 +319,7 @@ class _AddEventViewState extends State<AddEventViewNew> {
                         height: 20,
                       ),
                       TextFormField(
+                        initialValue: widget.modelEventNew.eventGoogleFormLink,
                         decoration: InputDecoration(
                           hintText: "Enter Event Google Form Link...",
                           prefixIcon: const Icon(Icons.link_rounded),
@@ -339,17 +354,16 @@ class _AddEventViewState extends State<AddEventViewNew> {
                             if (addEventFormKey.currentState!.validate()) {
                               addEventFormKey.currentState!.save();
 
-                              modelEvent.userId = modelUserData.getUserUID;
+                              modelEvent.userId = widget.modelEventNew.userId;
 
-                              modelEvent.eventPostedDate =
-                                  DateTime.now().toString();
+                              modelEvent.eventPostedDate = widget.modelEventNew.eventPostedDate;
 
                               if (addEventFormKey.currentState!.validate()) {
                                 FirebaseFirestore.instance
                                     .collection(DB_ROOT_NAME)
                                     .doc(EVENTS_CONSTANT)
                                     .collection(modelUserData.getUserCollege)
-                                    .doc()
+                                    .doc(widget.modelEventNew.id)
                                     .set(modelEvent.toMap())
                                     .whenComplete(() {
                                   Navigator.of(context).pop();
@@ -362,7 +376,7 @@ class _AddEventViewState extends State<AddEventViewNew> {
                                       onWillPop: () async => false,
                                       child: commonAlertDialog(
                                           context,
-                                          "Add Event Success!",
+                                          "Update Event Success!",
                                           Icon(
                                             Icons.event_available_rounded,
                                             color: primaryDarkColor,

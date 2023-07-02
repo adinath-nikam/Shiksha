@@ -1,10 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shiksha/AuthViews/college_select_view.dart';
 import 'package:shiksha/Components/common_component_widgets.dart';
-import 'package:shiksha/Editors/profile_edit_view.dart';
 import 'package:shiksha/Models/model_user_data.dart';
 import 'package:shiksha/colors/colors.dart';
 import 'package:syncfusion_flutter_barcodes/barcodes.dart';
@@ -40,15 +38,15 @@ class _ProfileViewContentState extends State<ProfileViewContent> {
     super.initState();
   }
 
-  Widget isVerified() {
-    if (FirebaseAuth.instance.currentUser!.emailVerified) {
-      return Icon(MdiIcons.checkDecagramOutline,
-          size: 24, color: primaryLightBlueColor);
-    } else {
-      return Icon(MdiIcons.alertDecagramOutline,
-          size: 24, color: primaryRedColor);
-    }
-  }
+  // Widget isVerified() {
+  //   if (FirebaseAuth.instance.currentUser!.emailVerified) {
+  //     return Icon(MdiIcons.checkDecagramOutline,
+  //         size: 24, color: primaryLightBlueColor);
+  //   } else {
+  //     return Icon(MdiIcons.alertDecagramOutline,
+  //         size: 24, color: primaryRedColor);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -92,30 +90,22 @@ class _ProfileViewContentState extends State<ProfileViewContent> {
                                     height: circleRadius / 2,
                                   ),
                                   GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (builder) =>
-                                                  const EditProfileView()));
+                                    onTap: (){
+                                      Navigator.of(context).push(animatedRoute(const CollegeSelectView()));
                                     },
-                                    child: GestureDetector(
-                                      onTap: (){
-                                        Navigator.of(context).push(MaterialPageRoute(builder: (builder)=> const CollegeSelectView()));
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          customTextBold(
-                                              text: 'EDIT',
-                                              textSize: 16,
-                                              color: primaryLightBlueColor),
-                                          Icon(
-                                            Icons.settings,
-                                            color: primaryLightBlueColor,
-                                          ),
-                                        ],
-                                      ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        customTextBold(
+                                            text: 'EDIT',
+                                            textSize: 16,
+                                            color: primaryLightBlueColor),
+                                        Icon(
+                                          Icons.settings,
+                                          color: primaryLightBlueColor,
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   const SizedBox(
@@ -161,7 +151,7 @@ class _ProfileViewContentState extends State<ProfileViewContent> {
                                           width: 5,
                                         ),
                                         Icon(
-                                          MdiIcons.contentCopy,
+                                          Icons.content_copy_rounded,
                                           size: 15,
                                           color: primaryDarkColor,
                                         ),
@@ -180,7 +170,7 @@ class _ProfileViewContentState extends State<ProfileViewContent> {
                                           child: Row(
                                             children: [
                                               Icon(
-                                                MdiIcons.schoolOutline,
+                                                Icons.school_rounded,
                                                 size: 30,
                                                 color: primaryDarkColor,
                                               ),
@@ -205,7 +195,7 @@ class _ProfileViewContentState extends State<ProfileViewContent> {
                                           child: Row(
                                             children: [
                                               Icon(
-                                                MdiIcons.bookEducationOutline,
+                                                Icons.book_rounded,
                                                 size: 30,
                                                 color: primaryDarkColor,
                                               ),
@@ -230,7 +220,7 @@ class _ProfileViewContentState extends State<ProfileViewContent> {
                                           child: Row(
                                             children: [
                                               Icon(
-                                                MdiIcons.calendarAccountOutline,
+                                                Icons.perm_contact_calendar_rounded,
                                                 size: 30,
                                                 color: primaryDarkColor,
                                               ),
@@ -314,7 +304,7 @@ class _ProfileViewContentState extends State<ProfileViewContent> {
                               child: Image(
                                 width: 60,
                                 height: 60,
-                                image: AssetImage('assets/images/1.png'),
+                                image: AssetImage('assets/images/क्षा_logo_dark.png'),
                               ),
                             ),
                           ),

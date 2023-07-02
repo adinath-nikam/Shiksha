@@ -1,14 +1,11 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shiksha/Components/AuthButtons.dart';
 import 'package:shiksha/Components/common_component_widgets.dart';
 import 'package:shiksha/HomeView/main_tab_view.dart';
 import 'package:shiksha/Models/model_user_data.dart';
 import 'package:shiksha/colors/colors.dart';
-
-
 import '../Components/constants.dart';
 import '../Models/utilty_shared_preferences.dart';
 
@@ -69,7 +66,7 @@ class CollegeSelectView extends StatelessWidget {
                                   child: ListTile(
                                     contentPadding: const EdgeInsets.all(15),
                                     leading: Icon(
-                                      MdiIcons.townHall,
+                                      Icons.school_rounded,
                                       color: primaryDarkColor,
                                     ),
                                     title: customTextBold(
@@ -78,30 +75,13 @@ class CollegeSelectView extends StatelessWidget {
                                         color: primaryDarkColor),
                                     trailing: GestureDetector(
                                       onTap: () {
-                                        Navigator.of(context).push(
-                                          PageRouteBuilder(
-                                            pageBuilder: (context, animation,
-                                                    secondaryAnimation) =>
-                                                StreamSelectView(
-                                              selectedCollege:
-                                                  list[index].toString(),
-                                            ),
-                                            transitionsBuilder: (
-                                              BuildContext context,
-                                              Animation<double> animation,
-                                              Animation<double>
-                                                  secondaryAnimation,
-                                              Widget child,
-                                            ) =>
-                                                SlideTransition(
-                                              position: Tween<Offset>(
-                                                begin: const Offset(1, 0),
-                                                end: Offset.zero,
-                                              ).animate(animation),
-                                              child: child,
-                                            ),
+                                        Navigator.of(context)
+                                            .push(animatedRoute(
+                                          StreamSelectView(
+                                            selectedCollege:
+                                                list[index].toString(),
                                           ),
-                                        );
+                                        ));
                                       },
                                       child: Icon(
                                         Icons.arrow_forward_ios,
@@ -183,7 +163,7 @@ class StreamSelectView extends StatelessWidget {
                                   child: ListTile(
                                     contentPadding: const EdgeInsets.all(15),
                                     leading: Icon(
-                                      MdiIcons.townHall,
+                                      Icons.school_rounded,
                                       color: primaryDarkColor,
                                     ),
                                     title: customTextBold(
@@ -192,31 +172,14 @@ class StreamSelectView extends StatelessWidget {
                                         color: primaryDarkColor),
                                     trailing: GestureDetector(
                                       onTap: () {
-                                        Navigator.of(context).push(
-                                          PageRouteBuilder(
-                                            pageBuilder: (context, animation,
-                                                    secondaryAnimation) =>
-                                                SemesterSelectView(
-                                              selectedCollege: selectedCollege,
-                                              selectedStream:
-                                                  list[index].toString(),
-                                            ),
-                                            transitionsBuilder: (
-                                              BuildContext context,
-                                              Animation<double> animation,
-                                              Animation<double>
-                                                  secondaryAnimation,
-                                              Widget child,
-                                            ) =>
-                                                SlideTransition(
-                                              position: Tween<Offset>(
-                                                begin: const Offset(1, 0),
-                                                end: Offset.zero,
-                                              ).animate(animation),
-                                              child: child,
-                                            ),
+                                        Navigator.of(context)
+                                            .push(animatedRoute(
+                                          SemesterSelectView(
+                                            selectedCollege: selectedCollege,
+                                            selectedStream:
+                                                list[index].toString(),
                                           ),
-                                        );
+                                        ));
                                       },
                                       child: Icon(
                                         Icons.arrow_forward_ios,
@@ -299,7 +262,7 @@ class SemesterSelectView extends StatelessWidget {
                                   child: ListTile(
                                     contentPadding: const EdgeInsets.all(15),
                                     leading: Icon(
-                                      MdiIcons.townHall,
+                                      Icons.school_rounded,
                                       color: primaryDarkColor,
                                     ),
                                     title: customTextBold(
@@ -308,32 +271,15 @@ class SemesterSelectView extends StatelessWidget {
                                         color: primaryDarkColor),
                                     trailing: GestureDetector(
                                       onTap: () {
-                                        Navigator.of(context).push(
-                                          PageRouteBuilder(
-                                            pageBuilder: (context, animation,
-                                                    secondaryAnimation) =>
-                                                USNSelectView(
-                                              selectedCollege: selectedCollege,
-                                              selectedStream: selectedStream,
-                                              selectedSemester:
-                                                  list[index].toString(),
-                                            ),
-                                            transitionsBuilder: (
-                                              BuildContext context,
-                                              Animation<double> animation,
-                                              Animation<double>
-                                                  secondaryAnimation,
-                                              Widget child,
-                                            ) =>
-                                                SlideTransition(
-                                              position: Tween<Offset>(
-                                                begin: const Offset(1, 0),
-                                                end: Offset.zero,
-                                              ).animate(animation),
-                                              child: child,
-                                            ),
+                                        Navigator.of(context)
+                                            .push(animatedRoute(
+                                          USNSelectView(
+                                            selectedCollege: selectedCollege,
+                                            selectedStream: selectedStream,
+                                            selectedSemester:
+                                                list[index].toString(),
                                           ),
-                                        );
+                                        ));
                                       },
                                       child: Icon(
                                         Icons.arrow_forward_ios,
@@ -420,7 +366,7 @@ class _USNSelectViewState extends State<USNSelectView> {
                               BorderSide(width: 3, color: primaryDarkColor),
                         ),
                         icon: Icon(
-                          MdiIcons.schoolOutline,
+                          Icons.school_rounded,
                           color: primaryDarkColor,
                           size: 38,
                         )),
@@ -464,8 +410,9 @@ class _USNSelectViewState extends State<USNSelectView> {
                                   .save('SP_SHIKSHA_USER_DATA', modelUserData)
                                   .whenComplete(() {
                                 Navigator.of(context).pop();
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (builder) => const TabView()));
+
+                                Navigator.of(context)
+                                    .push(animatedRoute(const TabView()));
                               });
                             });
                           }
@@ -478,7 +425,6 @@ class _USNSelectViewState extends State<USNSelectView> {
                   const SizedBox(
                     height: 100,
                   ),
-                  madeInTAG(),
                 ],
               ),
             ),

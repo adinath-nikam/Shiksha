@@ -1,18 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shiksha/LibraryViews/library_book_search_view.dart';
 import 'package:shiksha/LibraryViews/library_fines_view.dart';
 import 'package:shiksha/LibraryViews/library_history_view.dart';
 import 'package:shiksha/LibraryViews/library_issued_books_view.dart';
-import 'package:syncfusion_flutter_barcodes/barcodes.dart';
-import '../BusTracking/bus_track_map_view.dart';
 import '../Components/common_component_widgets.dart';
 import '../colors/colors.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:html/parser.dart' show parse;
-import 'package:flip_card/flip_card.dart';
 import 'package:xml/xml.dart' as xml;
 import 'package:requests/requests.dart';
 
@@ -228,7 +223,7 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
               text: "Scan ID", textSize: 16, color: primaryWhiteColor),
           backgroundColor: primaryDarkColor,
           icon: Icon(
-            MdiIcons.barcodeScan,
+            Icons.barcode_reader,
             color: primaryWhiteColor,
           ),
         ),
@@ -238,242 +233,18 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
             if (!snapshot.hasData) {
               return progressIndicator();
             } else if (snapshot.hasData && snapshot.data == true) {
-              return Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                child: Column(
-                  children: [
-                    FlipCard(
-                        fill: Fill.fillBack,
-                        // Fill the back side of the card to make in the same size as the front.
-                        direction: FlipDirection.HORIZONTAL,
-                        // default
-                        side: CardSide.FRONT,
-                        // The side to initially display.
-                        front: Container(
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: primaryDarkColor,
-                          ),
-                          padding: EdgeInsets.all(2),
-                          child: Card(
-                            color: primaryWhiteColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: CachedNetworkImage(
-                                      height: 50,
-                                      imageUrl:
-                                          'https://www.kletech.ac.in/information/img/logo.png',
-                                      fit: BoxFit.cover,
-                                      progressIndicatorBuilder: (context, url,
-                                              downloadProgress) =>
-                                          progressIndicator(),
-                                      errorWidget: (context, url, error) =>
-                                          Icon(
-                                        MdiIcons.alertCircleOutline,
-                                        color: primaryWhiteColor,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Image(
-                                          height: 130,
-                                          fit: BoxFit.fitHeight,
-                                          image:
-                                              Image.memory(patronImage).image,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 20,
-                                      ),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
-                                              color: primaryDarkColor.withAlpha(
-                                                  50),
-                                            ),
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 5, horizontal: 10),
-                                            child: customTextBold(
-                                                text: category,
-                                                textSize: 14,
-                                                color: primaryDarkColor),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          customTextBold(
-                                              text: username,
-                                              textSize: 22,
-                                              color: primaryDarkColor),
-                                          const SizedBox(
-                                            height: 20,
-                                          ),
-                                          Container(
-                                            height: 60,
-                                            width: 180,
-                                            child: SfBarcodeGenerator(
-                                              symbology: Code128(),
-                                              value: _scanBarcode,
-                                              showValue: true,
-                                              textStyle: const TextStyle(
-                                                fontSize: 12,
-                                                fontFamily: "ProductSans-Bold",
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        back: Container(
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: primaryDarkColor,
-                          ),
-                          padding: EdgeInsets.all(2),
-                          child: Card(
-                            color: primaryWhiteColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        MdiIcons.schoolOutline,
-                                        color: primaryDarkColor,
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      customTextBold(
-                                          text: stream,
-                                          textSize: 16,
-                                          color: primaryDarkColor)
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        MdiIcons.emailOutline,
-                                        color: primaryDarkColor,
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      customTextBold(
-                                          text: email,
-                                          textSize: 16,
-                                          color: primaryDarkColor)
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        MdiIcons.phone,
-                                        color: primaryDarkColor,
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      customTextBold(
-                                          text: phone,
-                                          textSize: 16,
-                                          color: primaryDarkColor)
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        MdiIcons.humanMale,
-                                        color: primaryDarkColor,
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      customTextBold(
-                                          text: gender,
-                                          textSize: 16,
-                                          color: primaryDarkColor)
-                                    ],
-                                  ),
-                                  Divider(
-                                    height: 50,
-                                    color: primaryDarkColor,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        MdiIcons.currencyRupee,
-                                        color: primaryRedColor,
-                                        size: 30,
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      customTextBold(
-                                          text: fine,
-                                          textSize: 30,
-                                          color: primaryRedColor)
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        )),
-                    libraryMenu(context),
-                  ],
+              return SingleChildScrollView(
+                child: Container(
+                  child: libraryInfo(),
                 ),
               );
             } else if (snapshot.hasData && snapshot.data == false) {
-              return Center(child: customTextBold(text: "No Patron Found! with UID \n'${widget.appUserUSN}'", textSize: 22, color: primaryDarkColor),);
+              return Center(
+                child: customTextBold(
+                    text: "No Patron Found! with UID \n'${widget.appUserUSN}'",
+                    textSize: 22,
+                    color: primaryDarkColor),
+              );
             } else {
               return const Text("Error");
             }
@@ -483,12 +254,82 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
     );
   }
 
+  Widget libraryInfo() {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.all(25),
+            width: double.infinity,
+            color: primaryDarkColor,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image(
+                    width: 100,
+                    height: 100,
+                    image: Image.memory(patronImage).image,
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                customTextRegular(
+                    text: "Total Due (Fine to Pay)",
+                    textSize: 14,
+                    color: primaryWhiteColor),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.currency_rupee_rounded,
+                      color: primaryWhiteColor,
+                      size: 30,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    customTextBold(
+                        text: fine, textSize: 30, color: primaryWhiteColor),
+                  ],
+                ),
+                Divider(
+                  color: primaryWhiteColor,
+                  thickness: 1,
+                  height: 50,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.0),
+                    color: primaryWhiteColor.withOpacity(0.5),
+                  ),
+                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  child: customTextBold(
+                      text: username, textSize: 24, color: primaryWhiteColor),
+                ),
+              ],
+            ),
+          ),
+          libraryMenu(context),
+        ],
+      ),
+    );
+  }
+
   Widget libraryMenu(BuildContext context) {
     LibraryMenuItems item1 = LibraryMenuItems(
         title: "SEARCH",
         img: Icon(
-          MdiIcons.bookSearchOutline,
-          color: primaryWhiteColor,
+          Icons.search_rounded,
+          color: primaryDarkColor,
           size: 25,
         ),
         Activity: LibraryBookSearchView());
@@ -496,8 +337,8 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
     LibraryMenuItems item2 = LibraryMenuItems(
         title: "FINES",
         img: Icon(
-          MdiIcons.currencyRupee,
-          color: primaryWhiteColor,
+          Icons.currency_rupee_rounded,
+          color: primaryDarkColor,
           size: 25,
         ),
         Activity: LibraryFinesView(
@@ -507,8 +348,8 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
     LibraryMenuItems item3 = LibraryMenuItems(
         title: "BOOKS",
         img: Icon(
-          MdiIcons.bookshelf,
-          color: primaryWhiteColor,
+          Icons.my_library_books_rounded,
+          color: primaryDarkColor,
           size: 25,
         ),
         Activity: LibraryIssuedBooksView(
@@ -518,37 +359,32 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
     LibraryMenuItems item4 = LibraryMenuItems(
         title: "HISTORY",
         img: Icon(
-          MdiIcons.history,
-          color: primaryWhiteColor,
+          Icons.history_rounded,
+          color: primaryDarkColor,
           size: 25,
         ),
         Activity: LibraryHistoryView(
           libraryBooksIssueHistory: lhd,
         ));
 
-
-    LibraryMenuItems item5 = LibraryMenuItems(
-        title: "ABOUT",
-        img: Icon(
-          MdiIcons.informationVariant,
-          color: primaryWhiteColor,
-          size: 25,
-        ),
-        Activity: MapScreenView());
-
     List<LibraryMenuItems> LibraryMenuItemsList = [
       item1,
       item2,
       item3,
       item4,
-      item5
     ];
 
     return Container(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 40),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            customTextBold(
+                text: "Operation", textSize: 22, color: primaryDarkColor),
+            SizedBox(
+              height: 20,
+            ),
             GridView.count(
                 shrinkWrap: true,
                 childAspectRatio: 1.0,
@@ -558,29 +394,32 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
                 children: LibraryMenuItemsList.map((data) {
                   return GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (builder) => data.Activity));
+                      Navigator.of(context).push(animatedRoute(data.Activity));
                     },
-                    child: Container(
-                      height: 200.0,
-                      width: 200.0,
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: primaryDarkColor,
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        side: BorderSide(
+                          color: primaryDarkColor,
+                          width: 2.0,
+                        ),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          data.img,
-
-                          //SizedBox(height: 12.0,),
-                          customTextBold(
-                              text: data.title,
-                              textSize: 14,
-                              color: primaryWhiteColor)
-                        ],
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12.0),
+                          color: primaryWhiteColor,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            data.img,
+                            customTextBold(
+                                text: data.title,
+                                textSize: 14,
+                                color: primaryDarkColor)
+                          ],
+                        ),
                       ),
                     ),
                   );

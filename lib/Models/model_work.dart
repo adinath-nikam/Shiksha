@@ -1,14 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shiksha/Models/model_user_data.dart';
-
 import '../Components/AuthButtons.dart';
 import '../Components/common_component_widgets.dart';
 import '../Components/constants.dart';
+import '../WorkViews/edit_work_view.dart';
 import '../colors/colors.dart';
-import 'ModelProfileData.dart';
 
 //ignore: must_be_immutable
 class ModelWork extends StatefulWidget {
@@ -98,26 +96,52 @@ class _ModelWorkState extends State<ModelWork> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10.0),
-                child: Image.network(
-                  widget.workImageURL!,
-                  fit: BoxFit.fill,
-                  height: 55,
-                  width: 55,
-                  loadingBuilder: (BuildContext context, Widget child,
-                      ImageChunkEvent? loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Center(
-                      child: CircularProgressIndicator(
-                        value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded /
-                                loadingProgress.expectedTotalBytes!
-                            : null,
-                      ),
-                    );
-                  },
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Image.network(
+                      widget.workImageURL!,
+                      fit: BoxFit.fill,
+                      height: 55,
+                      width: 55,
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        ModelWork e = ModelWork.fromData(
+                          widget.id,
+                          widget.workTitle,
+                          widget.workCompanyName,
+                          widget.workCompensation,
+                          widget.workDescription,
+                          widget.workLocation,
+                          widget.workType,
+                          widget.workPostURL,
+                          widget.workImageURL,
+                        );
+                        Navigator.of(context)
+                            .push(animatedRoute(EditWorkView(modelWork: e)));
+                      },
+                      icon: Icon(
+                        Icons.settings_rounded,
+                        color: primaryDarkColor,
+                        size: 30,
+                      ))
+                ],
               ),
               const SizedBox(
                 height: 25,
@@ -248,7 +272,7 @@ class _ModelWorkState extends State<ModelWork> {
                                 context,
                                 "Delete Job Success!",
                                 Icon(
-                                  MdiIcons.briefcaseOutline,
+                                  Icons.work_rounded,
                                   color: primaryDarkColor,
                                   size: 50,
                                 ), () {

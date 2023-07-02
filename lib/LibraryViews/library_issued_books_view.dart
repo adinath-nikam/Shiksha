@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import '../Components/common_component_widgets.dart';
 import '../colors/colors.dart';
 
@@ -31,7 +30,7 @@ class LibraryIssuedBooksView extends StatelessWidget {
                       child: ListTile(
                         contentPadding: const EdgeInsets.all(10),
                         leading: Icon(
-                          MdiIcons.book,
+                          Icons.book_rounded,
                           size: 40,
                           color: primaryWhiteColor,
                         ),

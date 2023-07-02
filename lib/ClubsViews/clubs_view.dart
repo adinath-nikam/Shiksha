@@ -1,5 +1,3 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -110,10 +108,8 @@ class _ClubsViewState extends State<ClubsView>
                     icon: const Icon(Icons.event),
                     backgroundColor: primaryDarkColor,
                     onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (builder) => const AddEventViewNew()),
-                      );
+                      Navigator.of(context)
+                          .push(animatedRoute(const AddEventViewNew()));
                     },
                     label: customTextBold(
                         text: "Add Event",
@@ -139,18 +135,23 @@ class _ClubsViewState extends State<ClubsView>
               backgroundColor: primaryWhiteColor,
             ),
           );
-        }
-        else if(snapshot.data!.docs.isEmpty){
+        } else if (snapshot.data!.docs.isEmpty) {
           return Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.event_busy_rounded, color: primaryDarkColor, size: 40,),
-                const SizedBox(width: 10,),
-                customTextBold(text: 'No Events :)', textSize: 22, color: primaryDarkColor)
-              ],
-            )
-          );
+              child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.event_busy_rounded,
+                color: primaryDarkColor,
+                size: 40,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              customTextBold(
+                  text: 'No Events :)', textSize: 22, color: primaryDarkColor)
+            ],
+          ));
         }
         return ListView(
           shrinkWrap: true,
@@ -182,8 +183,7 @@ class _ClubsViewState extends State<ClubsView>
         key: ValueKey(modelEvent.eventName),
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: GestureDetector(
-          onTap: () =>
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          onTap: () {
             ModelEventNew e = ModelEventNew.fromData(
                 modelEvent.id,
                 modelEvent.userId,
@@ -196,8 +196,9 @@ class _ClubsViewState extends State<ClubsView>
                 modelEvent.eventGoogleFormLink,
                 modelEvent.eventPostedDate,
                 modelEvent.eventClub);
-            return e;
-          })),
+
+            Navigator.of(context).push(animatedRoute(e));
+          },
           child: Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),

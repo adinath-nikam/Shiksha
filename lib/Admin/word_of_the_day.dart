@@ -124,8 +124,6 @@ class _AddWOTDViewState extends State<AddWOTDView> {
                           buttonSize: 60,
                           context: context,
                           function: () {
-
-
                             if (wotdUpdateFormKey.currentState!.validate()) {
                               wotdUpdateFormKey.currentState!.save();
                               FirebaseDatabase.instance
@@ -141,25 +139,21 @@ class _AddWOTDViewState extends State<AddWOTDView> {
                                   barrierDismissible: false,
                                   builder: (BuildContext context) =>
                                       WillPopScope(
-                                        onWillPop: () async => false,
-                                        child: commonAlertDialog(
-                                            context,
-                                            "WOTD Update Success!.",
-                                            Icon(
-                                              Icons.done,
-                                              color: primaryDarkColor,
-                                              size: 50,
-                                            ), () {
-                                          Navigator.of(context).pop();
-                                        }, 1),
-                                      ),
+                                    onWillPop: () async => false,
+                                    child: commonAlertDialog(
+                                        context,
+                                        "WOTD Update Success!.",
+                                        Icon(
+                                          Icons.done,
+                                          color: primaryDarkColor,
+                                          size: 50,
+                                        ), () {
+                                      Navigator.of(context).pop();
+                                    }, 1),
+                                  ),
                                 );
                               });
                             }
-
-
-
-
                           }),
                     ],
                   ),

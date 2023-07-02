@@ -1,7 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
 import '../colors/colors.dart';
 import 'common_component_widgets.dart';
 
@@ -29,7 +27,7 @@ class AuthButtons extends StatelessWidget {
           buttonSize: buttonSize,
           context: buttonContext,
           function: buttonFunction,
-      activity: buttonActivity),
+          activity: buttonActivity),
     );
   }
 }
@@ -52,26 +50,28 @@ Widget CustomButton(
         onPressed: () async {
           final connectivityResult = await Connectivity().checkConnectivity();
           if (connectivityResult == ConnectivityResult.none) {
-            showSnackBar(context, "You're not Connected to Internet.", primaryRedColor);
+            showSnackBar(
+                context, "You're not Connected to Internet.", primaryRedColor);
           } else {
-            if(activity != null){
-              Navigator.of(context).push(MaterialPageRoute(builder: (builder)=> activity));
-            }else {
+            if (activity != null) {
+              Navigator.of(context).push(animatedRoute(activity));
+            } else {
               function();
             }
           }
         },
-        child: customTextBold(text: text, textSize: 14, color: primaryWhiteColor)),
+        child:
+            customTextBold(text: text, textSize: 14, color: primaryWhiteColor)),
   );
 }
 
 //Custom Delete Button
 Widget CustomDeleteButton(
     {required String text,
-      required double buttonHeight,
-      required BuildContext context,
-      required Function function,
-      Widget? activity}) {
+    required double buttonHeight,
+    required BuildContext context,
+    required Function function,
+    Widget? activity}) {
   return SizedBox(
     height: buttonHeight,
     width: double.infinity,
@@ -83,11 +83,12 @@ Widget CustomDeleteButton(
         onPressed: () async {
           final connectivityResult = await Connectivity().checkConnectivity();
           if (connectivityResult == ConnectivityResult.none) {
-            showSnackBar(context, "You're not Connected to Internet.", primaryRedColor);
+            showSnackBar(
+                context, "You're not Connected to Internet.", primaryRedColor);
           } else {
-            if(activity != null){
-              Navigator.of(context).push(MaterialPageRoute(builder: (builder)=> activity));
-            }else {
+            if (activity != null) {
+              Navigator.of(context).push(animatedRoute(activity));
+            } else {
               function();
             }
           }
@@ -97,7 +98,9 @@ Widget CustomDeleteButton(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             customTextBold(text: text, textSize: 14, color: primaryWhiteColor),
-            const SizedBox(width: 20,),
+            const SizedBox(
+              width: 20,
+            ),
             Icon(
               Icons.delete,
               color: primaryWhiteColor,

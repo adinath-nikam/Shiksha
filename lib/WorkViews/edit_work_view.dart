@@ -1,73 +1,44 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:intl/intl.dart';
-import 'package:shiksha/Components/AuthButtons.dart';
-import 'package:shiksha/Models/model_user_data.dart';
+import '../Components/AuthButtons.dart';
 import '../Components/common_component_widgets.dart';
 import '../Components/constants.dart';
-import '../Models/model_event.dart';
+import '../Models/model_work.dart';
 import '../colors/colors.dart';
 
-class AddEventViewNew extends StatefulWidget {
-  const AddEventViewNew({Key? key}) : super(key: key);
+class EditWorkView extends StatefulWidget {
+  final ModelWork modelWork;
+
+  const EditWorkView({Key? key, required this.modelWork}) : super(key: key);
+
   @override
-  State<AddEventViewNew> createState() => _AddEventViewState();
+  State<EditWorkView> createState() => _EditWorkViewState();
 }
 
-class _AddEventViewState extends State<AddEventViewNew> {
-  final TextEditingController eventDateController = TextEditingController();
-  final TextEditingController semesterController = TextEditingController();
-  final TextEditingController streamsController = TextEditingController();
-  late String selectedEventDate;
-
-  List<String>? clubList = [];
+class _EditWorkViewState extends State<EditWorkView> {
+  final TextEditingController workImageURLController = TextEditingController();
+  final TextEditingController workTitleController = TextEditingController();
+  final TextEditingController workDescController = TextEditingController();
+  final TextEditingController workCompanyController = TextEditingController();
+  final TextEditingController workCompensationController =
+      TextEditingController();
+  final TextEditingController workLocationController = TextEditingController();
+  final TextEditingController workPostURLController = TextEditingController();
+  final addJobFormKey = GlobalKey<FormState>();
+  ModelWork modelWork = ModelWork();
+  String? workType;
 
   @override
   void initState() {
     super.initState();
-    getClubs();
-  }
+    workImageURLController.text = widget.modelWork.workImageURL!;
+    workTitleController.text = widget.modelWork.workTitle!;
+    workDescController.text = widget.modelWork.workDescription!;
+    workCompanyController.text = widget.modelWork.workCompanyName!;
+    workLocationController.text = widget.modelWork.workLocation!;
+    workCompensationController.text = widget.modelWork.workCompensation!;
+    workPostURLController.text = widget.modelWork.workPostURL!;
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  getClubs() async {
-    List<String>? tempList = [];
-    DataSnapshot dataSnapshot =
-        await FirebaseDatabase.instance.ref().child("SHIKSHA_APP/CLUBS").get();
-    Map<dynamic, dynamic> clubValues =
-        dataSnapshot.value as Map<dynamic, dynamic>;
-    clubValues.forEach((key, value) {
-      tempList.add(value);
-    });
-    setState(() {
-      clubList = tempList;
-    });
-    print(clubList);
-  }
-
-  ModelEventNew modelEvent = ModelEventNew();
-  final addEventFormKey = GlobalKey<FormState>();
-
-  void eventDatePicker(BuildContext context) async {
-    final DateTime? dobPicked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1990),
-      lastDate: DateTime(2100),
-      helpText: "Select Event Date...",
-      initialEntryMode: DatePickerEntryMode.input,
-    );
-    if (dobPicked != null) {
-      setState(() {
-        selectedEventDate = DateFormat('yyyy-MM-dd').format(dobPicked);
-        eventDateController.text = selectedEventDate;
-      });
-    }
   }
 
   @override
@@ -76,7 +47,7 @@ class _AddEventViewState extends State<AddEventViewNew> {
         child: Scaffold(
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(60.0),
-          child: appBarCommon(context, "ADD EVENT")),
+          child: appBarCommon(context, "UPDATE WORK")),
       body: SingleChildScrollView(
         child: Container(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -86,55 +57,14 @@ class _AddEventViewState extends State<AddEventViewNew> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                 child: Form(
-                  key: addEventFormKey,
+                  key: addJobFormKey,
                   child: Column(
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            color: primaryDarkColor.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(10)),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 20),
-                        child: DropdownButton(
-                          isExpanded: true,
-                          underline: const SizedBox(),
-                          // value: dropdownValue,
-                          hint: customTextBold(
-                              text: CLUB_DROPDOWN_INTIAL_VALUE,
-                              textSize: 12,
-                              color: primaryDarkColor),
-                          dropdownColor: primaryDarkColor,
-                          icon: const Icon(
-                            Icons.eco_rounded,
-                          ),
-                          iconSize: 30,
-                          elevation: 16,
-                          style: TextStyle(color: primaryDarkColor),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              CLUB_DROPDOWN_INTIAL_VALUE = newValue!;
-                              modelEvent.eventClub = CLUB_DROPDOWN_INTIAL_VALUE;
-                            });
-                          },
-
-                          items: clubList?.map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: TextStyle(color: primaryWhiteColor),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
                       TextFormField(
+                        controller: workImageURLController,
                         decoration: InputDecoration(
-                          hintText: "Enter Event Name...",
-                          prefixIcon: const Icon(Icons.label_important_rounded),
+                          hintText: "Enter Image URL...",
+                          prefixIcon: const Icon(Icons.image_rounded),
                           contentPadding: const EdgeInsets.all(25.0),
                           border: const OutlineInputBorder(
                             borderSide: BorderSide.none,
@@ -146,7 +76,7 @@ class _AddEventViewState extends State<AddEventViewNew> {
                           fillColor: primaryDarkColor.withOpacity(0.1),
                         ),
                         onSaved: (value) {
-                          modelEvent.eventName = value!;
+                          modelWork.workImageURL = value!;
                         },
                         validator: (value) {
                           return value == null ? '* Required' : null;
@@ -156,12 +86,35 @@ class _AddEventViewState extends State<AddEventViewNew> {
                         height: 20,
                       ),
                       TextFormField(
-                        onTap: () => eventDatePicker(context),
-                        controller: eventDateController,
-                        readOnly: true,
+                        controller: workTitleController,
                         decoration: InputDecoration(
-                          hintText: "Select Event Date...",
-                          prefixIcon: const Icon(Icons.calendar_month_outlined),
+                          hintText: "Enter Job Title...",
+                          prefixIcon: const Icon(Icons.work_history_rounded),
+                          contentPadding: const EdgeInsets.all(25.0),
+                          border: const OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10.0),
+                            ),
+                          ),
+                          filled: true,
+                          fillColor: primaryDarkColor.withOpacity(0.1),
+                        ),
+                        onSaved: (value) {
+                          modelWork.workTitle = value!;
+                        },
+                        validator: (value) {
+                          return value == null ? '* Required' : null;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        controller: workCompanyController,
+                        decoration: InputDecoration(
+                          hintText: "Enter Company Name...",
+                          prefixIcon: const Icon(Icons.domain),
                           contentPadding: const EdgeInsets.all(25.0),
                           border: const OutlineInputBorder(
                             borderSide: BorderSide.none,
@@ -179,18 +132,17 @@ class _AddEventViewState extends State<AddEventViewNew> {
                           return null;
                         },
                         onSaved: (value) {
-                          modelEvent.eventStartDate = value!;
+                          modelWork.workCompanyName = value!;
                         },
                       ),
                       const SizedBox(
                         height: 20,
                       ),
-                      DateTimeField(
-                        format: DateFormat.jm(),
+                      TextFormField(
+                        controller: workCompensationController,
                         decoration: InputDecoration(
-                          hintText: "Select Event Start Time...",
-                          prefixIcon:
-                              const Icon(Icons.access_time_filled_rounded),
+                          hintText: "Enter Compensation...",
+                          prefixIcon: const Icon(Icons.currency_rupee_rounded),
                           contentPadding: const EdgeInsets.all(25.0),
                           border: const OutlineInputBorder(
                             borderSide: BorderSide.none,
@@ -201,31 +153,23 @@ class _AddEventViewState extends State<AddEventViewNew> {
                           filled: true,
                           fillColor: primaryDarkColor.withOpacity(0.1),
                         ),
-                        onShowPicker: (context, currentValue) async {
-                          final time = await showTimePicker(
-                            context: context,
-                            initialTime: TimeOfDay.fromDateTime(
-                                currentValue ?? DateTime.now()),
-                          );
-                          return DateTimeField.convert(time);
-                        },
                         validator: (value) {
-                          if (value == null) {
+                          if (value == null || value.isEmpty) {
                             return "* Required.";
                           }
                           return null;
                         },
                         onSaved: (value) {
-                          modelEvent.eventStartTime =
-                              DateFormat.jm().format(value!);
+                          modelWork.workCompensation = value!;
                         },
                       ),
                       const SizedBox(
                         height: 20,
                       ),
                       TextFormField(
+                        controller: workLocationController,
                         decoration: InputDecoration(
-                          hintText: "Enter Event Venue...",
+                          hintText: "Enter Location...",
                           prefixIcon: const Icon(Icons.location_on_rounded),
                           contentPadding: const EdgeInsets.all(25.0),
                           border: const OutlineInputBorder(
@@ -244,16 +188,17 @@ class _AddEventViewState extends State<AddEventViewNew> {
                           return null;
                         },
                         onSaved: (value) {
-                          modelEvent.eventVenue = value!;
+                          modelWork.workLocation = value!;
                         },
                       ),
                       const SizedBox(
                         height: 20,
                       ),
                       TextFormField(
+                        controller: workDescController,
                         decoration: InputDecoration(
-                          hintText: "Enter Event Description...",
-                          prefixIcon: const Icon(Icons.info_rounded),
+                          hintText: "Enter Job Description...",
+                          prefixIcon: const Icon(Icons.short_text_rounded),
                           contentPadding: const EdgeInsets.all(25.0),
                           border: const OutlineInputBorder(
                             borderSide: BorderSide.none,
@@ -271,42 +216,16 @@ class _AddEventViewState extends State<AddEventViewNew> {
                           return null;
                         },
                         onSaved: (value) {
-                          modelEvent.eventDescription = value!;
+                          modelWork.workDescription = value!;
                         },
                       ),
                       const SizedBox(
                         height: 20,
                       ),
                       TextFormField(
+                        controller: workPostURLController,
                         decoration: InputDecoration(
-                          hintText: "Enter Event Instructions...",
-                          prefixIcon: const Icon(Icons.speaker),
-                          contentPadding: const EdgeInsets.all(25.0),
-                          border: const OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10.0),
-                            ),
-                          ),
-                          filled: true,
-                          fillColor: primaryDarkColor.withOpacity(0.1),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "* Required.";
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          modelEvent.eventInstructions = value!;
-                        },
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          hintText: "Enter Event Google Form Link...",
+                          hintText: "Enter Job Posting URL...",
                           prefixIcon: const Icon(Icons.link_rounded),
                           contentPadding: const EdgeInsets.all(25.0),
                           border: const OutlineInputBorder(
@@ -325,32 +244,65 @@ class _AddEventViewState extends State<AddEventViewNew> {
                           return null;
                         },
                         onSaved: (value) {
-                          modelEvent.eventGoogleFormLink = value!;
+                          modelWork.workPostURL = value!;
                         },
                       ),
                       const SizedBox(
                         height: 20,
                       ),
+                      Column(
+                        children: [
+                          RadioListTile(
+                            title: customTextBold(
+                                text: "Full Time",
+                                textSize: 16,
+                                color: primaryDarkColor),
+                            value: "Full Time",
+                            groupValue: workType,
+                            onChanged: (value) {
+                              setState(() {
+                                workType = value.toString();
+                                modelWork.workType = workType!;
+                              });
+                            },
+                          ),
+                          RadioListTile(
+                            title: customTextBold(
+                                text: "Internship",
+                                textSize: 16,
+                                color: primaryDarkColor),
+                            selectedTileColor: primaryGreenColor,
+                            value: "Internship",
+                            groupValue: workType,
+                            onChanged: (value) {
+                              setState(() {
+                                workType = value.toString();
+                                modelWork.workType = workType!;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       CustomButton(
-                          text: "SUBMIT",
+                          text: "UPDATE WORK",
                           buttonSize: 60,
                           context: context,
                           function: () {
-                            if (addEventFormKey.currentState!.validate()) {
-                              addEventFormKey.currentState!.save();
+                            if (addJobFormKey.currentState!.validate()) {
+                              showLoaderDialog(context, 'Please, wait!...');
 
-                              modelEvent.userId = modelUserData.getUserUID;
+                              addJobFormKey.currentState!.save();
 
-                              modelEvent.eventPostedDate =
-                                  DateTime.now().toString();
-
-                              if (addEventFormKey.currentState!.validate()) {
+                              if (addJobFormKey.currentState!.validate()) {
                                 FirebaseFirestore.instance
                                     .collection(DB_ROOT_NAME)
-                                    .doc(EVENTS_CONSTANT)
-                                    .collection(modelUserData.getUserCollege)
-                                    .doc()
-                                    .set(modelEvent.toMap())
+                                    .doc(WORK_CONSTANTS)
+                                    .collection(WORK_CONSTANTS_OFFCAMPUS)
+                                    .doc(widget.modelWork.id)
+                                    .set(modelWork.toMap())
                                     .whenComplete(() {
                                   Navigator.of(context).pop();
 
@@ -362,14 +314,14 @@ class _AddEventViewState extends State<AddEventViewNew> {
                                       onWillPop: () async => false,
                                       child: commonAlertDialog(
                                           context,
-                                          "Add Event Success!",
+                                          "Update Job Success!",
                                           Icon(
-                                            Icons.event_available_rounded,
+                                            Icons.done_all_rounded,
                                             color: primaryDarkColor,
                                             size: 50,
                                           ), () {
                                         Navigator.of(context).pop();
-                                      }, 1),
+                                      }, 2),
                                     ),
                                   );
                                 });

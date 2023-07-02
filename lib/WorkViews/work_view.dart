@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shiksha/Components/common_component_widgets.dart';
 import 'package:shiksha/Models/model_work.dart';
 import 'package:shiksha/Models/model_user_data.dart';
@@ -29,7 +28,7 @@ class _WorkViewState extends State<WorkView> {
               backgroundColor: primaryDarkColor,
               onPressed: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (builder) => const AddJobView()),
+                  animatedRoute(const AddJobView()),
                 );
               },
               label: customTextBold(
@@ -100,14 +99,22 @@ class _WorkViewContentState extends State<WorkViewContent> {
         } else {
           return Center(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.work_history_rounded, color: primaryDarkColor, size: 40,),
-                  const SizedBox(width: 10,),
-                  customTextBold(text: 'No Job Posts :(', textSize: 22, color: primaryDarkColor)
-                ],
-              )
-          );
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.work_history_rounded,
+                color: primaryDarkColor,
+                size: 40,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              customTextBold(
+                  text: 'No Job Posts :(',
+                  textSize: 22,
+                  color: primaryDarkColor)
+            ],
+          ));
         }
       },
     );
@@ -120,8 +127,7 @@ class _WorkViewContentState extends State<WorkViewContent> {
         key: ValueKey(modelWork.workTitle),
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: GestureDetector(
-          onTap: () =>
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          onTap: () {
             ModelWork e = ModelWork.fromData(
               modelWork.id,
               modelWork.workTitle,
@@ -133,8 +139,9 @@ class _WorkViewContentState extends State<WorkViewContent> {
               modelWork.workPostURL,
               modelWork.workImageURL,
             );
-            return e;
-          })),
+
+            Navigator.of(context).push(animatedRoute(e));
+          },
           child: Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),

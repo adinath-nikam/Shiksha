@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shiksha/Models/model_campaign.dart';
 import '../Components/AuthButtons.dart';
 import '../Components/common_component_widgets.dart';
@@ -25,7 +24,7 @@ class _CampaignViewState extends State<CampaignView> {
             child: appBarCommon(context, "CAMPAIGNS")),
         floatingActionButton: FloatingActionButton.extended(
           elevation: 0.0,
-          icon: const Icon(MdiIcons.text),
+          icon: const Icon(Icons.short_text_outlined),
           backgroundColor: primaryGreenColor,
           onPressed: () {
             Navigator.of(context).push(
@@ -171,7 +170,7 @@ class _AddCampaignState extends State<AddCampaign> {
                       TextFormField(
                         decoration: InputDecoration(
                           hintText: "Enter Campaign Name...",
-                          prefixIcon: const Icon(MdiIcons.flower),
+                          prefixIcon: const Icon(Icons.text_fields_outlined),
                           contentPadding: const EdgeInsets.all(25.0),
                           border: const OutlineInputBorder(
                             borderSide: BorderSide.none,
@@ -195,7 +194,7 @@ class _AddCampaignState extends State<AddCampaign> {
                       TextFormField(
                         decoration: InputDecoration(
                           hintText: "Enter Campaign Image URL...",
-                          prefixIcon: const Icon(MdiIcons.imageOutline),
+                          prefixIcon: const Icon(Icons.image_rounded),
                           contentPadding: const EdgeInsets.all(25.0),
                           border: const OutlineInputBorder(
                             borderSide: BorderSide.none,
@@ -222,7 +221,7 @@ class _AddCampaignState extends State<AddCampaign> {
                       TextFormField(
                         decoration: InputDecoration(
                           hintText: "Enter Campaign URL...",
-                          prefixIcon: const Icon(MdiIcons.link),
+                          prefixIcon: const Icon(Icons.link_rounded),
                           contentPadding: const EdgeInsets.all(25.0),
                           border: const OutlineInputBorder(
                             borderSide: BorderSide.none,
@@ -309,7 +308,7 @@ class _AddCampaignState extends State<AddCampaign> {
                                           context,
                                           "Add Campaign Success!",
                                           Icon(
-                                            MdiIcons.post,
+                                            Icons.post_add_rounded,
                                             color: primaryDarkColor,
                                             size: 50,
                                           ), () {

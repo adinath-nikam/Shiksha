@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:firebase_database/firebase_database.dart';
 import '../FirebaseServices/firebase_service.dart';
 
@@ -12,9 +10,9 @@ class ModelUserData {
   late final String userStream;
   late final String userCollege;
   late final String userJoiningDate;
-  bool userCanPostEvent = true;
-  bool userCanPostJob = true;
-  bool userIsAdmin = true;
+  bool userCanPostEvent = false;
+  bool userCanPostJob = false;
+  bool userIsAdmin = false;
 
   ModelUserData(
       {required this.userUID,

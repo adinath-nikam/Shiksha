@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import '../Components/AuthButtons.dart';
 import '../Components/common_component_widgets.dart';
 import '../Components/constants.dart';
@@ -288,7 +287,7 @@ class _AddJobViewState extends State<AddJobView> {
                                           context,
                                           "Add Job Success!",
                                           Icon(
-                                            MdiIcons.checkOutline,
+                                            Icons.done_all_rounded,
                                             color: primaryDarkColor,
                                             size: 50,
                                           ), () {

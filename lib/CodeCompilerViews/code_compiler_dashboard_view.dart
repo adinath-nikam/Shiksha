@@ -99,30 +99,11 @@ class _CodeCompilerDashBoardState extends State<CodeCompilerDashBoard> {
                                             color: primaryDarkColor),
                                         ElevatedButton(
                                           onPressed: () {
-                                            Navigator.of(context).push(
-                                              PageRouteBuilder(
-                                                pageBuilder: (context,
-                                                        animation,
-                                                        secondaryAnimation) =>
-                                                    CompilerView(
-                                                        url: list[index]
-                                                            ['URL']),
-                                                transitionsBuilder: (
-                                                  BuildContext context,
-                                                  Animation<double> animation,
-                                                  Animation<double>
-                                                      secondaryAnimation,
-                                                  Widget child,
-                                                ) =>
-                                                    SlideTransition(
-                                                  position: Tween<Offset>(
-                                                    begin: const Offset(1, 0),
-                                                    end: Offset.zero,
-                                                  ).animate(animation),
-                                                  child: child,
-                                                ),
-                                              ),
-                                            );
+
+                                            Navigator.of(context)
+                                                .push(animatedRoute(CompilerView(
+                                                url: list[index]
+                                                ['URL'])));
                                           },
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: primaryDarkColor,
