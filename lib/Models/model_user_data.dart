@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import '../FirebaseServices/firebase_service.dart';
+import '../Models/utilty_shared_preferences.dart';
 
 final FirebaseAuthServices firebaseAuthServices = FirebaseAuthServices();
 
@@ -129,4 +130,19 @@ Stream<ModelUserData?> getUserData() {
     return modelUserData = ModelUserData.fromJson(
         event.snapshot.value as Map<dynamic, dynamic>);
   });
+}
+
+
+late ModelUserData tempUserData;
+
+Future<ModelUserData> tempUserData2() async {
+  try {
+    modelUserData = ModelUserData.fromJson(
+        await UtilitySharedPreferences().read('SP_SHIKSHA_USER_DATA'));
+
+    return modelUserData;
+  } catch (e) {
+      print(">>> $e");
+    return modelUserData;
+  }
 }

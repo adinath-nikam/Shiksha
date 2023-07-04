@@ -401,20 +401,38 @@ class _USNSelectViewState extends State<USNSelectView> {
                                 userStream: widget.selectedStream,
                                 userJoiningDate: DateTime.now().toString());
 
-                            firebaseAuthServices.databaseReference
-                                .child(
-                                    '$DB_ROOT_NAME/$RTDB_USERS_ROOT_NAME/${firebaseAuthServices.firebaseUser!.uid}')
-                                .set(modelUserData.toJson())
-                                .whenComplete(() async {
-                              sharedPrefUserData
-                                  .save('SP_SHIKSHA_USER_DATA', modelUserData)
-                                  .whenComplete(() {
-                                Navigator.of(context).pop();
+                            // firebaseAuthServices.databaseReference
+                            //     .child(
+                            //         '$DB_ROOT_NAME/$RTDB_USERS_ROOT_NAME/${firebaseAuthServices.firebaseUser!.uid}')
+                            //     .set(modelUserData.toJson())
+                            //     .whenComplete(() async {
+                            //
+                            //
+                            //   sharedPrefUserData
+                            //       .save('SP_SHIKSHA_USER_DATA', modelUserData)
+                            //       .whenComplete(() {
+                            //     Navigator.of(context).pop();
+                            //
+                            //     Navigator.of(context)
+                            //         .push(animatedRoute(const TabView()));
+                            //   });
+                            //
+                            //
+                            // });
 
-                                Navigator.of(context)
-                                    .push(animatedRoute(const TabView()));
-                              });
+
+                            sharedPrefUserData
+                                .save('SP_SHIKSHA_USER_DATA', modelUserData)
+                                .whenComplete(() {
+                              Navigator.of(context).pop();
+
+                              Navigator.of(context)
+                                  .push(animatedRoute(const TabView()));
                             });
+
+
+
+
                           }
                         });
                       }),

@@ -95,8 +95,8 @@ class _MyAppState extends State<MyApp> {
             backgroundColor: primaryWhiteColor,
             body: firebaseAuthServices.firebaseUser == null
                 ? const SignInView()
-                : StreamBuilder<ModelUserData?>(
-                    stream: getUserData(),
+                : FutureBuilder<ModelUserData?>(
+                    future: tempUserData2(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
@@ -112,6 +112,24 @@ class _MyAppState extends State<MyApp> {
                         return const Center(child: ErrorView());
                       }
                     }),
+
+            // StreamBuilder<ModelUserData?>(
+            //         stream: getUserData(),
+            //         builder: (context, snapshot) {
+            //           if (snapshot.connectionState == ConnectionState.waiting) {
+            //             return const Center(child: CircularProgressIndicator());
+            //           } else if (snapshot.hasData) {
+            //             FlutterNativeSplash.remove();
+            //             return const TabView();
+            //           } else if (snapshot.hasError) {
+            //             FlutterNativeSplash.remove();
+            //             print(snapshot.hasError);
+            //             return const CollegeSelectView();
+            //           } else {
+            //             FlutterNativeSplash.remove();
+            //             return const Center(child: ErrorView());
+            //           }
+            //         }),
           ),
         ),
       ),

@@ -25,7 +25,9 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  String word = 'Loading..', pos = 'Loading..', mean = 'Loading..';
+  String word = 'Loading..',
+      pos = 'Loading..',
+      mean = 'Loading..';
   late final Map wordOfTheDay;
 
   @override
@@ -52,50 +54,56 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      body: SingleChildScrollView(
-        child: AnimationLimiter(
-          child: AnimationConfiguration.synchronized(
-            child: SlideAnimation(
-              verticalOffset: MediaQuery.of(context).size.height,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  campaignListView(),
-                  expansionMenu(context),
-                  getWordOfTheDay(),
-                  SizedBox(height: 200, child: eventsListView()),
-                  Container(height: 210, child: workListView()),
-                  // recentJobPosting(),
-                  const SizedBox(
-                    height: 25,
+          body: SingleChildScrollView(
+            child: AnimationLimiter(
+              child: AnimationConfiguration.synchronized(
+                child: SlideAnimation(
+                  verticalOffset: MediaQuery
+                      .of(context)
+                      .size
+                      .height,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      campaignListView(),
+                      expansionMenu(context),
+                      getWordOfTheDay(),
+                      SizedBox(height: 200, child: eventsListView()),
+                      Container(height: 210, child: workListView()),
+                      // recentJobPosting(),
+                      const SizedBox(
+                        height: 25,
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
-      ),
-      floatingActionButton: modelUserData.getUserIsAdmin
-          ? FloatingActionButton.extended(
-              elevation: 0.0,
-              icon: const Icon(Icons.admin_panel_settings),
-              backgroundColor: primaryGreenColor,
-              onPressed: () {
-                Navigator.of(context).push(animatedRoute(const AdminView()));
-              },
-              label: customTextBold(
-                  text: "Admin", textSize: 14, color: primaryWhiteColor),
-            )
-          : null,
-    ));
+          floatingActionButton: modelUserData.getUserIsAdmin
+              ? FloatingActionButton.extended(
+            elevation: 0.0,
+            icon: const Icon(Icons.admin_panel_settings),
+            backgroundColor: primaryGreenColor,
+            onPressed: () {
+              Navigator.of(context).push(animatedRoute(const AdminView()));
+            },
+            label: customTextBold(
+                text: "Admin", textSize: 14, color: primaryWhiteColor),
+          )
+              : null,
+        ));
   }
 
   Widget getWordOfTheDay() {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
         color: primaryDarkColor.withAlpha(50),
@@ -134,7 +142,7 @@ class _HomeViewState extends State<HomeView> {
             children: [
               Container(
                   padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                   child: customTextBold(
                       text: "Upcoming Events",
                       textSize: 16,
@@ -145,7 +153,7 @@ class _HomeViewState extends State<HomeView> {
                   scrollDirection: Axis.horizontal,
                   children: snapshot.data!.docs.map((data) {
                     final ModelEventNew modelEvent =
-                        ModelEventNew.fromSnapshot(data);
+                    ModelEventNew.fromSnapshot(data);
                     final startDate = DateFormat("yyyy-MM-dd")
                         .parse(modelEvent.eventStartDate!);
                     final postedDate = DateFormat("yyyy-MM-dd")
@@ -156,7 +164,7 @@ class _HomeViewState extends State<HomeView> {
                     final dayNumber = DateFormat('dd').format(startDate);
 
                     final postedYearNumber =
-                        DateFormat('yyyy').format(postedDate);
+                    DateFormat('yyyy').format(postedDate);
 
                     return GestureDetector(
                       onTap: () {
@@ -268,7 +276,7 @@ class _HomeViewState extends State<HomeView> {
             children: [
               Container(
                   padding:
-                      const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
+                  const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
                   child: customTextBold(
                       text: "Recent Posts",
                       textSize: 16,
@@ -315,16 +323,16 @@ class _HomeViewState extends State<HomeView> {
                                       vertical: 20, horizontal: 20),
                                   child: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                        MainAxisAlignment.start,
                                         children: [
                                           ClipRRect(
                                             borderRadius:
-                                                BorderRadius.circular(10.0),
+                                            BorderRadius.circular(10.0),
                                             child: Image.network(
                                               modelWork.workImageURL!,
                                               fit: BoxFit.fitWidth,
@@ -332,21 +340,21 @@ class _HomeViewState extends State<HomeView> {
                                               width: 55,
                                               loadingBuilder:
                                                   (BuildContext context,
-                                                      Widget child,
-                                                      ImageChunkEvent?
-                                                          loadingProgress) {
+                                                  Widget child,
+                                                  ImageChunkEvent?
+                                                  loadingProgress) {
                                                 if (loadingProgress == null)
                                                   return child;
                                                 return Center(
                                                   child:
-                                                      CircularProgressIndicator(
+                                                  CircularProgressIndicator(
                                                     value: loadingProgress
-                                                                .expectedTotalBytes !=
-                                                            null
+                                                        .expectedTotalBytes !=
+                                                        null
                                                         ? loadingProgress
-                                                                .cumulativeBytesLoaded /
-                                                            loadingProgress
-                                                                .expectedTotalBytes!
+                                                        .cumulativeBytesLoaded /
+                                                        loadingProgress
+                                                            .expectedTotalBytes!
                                                         : null,
                                                   ),
                                                 );
@@ -358,7 +366,7 @@ class _HomeViewState extends State<HomeView> {
                                           ),
                                           Column(
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                             children: [
                                               customTextBold(
                                                   text: modelWork
@@ -371,7 +379,7 @@ class _HomeViewState extends State<HomeView> {
                                                   color: primaryDarkColor),
                                               customTextBold(
                                                   text: modelWork
-                                                          .workCompensation! +
+                                                      .workCompensation! +
                                                       " LPA",
                                                   textSize: 10,
                                                   color: primaryDarkColor),
@@ -384,12 +392,12 @@ class _HomeViewState extends State<HomeView> {
                                       ),
                                       Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                         children: [
                                           Container(
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                                  BorderRadius.circular(5.0),
+                                              BorderRadius.circular(5.0),
                                               color: primaryDarkColor
                                                   .withAlpha(50),
                                             ),
@@ -426,7 +434,7 @@ class _HomeViewState extends State<HomeView> {
   Widget campaignListView() {
     return StreamBuilder<QuerySnapshot>(
       stream:
-          FirebaseFirestore.instance.collection("CAMPAIGNS_DATA").snapshots(),
+      FirebaseFirestore.instance.collection("CAMPAIGNS_DATA").snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const SizedBox();
@@ -435,9 +443,12 @@ class _HomeViewState extends State<HomeView> {
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (BuildContext context, a, b) {
                 if ((snapshot.data!.docs[a].data()
-                    as Map<String, dynamic>)['isActive']) {
+                as Map<String, dynamic>)['isActive']) {
                   return Container(
-                    width: MediaQuery.of(context).size.width,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
                     margin: const EdgeInsets.only(right: 10),
                     decoration: BoxDecoration(
                         color: primaryDarkColor,
@@ -446,7 +457,7 @@ class _HomeViewState extends State<HomeView> {
                       onTap: () {
                         try {
                           launch((snapshot.data!.docs[a].data()
-                                  as Map<String, dynamic>)['campaignURL']
+                          as Map<String, dynamic>)['campaignURL']
                               .toString());
                         } catch (e) {
                           debugPrint(e.toString());
@@ -456,16 +467,17 @@ class _HomeViewState extends State<HomeView> {
                         borderRadius: BorderRadius.circular(10.0),
                         child: CachedNetworkImage(
                           imageUrl: (snapshot.data!.docs[a].data()
-                                  as Map<String, dynamic>)['campaignImgURL']
+                          as Map<String, dynamic>)['campaignImgURL']
                               .toString(),
                           fit: BoxFit.fill,
                           progressIndicatorBuilder:
                               (context, url, downloadProgress) =>
-                                  progressIndicator(),
-                          errorWidget: (context, url, error) => Icon(
-                            Icons.info_rounded,
-                            color: primaryWhiteColor,
-                          ),
+                              progressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              Icon(
+                                Icons.info_rounded,
+                                color: primaryWhiteColor,
+                              ),
                         ),
                       ),
                     ),
@@ -543,7 +555,7 @@ class _HomeViewState extends State<HomeView> {
               children: <Widget>[
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   child: ExpansionTile(
                     initiallyExpanded: true,
                     trailing: Icon(
@@ -583,9 +595,9 @@ class _HomeViewState extends State<HomeView> {
                                       ),
                                       child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                        CrossAxisAlignment.center,
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
+                                        MainAxisAlignment.spaceEvenly,
                                         children: <Widget>[
                                           data.img,
                                           customTextBold(
