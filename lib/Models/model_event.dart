@@ -6,6 +6,7 @@ import 'package:shiksha/Models/model_user_data.dart';
 import '../Components/AuthButtons.dart';
 import '../Components/common_component_widgets.dart';
 import '../Components/constants.dart';
+import '../FirebaseServices/firebase_api.dart';
 import '../colors/colors.dart';
 
 class ModelEventNew extends StatefulWidget {

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shiksha/Components/common_component_widgets.dart';
+import 'package:shiksha/FirebaseServices/firebase_api.dart';
 import 'package:shiksha/Models/model_user_data.dart';
 import '../Components/constants.dart';
 import '../Models/model_event.dart';
@@ -121,12 +122,7 @@ class _ClubsViewState extends State<ClubsView>
 
   Widget eventListView() {
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection(DB_ROOT_NAME)
-          .doc(EVENTS_CONSTANT)
-          .collection(modelUserData.getUserCollege)
-          .orderBy(orderBy, descending: true)
-          .snapshots(),
+      stream: FirebaseFirestoreEventsApi().eventsStream(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(

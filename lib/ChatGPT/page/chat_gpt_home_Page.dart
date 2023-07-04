@@ -1,4 +1,3 @@
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shiksha/components/question_input.dart';
 import 'package:shiksha/ChatGPT/page/chat_history_page.dart';
 import 'package:shiksha/ChatGPT/page/chat_page.dart';
@@ -12,6 +11,7 @@ import 'package:shiksha/ChatGPT/stores/ai_chat_store.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../Components/common_component_widgets.dart';
 import '../../colors/colors.dart';
 
 class HomePage extends StatefulWidget {
@@ -84,50 +84,9 @@ class _HomePageState extends State<HomePage> {
     final store = Provider.of<AIChatStore>(context, listen: true);
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          systemOverlayStyle: SystemUiOverlayStyle.light,
-          toolbarHeight: 60,
-          automaticallyImplyLeading: false,
-          titleSpacing: 0,
-          title: Wrap(
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: Container(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: Icon(
-                      MdiIcons.arrowLeft,
-                      color: primaryDarkColor,
-                      size: 30,
-                    )),
-              ),
-              const SizedBox(width: 24),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(5.0),
-                clipBehavior: Clip.antiAlias,
-                child: const Image(
-                  width: 30,
-                  height: 30,
-                  image: AssetImage('assets/images/क्षा_logo_dark.png'),
-                ),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                Config.appName,
-                style: const TextStyle(
-                  color: Color.fromRGBO(54, 54, 54, 1.0),
-                  fontSize: 18,
-                  height: 1,
-                ),
-              ),
-            ],
-          ),
-          backgroundColor: Colors.white,
-          elevation: 0.5,
-        ),
+        appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(60.0),
+            child: appBarCommon(context, "SHIKSHA BOT (BETA)")),
         body: SafeArea(
           child: Column(
             children: [
@@ -160,15 +119,7 @@ class _HomePageState extends State<HomePage> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  Container(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 0, 8, 0),
-                                    height: 16,
-                                    child: const Image(
-                                      image: AssetImage(
-                                          'assets/images/arrow_icon.png'),
-                                    ),
-                                  ),
+                                  const Icon(Icons.chevron_right_rounded),
                                 ],
                               ),
                             ),
@@ -297,7 +248,7 @@ class _HomePageState extends State<HomePage> {
                     child: Container(
                         padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
                         child: Icon(
-                          MdiIcons.arrowRightThick,
+                          Icons.arrow_forward_rounded,
                           color: primaryWhiteColor,
                         )),
                   ),

@@ -4,7 +4,7 @@ import 'package:shiksha/Components/common_component_widgets.dart';
 import 'package:shiksha/Models/model_work.dart';
 import 'package:shiksha/Models/model_user_data.dart';
 import 'package:shiksha/WorkViews/add_job_view.dart';
-import '../Components/constants.dart';
+import '../FirebaseServices/firebase_api.dart';
 import '../colors/colors.dart';
 
 class WorkView extends StatefulWidget {
@@ -58,11 +58,7 @@ class _WorkViewContentState extends State<WorkViewContent> {
 
   Widget workListView() {
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection(DB_ROOT_NAME)
-          .doc(WORK_CONSTANTS)
-          .collection(WORK_CONSTANTS_OFFCAMPUS)
-          .snapshots(),
+      stream: FirebaseFirestoreEventsApi().workStream(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(

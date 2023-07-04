@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:shiksha/ChatGPT/stores/ai_chat_store.dart';
 import 'package:provider/provider.dart';
 
+import '../../Components/common_component_widgets.dart';
+
 class ChatHistoryPage extends StatefulWidget {
   const ChatHistoryPage({Key? key}) : super(key: key);
 
@@ -34,53 +36,9 @@ class _ChatHistoryPageState extends State<ChatHistoryPage> {
     final store = Provider.of<AIChatStore>(context, listen: true);
 
     return Scaffold(
-      appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-        toolbarHeight: 60,
-        automaticallyImplyLeading: false,
-        titleSpacing: 0,
-        title: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            InkWell(
-              splashColor: Colors.white,
-              highlightColor: Colors.white,
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: const SizedBox(
-                height: 60,
-                child: Row(
-                  children: [
-                    SizedBox(width: 24),
-                    Image(
-                      width: 18,
-                      image: AssetImage('assets/images/back_icon.png'),
-                    ),
-                    SizedBox(width: 12),
-                    Text(
-                      "History",
-                      style: TextStyle(
-                        fontFamily: 'ProductSans-Bold',
-                        color: Color.fromRGBO(0, 0, 0, 1),
-                        fontSize: 18,
-                        height: 1,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(width: 24),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0.5,
-        actions: const [
-          SizedBox(width: 8),
-        ],
-      ),
+      appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(60.0),
+          child: appBarCommon(context, "HISTORY")),
       body: SafeArea(
         child: Column(
           children: [

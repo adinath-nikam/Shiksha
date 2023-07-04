@@ -12,6 +12,8 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../Components/common_component_widgets.dart';
+
 class ChatPage extends StatefulWidget {
   final String chatId;
   final bool autofocus;
@@ -149,61 +151,9 @@ class _ChatPageState extends State<ChatPage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-        toolbarHeight: 60,
-        automaticallyImplyLeading: false,
-        titleSpacing: 0,
-        title: Row(
-          children: [
-            InkWell(
-              splashColor: Colors.white,
-              highlightColor: Colors.white,
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: const Row(
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 60,
-                        child: Row(
-                          children: [
-                            SizedBox(width: 24),
-                            Image(
-                              width: 18,
-                              image: AssetImage('assets/images/back_icon.png'),
-                            ),
-                            SizedBox(width: 12),
-                            Text(
-                              "Chat (BETA)",
-                              style: TextStyle(
-                                fontFamily: 'ProductSans-Bold',
-                                color: Color.fromRGBO(0, 0, 0, 1),
-                                fontSize: 18,
-                                height: 1,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(width: 24),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0.5,
-        actions: const [
-          SizedBox(width: 20),
-        ],
-      ),
+      appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(60.0),
+          child: appBarCommon(context, "CHAT (BETA)")),
       body: SafeArea(
         child: Column(
           children: [
@@ -287,11 +237,7 @@ class _ChatPageState extends State<ChatPage> {
         child: Column(
           children: [
             const SizedBox(height: 60),
-            const Image(
-              width: 18,
-              height: 18,
-              image: AssetImage('assets/images/tip_icon.png'),
-            ),
+            Icon(Icons.tips_and_updates_rounded),
             const SizedBox(height: 12),
             Text(
               'Tip',
@@ -461,13 +407,7 @@ class _ChatPageState extends State<ChatPage> {
       onTap: () async {
         Share.share(message['content']);
       },
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),
-        child: const Image(
-          image: AssetImage('assets/images/share_message_icon.png'),
-          width: 22,
-        ),
-      ),
+      child: Icon(Icons.share_rounded),
     );
   }
 
@@ -476,13 +416,7 @@ class _ChatPageState extends State<ChatPage> {
       onTap: () async {
         _speak(message['content']);
       },
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),
-        child: const Image(
-          image: AssetImage('assets/images/voice_icon.png'),
-          width: 26,
-        ),
-      ),
+      child: Icon(Icons.record_voice_over_rounded),
     );
   }
 
@@ -504,13 +438,7 @@ class _ChatPageState extends State<ChatPage> {
         );
         _isCopying = false;
       },
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),
-        child: const Image(
-          image: AssetImage('assets/images/chat_copy_icon.png'),
-          width: 26,
-        ),
-      ),
+      child: Icon(Icons.copy_rounded),
     );
   }
 
