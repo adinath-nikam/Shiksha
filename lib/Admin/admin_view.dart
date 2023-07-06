@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:shiksha/Admin/word_of_the_day.dart';
 import 'package:shiksha/Components/common_component_widgets.dart';
+import 'package:shiksha/FirebaseServices/firebase_api.dart';
 import 'package:shiksha/colors/colors.dart';
 import 'campaign_view.dart';
 
@@ -142,8 +143,7 @@ class _AppUsersState extends State<AppUsers> {
           preferredSize: const Size.fromHeight(60.0),
           child: appBarCommon(context, "APP USERS")),
       body: StreamBuilder(
-          stream:
-              FirebaseDatabase.instance.ref("SHIKSHA_APP/USERS_DATA").onValue,
+          stream: FirebaseAPI().realtimeDBStream("SHIKSA_APP/USERS_DATA"),
           builder:
               (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
             if (!snapshot.hasData) {
@@ -156,7 +156,6 @@ class _AppUsersState extends State<AppUsers> {
 
               List<dynamic> list = [];
               list.clear();
-
               list = map.values.toList();
 
               return Column(

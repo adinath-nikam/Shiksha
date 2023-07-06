@@ -29,6 +29,8 @@ class _LibraryBookSearchViewState extends State<LibraryBookSearchView> {
   String searchByOptionTitleSelected = 'Title';
   String searchByOptionCodeSelected = 'ti';
 
+  TextEditingController controllerTextEditLibraryBookSearch = TextEditingController();
+
   final List<_ModelSearchByOptions> _listSearchByOptions = [
     _ModelSearchByOptions(
       searchByOptionTitle: 'Title',
@@ -136,8 +138,14 @@ class _LibraryBookSearchViewState extends State<LibraryBookSearchView> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    controllerTextEditLibraryBookSearch.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    TextEditingController textController = TextEditingController();
+
     return SafeArea(
         child: Scaffold(
             appBar: PreferredSize(
@@ -153,7 +161,7 @@ class _LibraryBookSearchViewState extends State<LibraryBookSearchView> {
                     margin: const EdgeInsets.only(
                         left: 15, right: 15, top: 20, bottom: 20),
                     child: TextField(
-                      controller: textController,
+                      controller: controllerTextEditLibraryBookSearch,
                       decoration: InputDecoration(
                         prefixIcon: Container(
                           color: primaryDarkColor,
@@ -179,7 +187,7 @@ class _LibraryBookSearchViewState extends State<LibraryBookSearchView> {
                             child: IconButton(
                               color: primaryDarkColor,
                               onPressed: () {
-                                searchBook(textController.text.toString());
+                                searchBook(controllerTextEditLibraryBookSearch.text.toString());
                               },
                               tooltip: 'Search',
                               icon: Icon(

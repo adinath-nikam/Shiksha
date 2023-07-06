@@ -20,6 +20,11 @@ class _AddJobViewState extends State<AddJobView> {
   String? workType;
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
@@ -266,6 +271,9 @@ class _AddJobViewState extends State<AddJobView> {
                               showLoaderDialog(context, 'Please, wait!...');
 
                               addJobFormKey.currentState!.save();
+
+                              modelWork.workPostedDate =
+                                  DateTime.now().toString();
 
                               if (addJobFormKey.currentState!.validate()) {
                                 FirebaseFirestore.instance

@@ -1,8 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
-import '../FirebaseServices/firebase_service.dart';
 import '../Models/utilty_shared_preferences.dart';
-
-final FirebaseAuthServices firebaseAuthServices = FirebaseAuthServices();
 
 class ModelUserData {
   late final String userUID;
@@ -10,6 +7,8 @@ class ModelUserData {
   late final String userSemester;
   late final String userStream;
   late final String userCollege;
+  late final String userEmail;
+  late final String userPhone;
   late final String userJoiningDate;
   bool userCanPostEvent = false;
   bool userCanPostJob = false;
@@ -21,7 +20,9 @@ class ModelUserData {
       required this.userCollege,
       required this.userSemester,
       required this.userStream,
-      required this.userJoiningDate});
+      required this.userJoiningDate,
+      required this.userEmail,
+      required this.userPhone});
 
   String get getUserUID {
     return userUID;
@@ -43,6 +44,14 @@ class ModelUserData {
     return userStream;
   }
 
+  String get getUserEmail {
+    return userEmail;
+  }
+
+  String get getUserPhone {
+    return userPhone;
+  }
+
   String get getUserJoiningDate {
     return userJoiningDate;
   }
@@ -59,24 +68,32 @@ class ModelUserData {
     return userIsAdmin;
   }
 
-  set setStudentUid(String userUID) {
+  set setUserUid(String userUID) {
     this.userUID = userUID;
   }
 
-  set setStudentUSN(String userUSN) {
+  set setUserUSN(String userUSN) {
     this.userUSN = userUSN;
   }
 
-  set setStudentCollege(String userCollege) {
+  set setCollegeCollege(String userCollege) {
     this.userCollege = userCollege;
   }
 
-  set setStudentBranch(String userStream) {
+  set setUserBranch(String userStream) {
     this.userStream = userStream;
   }
 
-  set setStudentSemester(String userSemester) {
+  set setUserSemester(String userSemester) {
     this.userSemester = userSemester;
+  }
+
+  set setUserEmail(String userEmail) {
+    this.userEmail = userEmail;
+  }
+
+  set setUserPhone(String userPhone) {
+    this.userPhone = userPhone;
   }
 
   set setJoiningDate(String userJoiningDate) {
@@ -101,6 +118,8 @@ class ModelUserData {
         'userCollege': userCollege,
         'userStream': userStream,
         'userSemester': userSemester,
+    'userEmail': userEmail,
+    'userPhone': userPhone,
         'userJoiningDate': userJoiningDate,
         'userCanPostEvent': userCanPostEvent,
         'userCanPostJob': userCanPostJob,
@@ -113,6 +132,8 @@ class ModelUserData {
     userCollege = json['userCollege'] as String;
     userStream = json['userStream'] as String;
     userSemester = json['userSemester'] as String;
+    userEmail = json['userEmail'] as String;
+    userPhone = json['userPhone'] as String;
     userJoiningDate = json['userJoiningDate'] as String;
     userCanPostEvent = json['userCanPostEvent'] as bool;
     userCanPostJob = json['userCanPostJob'] as bool;
@@ -122,27 +143,14 @@ class ModelUserData {
 
 late ModelUserData modelUserData;
 
-Stream<ModelUserData?> getUserData() {
-  return FirebaseDatabase.instance
-      .ref("SHIKSHA_APP/USERS_DATA/${firebaseAuthServices.firebaseUser!.uid}")
-      .onValue
-      .map((event) {
-    return modelUserData = ModelUserData.fromJson(
-        event.snapshot.value as Map<dynamic, dynamic>);
-  });
-}
-
-
-late ModelUserData tempUserData;
-
-Future<ModelUserData> tempUserData2() async {
+Future<ModelUserData> getUserData() async {
   try {
     modelUserData = ModelUserData.fromJson(
         await UtilitySharedPreferences().read('SP_SHIKSHA_USER_DATA'));
 
     return modelUserData;
   } catch (e) {
-      print(">>> $e");
+    print(">>> $e");
     return modelUserData;
   }
 }

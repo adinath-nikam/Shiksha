@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import '../Components/constants.dart';
 import '../Models/model_user_data.dart';
 
-class FirebaseFirestoreEventsApi {
+class FirebaseAPI {
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  final FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
 
   Stream<QuerySnapshot> eventsStream() {
     return firebaseFirestore
@@ -20,4 +22,11 @@ class FirebaseFirestoreEventsApi {
         .collection(WORK_CONSTANTS_OFFCAMPUS)
         .snapshots();
   }
+
+  Stream<DatabaseEvent> realtimeDBStream(String reference) {
+    return firebaseDatabase
+        .ref(reference)
+        .onValue;
+  }
+
 }

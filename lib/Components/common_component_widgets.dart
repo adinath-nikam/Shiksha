@@ -77,38 +77,34 @@ Widget commonAlertDialog(BuildContext context, String buttonText, Icon icon,
   );
 }
 
-Widget termsAndConditionsText() {
-  void launchTermsConditionsTab() async {
-    try {
-      launch('https://github.com');
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-  }
-
-  return GestureDetector(
-    onTap: () => launchTermsConditionsTab(),
-    child: Column(
-      children: [
-        customTextRegular(
-            text: "On Clicking Submit You Agree to our",
-            textSize: 14,
-            color: primaryDarkColor),
-        const SizedBox(
-          height: 10,
+Widget infoWidget(String infoTitle, String infoText, Color infoContentColor,
+    Color infoBackgroundColor) {
+  return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        color: infoBackgroundColor.withOpacity(0.5),
+      ),
+      child: ListTile(
+        contentPadding: EdgeInsets.all(15),
+        leading: Icon(
+          Icons.info_rounded,
+          color: infoContentColor,
         ),
-        customTextBold(
-            text: "Terms and Conditions.",
-            textSize: 14,
-            color: primaryBlueColor),
-      ],
-    ),
-  );
+        minLeadingWidth: 5,
+        title: customTextBold(
+            text: infoTitle, textSize: 16, color: infoContentColor),
+        subtitle: customTextRegular(
+            text: infoText, textSize: 12, color: infoContentColor),
+      ));
 }
 
 void showSnackBar(BuildContext context, String text, Color color) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: color,
+      showCloseIcon: true,
+      closeIconColor: primaryWhiteColor,
+      duration: Duration(milliseconds: 8000),
       content: Text(
         text,
       )));
@@ -126,8 +122,8 @@ Widget headerImage() {
 }
 
 Widget progressIndicator() {
-  return Center(
-    child: CircularProgressIndicator(
+  return const Center(
+    child: const CircularProgressIndicator(
       color: primaryWhiteColor,
       backgroundColor: primaryDarkColor,
     ),
@@ -273,21 +269,19 @@ Widget appBarHomeView({
                 color: primaryDarkColor,
               )),
           const Image(
-            image: AssetImage("assets/images/shiksha_logo_horizontal_light.png"),
+            image:
+                AssetImage("assets/images/shiksha_logo_horizontal_light.png"),
             height: 120,
             width: 120,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(animatedRoute(const SettingsView()));
-              },
-              child: Icon(
-                Icons.settings_rounded,
-                size: 30,
-                color: primaryDarkColor,
-              ),
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(animatedRoute(const SettingsView()));
+            },
+            child: Icon(
+              Icons.settings_rounded,
+              size: 30,
+              color: primaryDarkColor,
             ),
           )
         ],

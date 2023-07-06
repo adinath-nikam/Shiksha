@@ -18,6 +18,14 @@ class _AddWOTDViewState extends State<AddWOTDView> {
   final GlobalKey<FormState> wotdUpdateFormKey = GlobalKey();
 
   @override
+  void dispose() {
+    super.dispose();
+    wordController.dispose();
+    posController.dispose();
+    descController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(

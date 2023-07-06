@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shiksha/FirebaseServices/firebase_service.dart';
 import 'package:shiksha/ClubsViews/clubs_view.dart';
 import 'package:shiksha/HomeView/home_view.dart';
 import 'package:shiksha/WorkViews/work_view.dart';
@@ -15,13 +14,8 @@ class TabView extends StatefulWidget {
 }
 
 class _TabViewState extends State<TabView> {
-  final FirebaseAuthServices firebaseAuthServices = FirebaseAuthServices();
 
   int index = 0;
-
-  void signOut() async {
-    firebaseAuthServices.signOut(context);
-  }
 
   @override
   Widget build(BuildContext context) {

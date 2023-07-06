@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:shiksha/Components/common_component_widgets.dart';
 import 'package:shiksha/FirebaseServices/firebase_api.dart';
 import 'package:shiksha/Models/model_user_data.dart';
-import '../Components/constants.dart';
 import '../Models/model_event.dart';
 import '../colors/colors.dart';
 import 'add_event_view.dart';
@@ -122,7 +121,7 @@ class _ClubsViewState extends State<ClubsView>
 
   Widget eventListView() {
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestoreEventsApi().eventsStream(),
+      stream: FirebaseAPI().eventsStream(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(

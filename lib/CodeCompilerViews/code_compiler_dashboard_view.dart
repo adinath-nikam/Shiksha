@@ -1,8 +1,10 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../Components/common_component_widgets.dart';
+import '../FirebaseServices/firebase_api.dart';
 import '../colors/colors.dart';
 
 class CodeCompilerDashBoard extends StatefulWidget {
@@ -22,27 +24,13 @@ class _CodeCompilerDashBoardState extends State<CodeCompilerDashBoard> {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
         child: Column(
           children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: primaryYellowColor.withAlpha(80),
-              ),
-              child: customTextRegular(
-                  text:
-                      "Compilers for other Programming Languages will be added in Next Update",
-                  textSize: 14,
-                  color: primaryDarkColor),
-            ),
+            infoWidget("Compilers", "Compilers for other programming languages will be added in next update.", primaryDarkColor, primaryYellowColor),
             const SizedBox(
               height: 25,
             ),
             Expanded(
               child: StreamBuilder(
-                  stream: FirebaseDatabase.instance
-                      .ref("SHIKSHA_APP/COMPILERS")
-                      .onValue,
+                  stream: FirebaseAPI().realtimeDBStream("SHIKSHA_APP/COMPILERS"),
                   builder: (BuildContext context,
                       AsyncSnapshot<DatabaseEvent> snapshot) {
                     if (!snapshot.hasData) {
@@ -88,15 +76,15 @@ class _CodeCompilerDashBoardState extends State<CodeCompilerDashBoard> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
                                       children: <Widget>[
-                                        Icon(
-                                          Icons.code_rounded,
-                                          color: primaryDarkColor,
-                                          size: 35,
-                                        ),
-                                        customTextBold(
-                                            text: list[index]['PL'],
-                                            textSize: 18,
-                                            color: primaryDarkColor),
+                                      SvgPicture.network(
+                                        list[index]['ICON'],
+                                        semanticsLabel: 'programming language icon',
+                                        height: 50,
+                                        width: 50,
+                                        placeholderBuilder: (BuildContext context) => Container(
+                                            padding: const EdgeInsets.all(30.0),
+                                            child: progressIndicator()),
+                                      ),
                                         ElevatedButton(
                                           onPressed: () {
 
@@ -152,12 +140,9 @@ class _CompilerViewState extends State<CompilerView> {
     super.initState();
     controller.setJavaScriptMode(JavaScriptMode.unrestricted);
     controller.loadRequest(Uri.parse(widget.url));
-    controller.runJavaScript(
-        "document.getElementsByClassName('header')[0].style.display='none';");
     controller
         .setNavigationDelegate(NavigationDelegate(onPageFinished: (String url) {
-      controller.runJavaScript(
-          "document.getElementsByClassName('header')[0].style.display='none';");
+      controller.runJavaScript("document.getElementsByClassName('header')[0].style.display='none';");
       setState(() {
         _loading = true;
       });

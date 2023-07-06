@@ -7,15 +7,18 @@ import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:intl/intl.dart';
 import 'package:shiksha/Admin/admin_view.dart';
+import 'package:shiksha/AuthViews/splash_view.dart';
 import 'package:shiksha/FirebaseServices/firebase_api.dart';
 import 'package:shiksha/Models/model_user_data.dart';
 import 'package:shiksha/Models/model_work.dart';
+import 'package:uuid/uuid.dart';
 import '../BusTracking/bus_track_map_view.dart';
 import '../Components/common_component_widgets.dart';
 import '../LibraryViews/library_dashboard_view.dart';
 import '../Models/model_event.dart';
 import '../colors/colors.dart';
-import '../ChatGPT/page/chat_gpt_home_Page.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -25,9 +28,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  String word = 'Loading..',
-      pos = 'Loading..',
-      mean = 'Loading..';
+  String word = 'Loading..', pos = 'Loading..', mean = 'Loading..';
   late final Map wordOfTheDay;
 
   @override
@@ -54,56 +55,51 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-          body: SingleChildScrollView(
-            child: AnimationLimiter(
-              child: AnimationConfiguration.synchronized(
-                child: SlideAnimation(
-                  verticalOffset: MediaQuery
-                      .of(context)
-                      .size
-                      .height,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      campaignListView(),
-                      expansionMenu(context),
-                      getWordOfTheDay(),
-                      SizedBox(height: 200, child: eventsListView()),
-                      Container(height: 210, child: workListView()),
-                      // recentJobPosting(),
-                      const SizedBox(
-                        height: 25,
-                      ),
-                    ],
+      body: SingleChildScrollView(
+        child: AnimationLimiter(
+          child: AnimationConfiguration.synchronized(
+            child: SlideAnimation(
+              verticalOffset: MediaQuery.of(context).size.height,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  campaignListView(),
+                  chatBotWidget(),
+                  HomeMenuView(context),
+                  getWordOfTheDay(),
+                  SizedBox(height: 200, child: eventsListView()),
+                  Container(height: 210, child: workListView()),
+                  // recentJobPosting(),
+                  const SizedBox(
+                    height: 25,
                   ),
-                ),
+                ],
               ),
             ),
           ),
-          floatingActionButton: modelUserData.getUserIsAdmin
-              ? FloatingActionButton.extended(
-            elevation: 0.0,
-            icon: const Icon(Icons.admin_panel_settings),
-            backgroundColor: primaryGreenColor,
-            onPressed: () {
-              Navigator.of(context).push(animatedRoute(const AdminView()));
-            },
-            label: customTextBold(
-                text: "Admin", textSize: 14, color: primaryWhiteColor),
-          )
-              : null,
-        ));
+        ),
+      ),
+      floatingActionButton: modelUserData.getUserIsAdmin
+          ? FloatingActionButton.extended(
+              elevation: 0.0,
+              icon: const Icon(Icons.admin_panel_settings),
+              backgroundColor: primaryGreenColor,
+              onPressed: () {
+                Navigator.of(context).push(animatedRoute(const AdminView()));
+              },
+              label: customTextBold(
+                  text: "Admin", textSize: 14, color: primaryWhiteColor),
+            )
+          : null,
+    ));
   }
 
   Widget getWordOfTheDay() {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
+      width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
         color: primaryDarkColor.withAlpha(50),
@@ -130,9 +126,153 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
+  Widget chatBotWidget() {
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).push(animatedRoute(IntroView()));
+        },
+        child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            color: primaryDarkColor.withOpacity(1),
+            elevation: 2,
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: primaryWhiteColor,
+              ),
+              margin: EdgeInsets.all(2),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Image(
+                            image: AssetImage(
+                                "assets/images/shiksha_logo_landscape_light_bot.png"),
+                            height: 70,
+                            width: 70,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          customTextBold(
+                              text: "BOT",
+                              textSize: 22,
+                              color: primaryDarkColor),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Icon(
+                            Icons.arrow_circle_right_rounded,
+                            color: primaryDarkColor.withOpacity(0.5),
+                          ),
+                        ],
+                      ),
+                      customTextRegular(
+                          text:
+                              "Ask anything.., \nand get queries solved quickly.",
+                          textSize: 12,
+                          color: primaryDarkColor.withOpacity(0.5)),
+                    ],
+                  ),
+                  Image(
+                    image: AssetImage("assets/images/shiksha_bot.gif"),
+                    height: 125,
+                    width: 125,
+                    fit: BoxFit.cover,
+                  ),
+                ],
+              ),
+            )),
+      ),
+    );
+  }
+
+  Widget HomeMenuView(BuildContext context) {
+    HomeMenuItems item1 = HomeMenuItems(
+        text: "Get Access to your College Library Materials",
+        img: Image(
+          image: AssetImage("assets/images/library_img.jpg"),
+          height: 100,
+          width: 100,
+          fit: BoxFit.contain,
+        ),
+        activity: LibraryDashboardView(appUserUSN: modelUserData.getUserUSN));
+
+    HomeMenuItems item2 = HomeMenuItems(
+        text: "Realtime College Bus Tracking\n(Experimental Feature)",
+        img: Image(
+          image: AssetImage("assets/images/bus_track_img.png"),
+          height: 100,
+          width: 100,
+          fit: BoxFit.contain,
+        ),
+        activity: const MapScreenView());
+
+    List<HomeMenuItems> expansionMenuItemsList = [
+      item1,
+      item2,
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      child: GridView.count(
+          shrinkWrap: true,
+          childAspectRatio: 0.9,
+          crossAxisCount: 2,
+          crossAxisSpacing: 15,
+          mainAxisSpacing: 20,
+          children: expansionMenuItemsList.map((data) {
+            return GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(animatedRoute(data.activity));
+              },
+              child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  color: primaryDarkColor.withOpacity(1),
+                  elevation: 2,
+                  child: Container(
+                    width: 180,
+                    height: 150,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: primaryWhiteColor,
+                    ),
+                    margin: EdgeInsets.all(2),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        data.img,
+                        SizedBox(height: 5),
+                        customTextRegular(
+                            text: data.text,
+                            textSize: 10,
+                            color: primaryDarkColor.withOpacity(0.5)),
+                      ],
+                    ),
+                  )),
+            );
+          }).toList()),
+    );
+  }
+
   Widget eventsListView() {
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestoreEventsApi().eventsStream(),
+      stream: FirebaseAPI().eventsStream(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(child: progressIndicator());
@@ -142,7 +282,7 @@ class _HomeViewState extends State<HomeView> {
             children: [
               Container(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                   child: customTextBold(
                       text: "Upcoming Events",
                       textSize: 16,
@@ -153,7 +293,7 @@ class _HomeViewState extends State<HomeView> {
                   scrollDirection: Axis.horizontal,
                   children: snapshot.data!.docs.map((data) {
                     final ModelEventNew modelEvent =
-                    ModelEventNew.fromSnapshot(data);
+                        ModelEventNew.fromSnapshot(data);
                     final startDate = DateFormat("yyyy-MM-dd")
                         .parse(modelEvent.eventStartDate!);
                     final postedDate = DateFormat("yyyy-MM-dd")
@@ -164,7 +304,7 @@ class _HomeViewState extends State<HomeView> {
                     final dayNumber = DateFormat('dd').format(startDate);
 
                     final postedYearNumber =
-                    DateFormat('yyyy').format(postedDate);
+                        DateFormat('yyyy').format(postedDate);
 
                     return GestureDetector(
                       onTap: () {
@@ -266,7 +406,7 @@ class _HomeViewState extends State<HomeView> {
 
   Widget workListView() {
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestoreEventsApi().workStream(),
+      stream: FirebaseAPI().workStream(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(child: progressIndicator());
@@ -276,7 +416,7 @@ class _HomeViewState extends State<HomeView> {
             children: [
               Container(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
                   child: customTextBold(
                       text: "Recent Posts",
                       textSize: 16,
@@ -299,6 +439,7 @@ class _HomeViewState extends State<HomeView> {
                           modelWork.workType,
                           modelWork.workPostURL,
                           modelWork.workImageURL,
+                          modelWork.workPostedDate,
                         );
                         Navigator.of(context).push(animatedRoute(e));
                       },
@@ -317,44 +458,44 @@ class _HomeViewState extends State<HomeView> {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 color: primaryWhiteColor,
-                                elevation: 5,
+                                elevation: 2,
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 20, horizontal: 20),
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Row(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.start,
+                                            MainAxisAlignment.start,
                                         children: [
                                           ClipRRect(
                                             borderRadius:
-                                            BorderRadius.circular(10.0),
+                                                BorderRadius.circular(10.0),
                                             child: Image.network(
                                               modelWork.workImageURL!,
-                                              fit: BoxFit.fitWidth,
+                                              fit: BoxFit.cover,
                                               height: 55,
                                               width: 55,
                                               loadingBuilder:
                                                   (BuildContext context,
-                                                  Widget child,
-                                                  ImageChunkEvent?
-                                                  loadingProgress) {
+                                                      Widget child,
+                                                      ImageChunkEvent?
+                                                          loadingProgress) {
                                                 if (loadingProgress == null)
                                                   return child;
                                                 return Center(
                                                   child:
-                                                  CircularProgressIndicator(
+                                                      CircularProgressIndicator(
                                                     value: loadingProgress
-                                                        .expectedTotalBytes !=
-                                                        null
+                                                                .expectedTotalBytes !=
+                                                            null
                                                         ? loadingProgress
-                                                        .cumulativeBytesLoaded /
-                                                        loadingProgress
-                                                            .expectedTotalBytes!
+                                                                .cumulativeBytesLoaded /
+                                                            loadingProgress
+                                                                .expectedTotalBytes!
                                                         : null,
                                                   ),
                                                 );
@@ -366,7 +507,7 @@ class _HomeViewState extends State<HomeView> {
                                           ),
                                           Column(
                                             crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                                CrossAxisAlignment.start,
                                             children: [
                                               customTextBold(
                                                   text: modelWork
@@ -379,7 +520,7 @@ class _HomeViewState extends State<HomeView> {
                                                   color: primaryDarkColor),
                                               customTextBold(
                                                   text: modelWork
-                                                      .workCompensation! +
+                                                          .workCompensation! +
                                                       " LPA",
                                                   textSize: 10,
                                                   color: primaryDarkColor),
@@ -392,12 +533,12 @@ class _HomeViewState extends State<HomeView> {
                                       ),
                                       Row(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Container(
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                              BorderRadius.circular(5.0),
+                                                  BorderRadius.circular(5.0),
                                               color: primaryDarkColor
                                                   .withAlpha(50),
                                             ),
@@ -434,7 +575,7 @@ class _HomeViewState extends State<HomeView> {
   Widget campaignListView() {
     return StreamBuilder<QuerySnapshot>(
       stream:
-      FirebaseFirestore.instance.collection("CAMPAIGNS_DATA").snapshots(),
+          FirebaseFirestore.instance.collection("CAMPAIGNS_DATA").snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const SizedBox();
@@ -443,12 +584,9 @@ class _HomeViewState extends State<HomeView> {
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (BuildContext context, a, b) {
                 if ((snapshot.data!.docs[a].data()
-                as Map<String, dynamic>)['isActive']) {
+                    as Map<String, dynamic>)['isActive']) {
                   return Container(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width,
+                    width: MediaQuery.of(context).size.width,
                     margin: const EdgeInsets.only(right: 10),
                     decoration: BoxDecoration(
                         color: primaryDarkColor,
@@ -457,7 +595,7 @@ class _HomeViewState extends State<HomeView> {
                       onTap: () {
                         try {
                           launch((snapshot.data!.docs[a].data()
-                          as Map<String, dynamic>)['campaignURL']
+                                  as Map<String, dynamic>)['campaignURL']
                               .toString());
                         } catch (e) {
                           debugPrint(e.toString());
@@ -467,17 +605,16 @@ class _HomeViewState extends State<HomeView> {
                         borderRadius: BorderRadius.circular(10.0),
                         child: CachedNetworkImage(
                           imageUrl: (snapshot.data!.docs[a].data()
-                          as Map<String, dynamic>)['campaignImgURL']
+                                  as Map<String, dynamic>)['campaignImgURL']
                               .toString(),
                           fit: BoxFit.fill,
                           progressIndicatorBuilder:
                               (context, url, downloadProgress) =>
-                              progressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              Icon(
-                                Icons.info_rounded,
-                                color: primaryWhiteColor,
-                              ),
+                                  progressIndicator(),
+                          errorWidget: (context, url, error) => Icon(
+                            Icons.info_rounded,
+                            color: primaryWhiteColor,
+                          ),
                         ),
                       ),
                     ),
@@ -506,132 +643,13 @@ class _HomeViewState extends State<HomeView> {
       },
     );
   }
-
-  Widget expansionMenu(BuildContext context) {
-    ExpansionMenuItems item1 = ExpansionMenuItems(
-        title: "AI Bot",
-        img: Icon(
-          Icons.adb_outlined,
-          color: primaryWhiteColor,
-          size: 35,
-        ),
-        activity: const HomePage());
-
-    ExpansionMenuItems item2 = ExpansionMenuItems(
-        title: "Library",
-        img: Icon(
-          Icons.book,
-          color: primaryWhiteColor,
-          size: 35,
-        ),
-        // activity: temp()
-        activity: LibraryDashboardView(appUserUSN: modelUserData.getUserUSN));
-
-    ExpansionMenuItems item3 = ExpansionMenuItems(
-        title: "Track Bus",
-        img: Icon(
-          Icons.bus_alert_rounded,
-          color: primaryWhiteColor,
-          size: 35,
-        ),
-        activity: const MapScreenView());
-
-    List<ExpansionMenuItems> expansionMenuItemsList = [
-      item1,
-      item2,
-      item3,
-    ];
-
-    return Column(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: Card(
-            color: primaryDarkColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: ExpansionTile(
-                    initiallyExpanded: true,
-                    trailing: Icon(
-                      Icons.menu_rounded,
-                      color: primaryWhiteColor,
-                    ),
-                    title: Align(
-                        alignment: Alignment.centerLeft,
-                        child: customTextBold(
-                            text: "Menu",
-                            textSize: 16,
-                            color: primaryWhiteColor)),
-                    children: <Widget>[
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        child: Column(
-                          children: <Widget>[
-                            GridView.count(
-                                shrinkWrap: true,
-                                childAspectRatio: 1.0,
-                                crossAxisCount: 3,
-                                crossAxisSpacing: 15,
-                                mainAxisSpacing: 20,
-                                children: expansionMenuItemsList.map((data) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context)
-                                          .push(animatedRoute(data.activity));
-                                    },
-                                    child: Container(
-                                      height: 150.0,
-                                      width: 150.0,
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: primaryWhiteColor.withAlpha(50),
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                        children: <Widget>[
-                                          data.img,
-                                          customTextBold(
-                                              text: data.title,
-                                              textSize: 14,
-                                              color: primaryWhiteColor)
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                }).toList())
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-      ],
-    );
-  }
 }
 
-class ExpansionMenuItems {
-  late String title;
-  late Icon img;
+class HomeMenuItems {
+  late String text;
+  late Image img;
   late Widget activity;
 
-  ExpansionMenuItems(
-      {required this.title, required this.img, required this.activity});
+  HomeMenuItems(
+      {required this.text, required this.img, required this.activity});
 }

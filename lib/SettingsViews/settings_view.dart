@@ -1,11 +1,13 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
-import 'package:shiksha/AuthViews/singin_view.dart';
+
 import 'package:shiksha/colors/colors.dart';
-import '../AuthViews/forgot_password_view.dart';
+import 'package:shiksha/main.dart';
+
 import '../Components/AuthButtons.dart';
 import '../Components/common_component_widgets.dart';
+import '../HomeView/main_tab_view.dart';
+import '../Models/utilty_shared_preferences.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({Key? key}) : super(key: key);
@@ -27,7 +29,8 @@ class SettingsView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const Image(
-                    image: AssetImage("assets/images/shiksha_logo_horizontal_light.png"),
+                    image: AssetImage(
+                        "assets/images/shiksha_logo_horizontal_light.png"),
                     height: 120,
                     width: 120,
                   ),
@@ -46,30 +49,6 @@ class SettingsView extends StatelessWidget {
                                   textSize: 16,
                                   color: primaryDarkColor),
                             ],
-                          ),
-                          const Divider(
-                            height: 50,
-                            thickness: 2,
-                          ),
-                          GestureDetector(
-                            onTap: () => Navigator.of(context)
-                                .push(animatedRoute(ForgotPasswordView())),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Icon(
-                                  Icons.lock,
-                                  color: primaryDarkColor,
-                                ),
-                                customTextBold(
-                                    text: "Change Account Password",
-                                    textSize: 16,
-                                    color: primaryDarkColor),
-                                const Icon(
-                                  Icons.chevron_right_rounded,
-                                ),
-                              ],
-                            ),
                           ),
                           const Divider(
                             height: 50,
@@ -144,12 +123,13 @@ class SettingsView extends StatelessWidget {
                               children: [
                                 Icon(
                                   Icons.info_rounded,
+                                    color: primaryDarkColor
                                 ),
                                 customTextBold(
                                     text: "About Us",
                                     textSize: 16,
                                     color: primaryDarkColor),
-                                const Icon(
+                                Icon(
                                   Icons.chevron_right_rounded,
                                 ),
                               ],
@@ -160,14 +140,21 @@ class SettingsView extends StatelessWidget {
                             thickness: 2,
                           ),
                           CustomButton(
-                              text: "LOG OUT",
+                              text: "DELETE ACCOUNT",
                               buttonSize: 60,
                               context: context,
                               function: () {
-                                FirebaseAuth.instance.signOut();
-                                Navigator.of(context).pop();
-                                Navigator.of(context).pushReplacement(
-                                    animatedRoute(const SignInView()));
+
+                                try {
+                                  UtilitySharedPreferences()
+                                      .remove("SP_SHIKSHA_USER_DATA")
+                                      .whenComplete(() {
+                                    Navigator.of(context).pushReplacement(
+                                        animatedRoute(MyApp()));
+                                  });
+                                } catch (e) {
+                                  print(e);
+                                }
                               }),
                         ],
                       ),

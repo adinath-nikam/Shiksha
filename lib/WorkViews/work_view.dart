@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shiksha/Components/common_component_widgets.dart';
 import 'package:shiksha/Models/model_work.dart';
 import 'package:shiksha/Models/model_user_data.dart';
@@ -58,7 +59,7 @@ class _WorkViewContentState extends State<WorkViewContent> {
 
   Widget workListView() {
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestoreEventsApi().workStream(),
+      stream: FirebaseAPI().workStream(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(
@@ -119,6 +120,12 @@ class _WorkViewContentState extends State<WorkViewContent> {
   Widget workListViewItem(BuildContext context, DocumentSnapshot data) {
     final ModelWork modelWork = ModelWork.fromSnapshot(data);
 
+    final postedDate =
+        DateFormat("yyyy-MM-dd").parse(modelWork.workPostedDate!);
+    final postedMonthString = DateFormat('MMMM').format(postedDate);
+    final postedYearNumber = DateFormat('yyyy').format(postedDate);
+    final postedDayNumber = DateFormat('dd').format(postedDate);
+
     return Padding(
         key: ValueKey(modelWork.workTitle),
         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -134,21 +141,30 @@ class _WorkViewContentState extends State<WorkViewContent> {
               modelWork.workType,
               modelWork.workPostURL,
               modelWork.workImageURL,
+              modelWork.workPostedDate,
             );
 
             Navigator.of(context).push(animatedRoute(e));
           },
           child: Card(
+
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(12),
               ),
-              color: primaryWhiteColor,
-              elevation: 5,
+              color: primaryDarkColor.withOpacity(1),
+              elevation: 2,
               child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: primaryWhiteColor,
+                ),
+                margin: EdgeInsets.all(2),
+
                 padding:
                     const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -190,7 +206,7 @@ class _WorkViewContentState extends State<WorkViewContent> {
                                 textSize: 14,
                                 color: primaryDarkColor),
                             customTextBold(
-                                text: modelWork.workCompensation!,
+                                text: "CTC: "+modelWork.workCompensation!+" LPA",
                                 textSize: 10,
                                 color: primaryDarkColor),
                           ],
@@ -216,6 +232,14 @@ class _WorkViewContentState extends State<WorkViewContent> {
                               color: primaryDarkColor),
                         ),
                       ],
+                    ),
+                    SizedBox(height: 15,),
+                    Text(
+                      "Posted on: $postedDayNumber $postedMonthString, $postedYearNumber",
+                      style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          fontSize: 10,
+                          color: primaryDarkColor),
                     ),
                   ],
                 ),

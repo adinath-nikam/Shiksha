@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:custom_marker/marker_icon.dart';
 import '../Components/common_component_widgets.dart';
 import '../colors/colors.dart';
 
@@ -48,10 +47,10 @@ class _MapScreenViewState extends State<MapScreenView> {
         markerId: markerId,
         position:
             LatLng(specify['location'].latitude, specify['location'].longitude),
-        icon: await MarkerIcon.downloadResizePicture(
-            url:
-                'https://firebasestorage.googleapis.com/v0/b/trash-add22.appspot.com/o/ic_bus.png?alt=media&token=840c8711-12f4-4a9d-8e20-c7add820c70a&_gl=1*128q90t*_ga*MTIwMjIyNDg3My4xNjg1MTA5NTc3*_ga_CW55HF8NVT*MTY4NjA0MjA5Mi4xNi4xLjE2ODYwNDIzNTUuMC4wLjA.',
-            imageSize: 125),
+        // icon: await MarkerIcon.downloadResizePicture(
+        //     url:
+        //         'https://firebasestorage.googleapis.com/v0/b/trash-add22.appspot.com/o/ic_bus.png?alt=media&token=840c8711-12f4-4a9d-8e20-c7add820c70a&_gl=1*128q90t*_ga*MTIwMjIyNDg3My4xNjg1MTA5NTc3*_ga_CW55HF8NVT*MTY4NjA0MjA5Mi4xNi4xLjE2ODYwNDIzNTUuMC4wLjA.',
+        //     imageSize: 125),
         infoWindow: InfoWindow(
           title: 'Bus Id',
           snippet: specifyId,

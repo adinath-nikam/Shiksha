@@ -19,6 +19,7 @@ class ModelWork extends StatefulWidget {
   String? workPostURL;
   String? workType;
   String? workImageURL;
+  String? workPostedDate;
   DocumentReference? reference;
 
   ModelWork({super.key});
@@ -33,6 +34,7 @@ class ModelWork extends StatefulWidget {
       this.workType,
       this.workPostURL,
       this.workImageURL,
+      this.workPostedDate,
       {super.key});
 
   ModelWork.fromMap(Map<String, dynamic> map,
@@ -47,6 +49,7 @@ class ModelWork extends StatefulWidget {
         assert(map['workType'] != null),
         assert(map['workPostURL'] != null),
         assert(map['workImageURL'] != null),
+        assert(map['workPostedDate'] != null),
         id = reference?.id,
         workTitle = map['workTitle'],
         workCompanyName = map['workCompanyName'],
@@ -55,7 +58,8 @@ class ModelWork extends StatefulWidget {
         workLocation = map['workLocation'],
         workType = map['workType'],
         workPostURL = map['workPostURL'],
-        workImageURL = map['workImageURL'];
+        workImageURL = map['workImageURL'],
+        workPostedDate = map['workPostedDate'];
 
   Map<String, dynamic> toMap() {
     return {
@@ -67,6 +71,7 @@ class ModelWork extends StatefulWidget {
       "workType": workType,
       "workPostURL": workPostURL,
       "workImageURL": workImageURL,
+      "workPostedDate": workPostedDate,
     };
   }
 
@@ -132,6 +137,7 @@ class _ModelWorkState extends State<ModelWork> {
                           widget.workType,
                           widget.workPostURL,
                           widget.workImageURL,
+                          widget.workPostedDate,
                         );
                         Navigator.of(context)
                             .push(animatedRoute(EditWorkView(modelWork: e)));

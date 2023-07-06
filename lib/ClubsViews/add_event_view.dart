@@ -33,6 +33,9 @@ class _AddEventViewState extends State<AddEventViewNew> {
   @override
   void dispose() {
     super.dispose();
+    eventDateController.dispose();
+    streamsController.dispose();
+    semesterController.dispose();
   }
 
   getClubs() async {

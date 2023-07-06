@@ -1,7 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shiksha/AuthViews/college_select_view.dart';
+import 'package:shiksha/AuthViews/profile_build_view.dart';
 import 'package:shiksha/Components/common_component_widgets.dart';
 import 'package:shiksha/Models/model_user_data.dart';
 import 'package:shiksha/colors/colors.dart';
@@ -37,16 +36,6 @@ class _ProfileViewContentState extends State<ProfileViewContent> {
   void initState() {
     super.initState();
   }
-
-  // Widget isVerified() {
-  //   if (FirebaseAuth.instance.currentUser!.emailVerified) {
-  //     return Icon(MdiIcons.checkDecagramOutline,
-  //         size: 24, color: primaryLightBlueColor);
-  //   } else {
-  //     return Icon(MdiIcons.alertDecagramOutline,
-  //         size: 24, color: primaryRedColor);
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +80,7 @@ class _ProfileViewContentState extends State<ProfileViewContent> {
                                   ),
                                   GestureDetector(
                                     onTap: (){
-                                      Navigator.of(context).push(animatedRoute(const CollegeSelectView()));
+                                      Navigator.of(context).push(animatedRoute(const CollegeSelectView(isUpdate: true,)));
                                     },
                                     child: Row(
                                       mainAxisAlignment:
@@ -129,6 +118,8 @@ class _ProfileViewContentState extends State<ProfileViewContent> {
                                   const SizedBox(
                                     height: 10,
                                   ),
+                                  Text(modelUserData.getUserEmail),
+                                  Text(modelUserData.getUserPhone),
                                   GestureDetector(
                                     onTap: () async {
                                       await Clipboard.setData(ClipboardData(
