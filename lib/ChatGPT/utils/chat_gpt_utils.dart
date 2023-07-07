@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sp_util/sp_util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Utils {
@@ -25,27 +24,12 @@ class Utils {
   static pushReplacement(BuildContext context, Widget widget) {
     PageRoute builder = PageRouteBuilder(
       transitionDuration: const Duration(milliseconds: 0),
-      pageBuilder: (BuildContext context, Animation<double> animation, Animation secondaryAnimation) {
+      pageBuilder: (BuildContext context, Animation<double> animation,
+          Animation secondaryAnimation) {
         return widget;
       },
     );
     Navigator.pushReplacement(context, builder);
-  }
-
-  /// Save whether to install for the first time
-  static void saveInstall() async {
-    await SpUtil.getInstance();
-    SpUtil.putBool("install_key", true);
-  }
-
-  /// Is it the first time to install
-  static Future<bool> getInstall() async {
-    await SpUtil.getInstance();
-    bool? isInstall = SpUtil.getBool("install_key");
-    if (isInstall == null) {
-      return false;
-    }
-    return isInstall;
   }
 
   static launchURL(

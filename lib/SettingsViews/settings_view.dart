@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
+import 'package:shiksha/AuthViews/splash_view.dart';
+import 'package:shiksha/Models/model_user_data.dart';
 
 import 'package:shiksha/colors/colors.dart';
 import 'package:shiksha/main.dart';
@@ -149,11 +151,11 @@ class SettingsView extends StatelessWidget {
                                   UtilitySharedPreferences()
                                       .remove("SP_SHIKSHA_USER_DATA")
                                       .whenComplete(() {
-                                    Navigator.of(context).pushReplacement(
-                                        animatedRoute(MyApp()));
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        animatedRoute(IntroView()),(Route<dynamic> route) => false);
                                   });
                                 } catch (e) {
-                                  print(e);
+                                  showSnackBar(context, e.toString(), primaryRedColor);
                                 }
                               }),
                         ],

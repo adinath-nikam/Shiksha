@@ -52,7 +52,7 @@ class _ClubsViewState extends State<ClubsView>
                               child: const Align(
                                 alignment: Alignment.center,
                                 child: Text(
-                                  "Club Events",
+                                  "College Events",
                                   style:
                                       TextStyle(fontFamily: "ProductSans-Bold"),
                                 ),
@@ -143,8 +143,14 @@ class _ClubsViewState extends State<ClubsView>
               const SizedBox(
                 width: 10,
               ),
-              customTextBold(
-                  text: 'No Events :)', textSize: 22, color: primaryDarkColor)
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  customTextBold(text: 'No Events :)', textSize: 22, color: primaryDarkColor),
+                  customTextBold(text: 'Any upcoming events\nwill appear here...', textSize: 14, color: primaryDarkColor.withOpacity(0.5)),
+                ],
+              )
             ],
           ));
         }

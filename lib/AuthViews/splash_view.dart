@@ -53,7 +53,7 @@ class IntroView extends StatelessWidget {
                     context: context,
                     function: () {
                       Navigator.of(context)
-                          .push(animatedRoute(const CollegeSelectView(
+                          .push(animatedRoute(const CollegeTypeSelectView(
                         isUpdate: false,
                       )));
                     }),

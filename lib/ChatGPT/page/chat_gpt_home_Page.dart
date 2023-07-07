@@ -2,7 +2,6 @@ import 'package:shiksha/components/question_input.dart';
 import 'package:shiksha/ChatGPT/page/chat_history_page.dart';
 import 'package:shiksha/ChatGPT/page/chat_page.dart';
 import 'package:shiksha/ChatGPT/utils/chat_gpt.dart';
-import 'package:shiksha/ChatGPT/utils/chat_gpt_config.dart';
 import 'package:shiksha/ChatGPT/utils/time.dart';
 import 'package:shiksha/ChatGPT/utils/chat_gpt_utils.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,6 @@ import 'package:flutter/services.dart';
 import 'package:shiksha/ChatGPT/stores/ai_chat_store.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
-
 import '../../Components/common_component_widgets.dart';
 import '../../colors/colors.dart';
 
@@ -41,16 +39,6 @@ class _HomePageState extends State<HomePage> {
         enabled: false,
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   void _handleClickModel(Map chatModel) {
@@ -339,7 +327,8 @@ class _HomePageState extends State<HomePage> {
                 ),
                 color: const Color.fromARGB(255, 145, 145, 145),
                 onPressed: () {
-                  _showDeleteConfirmationDialog(context, chat['id']);
+
+                  showDeleteConfirmationDialog(context, chat['id']);
                 },
               ),
             ],
@@ -354,33 +343,5 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> _showDeleteConfirmationDialog(
-    BuildContext context,
-    String chatId,
-  ) async {
-    final store = Provider.of<AIChatStore>(context, listen: false);
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirm deletion ?'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-            ),
-            TextButton(
-              child: const Text('Confirm'),
-              onPressed: () async {
-                await store.deleteChatById(chatId);
-                Navigator.of(context).pop(true);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+
 }

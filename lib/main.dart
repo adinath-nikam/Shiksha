@@ -28,7 +28,6 @@ Future<void> main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await dotenv.load(fileName: ".env");
   await GetStorage.init();
   await ChatGPT.initChatGPT();
 
@@ -96,7 +95,7 @@ class _MyAppState extends State<MyApp> {
                 future: getUserData(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
+                    return Center(child: progressIndicator());
                   } else if (snapshot.hasData) {
                     FlutterNativeSplash.remove();
                     return const TabView();

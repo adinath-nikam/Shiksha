@@ -7,18 +7,15 @@ import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:intl/intl.dart';
 import 'package:shiksha/Admin/admin_view.dart';
-import 'package:shiksha/AuthViews/splash_view.dart';
 import 'package:shiksha/FirebaseServices/firebase_api.dart';
 import 'package:shiksha/Models/model_user_data.dart';
 import 'package:shiksha/Models/model_work.dart';
-import 'package:uuid/uuid.dart';
 import '../BusTracking/bus_track_map_view.dart';
+import '../ChatGPT/page/chat_gpt_home_Page.dart';
 import '../Components/common_component_widgets.dart';
 import '../LibraryViews/library_dashboard_view.dart';
 import '../Models/model_event.dart';
 import '../colors/colors.dart';
-import 'package:crypto/crypto.dart';
-import 'dart:convert';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -37,6 +34,8 @@ class _HomeViewState extends State<HomeView> {
 
     getUserData();
 
+    updateLastActiveStatus();
+
     FirebaseDatabase.instance
         .ref('SHIKSHA_APP/EXTRAS/WOTD')
         .once()
@@ -49,6 +48,17 @@ class _HomeViewState extends State<HomeView> {
         mean = wordOfTheDay['MEANING'];
       });
     });
+  }
+
+  void updateLastActiveStatus() {
+    try {
+      FirebaseAPI()
+          .firebaseDatabase
+          .ref("SHIKSHA_APP/USERS_DATA/${modelUserData.getUserUID}")
+          .update({"last_active": DateTime.now().toString()})
+          .whenComplete(() {})
+          .onError((error, stackTrace) {});
+    } catch (e) {}
   }
 
   @override
@@ -131,7 +141,7 @@ class _HomeViewState extends State<HomeView> {
       padding: const EdgeInsets.all(15.0),
       child: GestureDetector(
         onTap: () {
-          Navigator.of(context).push(animatedRoute(IntroView()));
+          Navigator.of(context).push(animatedRoute(HomePage()));
         },
         child: Card(
             shape: RoundedRectangleBorder(

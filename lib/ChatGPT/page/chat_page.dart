@@ -237,16 +237,12 @@ class _ChatPageState extends State<ChatPage> {
         child: Column(
           children: [
             const SizedBox(height: 60),
-            Icon(Icons.tips_and_updates_rounded),
-            const SizedBox(height: 12),
-            Text(
-              'Tip',
-              style: TextStyle(
-                fontFamily: 'ProductSans-Bold',
-                color: primaryDarkColor,
-                fontSize: 14,
-              ),
+            const Icon(
+              Icons.tips_and_updates_rounded,
+              color: primaryDarkColor,
             ),
+            const SizedBox(height: 12),
+            customTextBold(text: "Tip", textSize: 14, color: primaryDarkColor),
             const SizedBox(height: 12),
             Column(
               children: tipsWidget,
@@ -276,14 +272,6 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget _genMessageItemWidget(Map message, int index) {
-    // String role = message['role'];
-    // if (role == 'generating') {
-    //   return SizedBox(
-    //     height: 160,
-    //     child: _generatingLottie,
-    //   );
-    // }
-
     return Container(
       color: Colors.white,
       padding: const EdgeInsets.fromLTRB(12, 6, 12, 6),
@@ -296,7 +284,7 @@ class _ChatPageState extends State<ChatPage> {
     String defaultAvatar = 'assets/images/क्षा_logo_dark.png';
     String defaultRoleName = 'BOT';
     Color defaultColor = const Color.fromRGBO(229, 245, 244, 1);
-    Color defaultTextColor = Colors.black;
+    Color defaultTextColor = primaryDarkColor;
     String defaultTextPrefix = '';
     List<Widget> defaultIcons = [
       _renderVoiceWidget(message),
@@ -310,7 +298,7 @@ class _ChatPageState extends State<ChatPage> {
     if (role == 'user') {
       defaultAvatar = 'assets/images/user_icon.png';
       defaultRoleName = 'You';
-      defaultColor = const Color.fromRGBO(236, 236, 236, 1.0);
+      defaultColor = primaryDarkColor.withOpacity(0.2);
       defaultIcons = [];
     } else if (role == 'error') {
       defaultTextColor = const Color.fromRGBO(238, 56, 56, 1.0);
@@ -384,7 +372,6 @@ class _ChatPageState extends State<ChatPage> {
           customContent ??
               MarkdownBody(
                 data: '$defaultTextPrefix${message['content']}',
-                // data: 'This is a line\nThis is another line'.replaceAll('\n', '<br>'),
                 shrinkWrap: true,
                 selectable: true,
                 styleSheet: MarkdownStyleSheet(
@@ -407,7 +394,10 @@ class _ChatPageState extends State<ChatPage> {
       onTap: () async {
         Share.share(message['content']);
       },
-      child: Icon(Icons.share_rounded),
+      child: Icon(
+        Icons.share_rounded,
+        color: primaryDarkColor,
+      ),
     );
   }
 
@@ -416,7 +406,10 @@ class _ChatPageState extends State<ChatPage> {
       onTap: () async {
         _speak(message['content']);
       },
-      child: Icon(Icons.record_voice_over_rounded),
+      child: Icon(
+        Icons.record_voice_over_rounded,
+        color: primaryDarkColor,
+      ),
     );
   }
 
@@ -438,7 +431,10 @@ class _ChatPageState extends State<ChatPage> {
         );
         _isCopying = false;
       },
-      child: Icon(Icons.copy_rounded),
+      child: Icon(
+        Icons.copy_rounded,
+        color: primaryDarkColor,
+      ),
     );
   }
 

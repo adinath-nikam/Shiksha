@@ -12,10 +12,108 @@ import '../Models/utilty_shared_preferences.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 
-class CollegeSelectView extends StatelessWidget {
+class CollegeTypeSelectView extends StatelessWidget {
   final bool isUpdate;
 
-  const CollegeSelectView({Key? key, required this.isUpdate}) : super(key: key);
+  const CollegeTypeSelectView({Key? key, required this.isUpdate})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+        child: Scaffold(
+      backgroundColor: primaryWhiteColor,
+      appBar: AppBar(
+        toolbarHeight: 120, // Set this height
+        backgroundColor: primaryWhiteColor,
+        elevation: 0,
+        flexibleSpace: Center(
+            child: customTextBold(
+                text: "Select your College Type..",
+                textSize: 28,
+                color: primaryDarkColor)),
+      ),
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+        child: StreamBuilder(
+            stream: FirebaseAPI().realtimeDBStream("SHIKSHA_APP/COLLEGE_TYPE"),
+            builder:
+                (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
+              if (!snapshot.hasData) {
+                return progressIndicator();
+              } else {
+                Map<dynamic, dynamic> map =
+                    snapshot.data!.snapshot.value as dynamic;
+                List<dynamic> list = [];
+                list.clear();
+                list = map.values.toList();
+
+                return AnimationLimiter(
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.snapshot.children.length,
+                      itemBuilder: (context, index) {
+                        return AnimationConfiguration.staggeredList(
+                          duration: const Duration(milliseconds: 1000),
+                          position: index,
+                          child: SlideAnimation(
+                            horizontalOffset: 50.0,
+                            child: FadeInAnimation(
+                              child: Container(
+                                margin: const EdgeInsets.all(10),
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                      side: const BorderSide(
+                                          color: primaryDarkColor, width: 1.0),
+                                      borderRadius: BorderRadius.circular(4.0)),
+                                  child: ListTile(
+                                    contentPadding: const EdgeInsets.all(15),
+                                    leading: const Icon(
+                                      Icons.school_rounded,
+                                      color: primaryDarkColor,
+                                    ),
+                                    title: customTextBold(
+                                        text: list[index],
+                                        textSize: 18,
+                                        color: primaryDarkColor),
+                                    trailing: GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context)
+                                            .push(animatedRoute(
+                                          CollegeSelectView(
+                                            selectedCollegeType:
+                                                list[index].toString(),
+                                            isUpdate: isUpdate,
+                                          ),
+                                        ));
+                                      },
+                                      child: const Icon(
+                                        Icons.arrow_forward_ios,
+                                        color: primaryDarkColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
+                );
+              }
+            }),
+      ),
+    ));
+  }
+}
+
+class CollegeSelectView extends StatelessWidget {
+  final String selectedCollegeType;
+  final bool isUpdate;
+
+  const CollegeSelectView(
+      {Key? key, required this.isUpdate, required this.selectedCollegeType})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +133,114 @@ class CollegeSelectView extends StatelessWidget {
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
         child: StreamBuilder(
-            stream: FirebaseAPI().realtimeDBStream("SHIKSHA_APP/COLLEGES"),
+            stream: FirebaseAPI()
+                .realtimeDBStream("SHIKSHA_APP/COLLEGES/$selectedCollegeType"),
             builder:
                 (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
               if (!snapshot.hasData) {
-                return Center(
-                  child: progressIndicator(),
+                return progressIndicator();
+              } else {
+                Map<dynamic, dynamic> map =
+                    snapshot.data!.snapshot.value as dynamic;
+                List<dynamic> list = [];
+                list.clear();
+                list = map.values.toList();
+
+                return AnimationLimiter(
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.snapshot.children.length,
+                      itemBuilder: (context, index) {
+                        return AnimationConfiguration.staggeredList(
+                          duration: const Duration(milliseconds: 1000),
+                          position: index,
+                          child: SlideAnimation(
+                            horizontalOffset: 50.0,
+                            child: FadeInAnimation(
+                              child: Container(
+                                margin: const EdgeInsets.all(10),
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                      side: const BorderSide(
+                                          color: primaryDarkColor, width: 1.0),
+                                      borderRadius: BorderRadius.circular(4.0)),
+                                  child: ListTile(
+                                    contentPadding: const EdgeInsets.all(15),
+                                    leading: const Icon(
+                                      Icons.school_rounded,
+                                      color: primaryDarkColor,
+                                    ),
+                                    title: customTextBold(
+                                        text: list[index],
+                                        textSize: 18,
+                                        color: primaryDarkColor),
+                                    trailing: GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context)
+                                            .push(animatedRoute(
+                                          UserCategorySelectView(
+                                            selectedCollegeType:
+                                                selectedCollegeType,
+                                            selectedCollege:
+                                                list[index].toString(),
+                                            isUpdate: isUpdate,
+                                          ),
+                                        ));
+                                      },
+                                      child: const Icon(
+                                        Icons.arrow_forward_ios,
+                                        color: primaryDarkColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
                 );
+              }
+            }),
+      ),
+    ));
+  }
+}
+
+class UserCategorySelectView extends StatelessWidget {
+  final String selectedCollege, selectedCollegeType;
+  final bool isUpdate;
+
+  const UserCategorySelectView(
+      {Key? key,
+      required this.isUpdate,
+      required this.selectedCollege,
+      required this.selectedCollegeType})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+        child: Scaffold(
+      backgroundColor: primaryWhiteColor,
+      appBar: AppBar(
+        toolbarHeight: 120, // Set this height
+        backgroundColor: primaryWhiteColor,
+        elevation: 0,
+        flexibleSpace: Center(
+            child: customTextBold(
+                text: "Select your Catgeory...",
+                textSize: 28,
+                color: primaryDarkColor)),
+      ),
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+        child: StreamBuilder(
+            stream: FirebaseAPI().realtimeDBStream("SHIKSHA_APP/USER_CATEGORY"),
+            builder:
+                (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
+              if (!snapshot.hasData) {
+                return progressIndicator();
               } else {
                 Map<dynamic, dynamic> map =
                     snapshot.data!.snapshot.value as dynamic;
@@ -82,9 +281,12 @@ class CollegeSelectView extends StatelessWidget {
                                         Navigator.of(context)
                                             .push(animatedRoute(
                                           StreamSelectView(
-                                            selectedCollege:
-                                                list[index].toString(),
+                                            selectedCollegeType:
+                                                selectedCollegeType,
+                                            selectedCollege: selectedCollege,
                                             isUpdate: isUpdate,
+                                            userCategory:
+                                                list[index].toString(),
                                           ),
                                         ));
                                       },
@@ -109,11 +311,15 @@ class CollegeSelectView extends StatelessWidget {
 }
 
 class StreamSelectView extends StatelessWidget {
-  final String selectedCollege;
+  final String selectedCollege, selectedCollegeType, userCategory;
   final bool isUpdate;
 
   const StreamSelectView(
-      {Key? key, required this.selectedCollege, required this.isUpdate})
+      {Key? key,
+      required this.selectedCollege,
+      required this.isUpdate,
+      required this.userCategory,
+      required this.selectedCollegeType})
       : super(key: key);
 
   @override
@@ -138,9 +344,7 @@ class StreamSelectView extends StatelessWidget {
             builder:
                 (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
               if (!snapshot.hasData) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return progressIndicator();
               } else {
                 Map<dynamic, dynamic> map =
                     snapshot.data!.snapshot.value as dynamic;
@@ -181,6 +385,9 @@ class StreamSelectView extends StatelessWidget {
                                         Navigator.of(context)
                                             .push(animatedRoute(
                                           SemesterSelectView(
+                                            selectedCollegeType:
+                                                selectedCollegeType,
+                                            userCategory: userCategory,
                                             selectedCollege: selectedCollege,
                                             selectedStream:
                                                 list[index].toString(),
@@ -209,14 +416,19 @@ class StreamSelectView extends StatelessWidget {
 }
 
 class SemesterSelectView extends StatelessWidget {
-  final String selectedCollege, selectedStream;
+  final String selectedCollege,
+      selectedStream,
+      userCategory,
+      selectedCollegeType;
   final bool isUpdate;
 
   const SemesterSelectView(
       {Key? key,
       required this.selectedCollege,
       required this.selectedStream,
-      required this.isUpdate})
+      required this.isUpdate,
+      required this.userCategory,
+      required this.selectedCollegeType})
       : super(key: key);
 
   @override
@@ -241,9 +453,7 @@ class SemesterSelectView extends StatelessWidget {
             builder:
                 (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
               if (!snapshot.hasData) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return progressIndicator();
               } else {
                 Map<dynamic, dynamic> map =
                     snapshot.data!.snapshot.value as dynamic;
@@ -283,11 +493,14 @@ class SemesterSelectView extends StatelessWidget {
                                         Navigator.of(context)
                                             .push(animatedRoute(
                                           UEPView(
+                                            selectedCollegeType:
+                                                selectedCollegeType,
                                             selectedCollege: selectedCollege,
                                             selectedStream: selectedStream,
                                             selectedSemester:
                                                 list[index].toString(),
                                             isUpdate: isUpdate,
+                                            userCategory: userCategory,
                                           ),
                                         ));
                                       },
@@ -312,7 +525,11 @@ class SemesterSelectView extends StatelessWidget {
 }
 
 class UEPView extends StatefulWidget {
-  final String selectedCollege, selectedStream, selectedSemester;
+  final String selectedCollege,
+      selectedStream,
+      selectedSemester,
+      userCategory,
+      selectedCollegeType;
   final bool isUpdate;
 
   const UEPView(
@@ -320,7 +537,9 @@ class UEPView extends StatefulWidget {
       required this.selectedCollege,
       required this.selectedStream,
       required this.selectedSemester,
-      required this.isUpdate})
+      required this.isUpdate,
+      required this.userCategory,
+      required this.selectedCollegeType})
       : super(key: key);
 
   @override
@@ -575,16 +794,24 @@ class _UEPViewState extends State<UEPView> {
                                   userEmail: modelUserData.getUserEmail,
                                   userPhone: modelUserData.getUserPhone,
                                   userJoiningDate:
-                                      modelUserData.getUserJoiningDate);
+                                      modelUserData.getUserJoiningDate,
+                                  userCategory: widget.userCategory,
+                                  userCollegeType: widget.selectedCollegeType);
 
-                              sharedPrefUserData
-                                  .save('SP_SHIKSHA_USER_DATA',
-                                      signUpModelUserData)
-                                  .whenComplete(() {
-                                Navigator.of(context).pop();
-                                Navigator.of(context)
-                                    .push(animatedRoute(const MyApp()));
-                              });
+                              try {
+                                sharedPrefUserData
+                                    .save('SP_SHIKSHA_USER_DATA',
+                                        signUpModelUserData)
+                                    .whenComplete(() {
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      animatedRoute(const MyApp()),
+                                      (Route<dynamic> route) => false);
+                                });
+                              } catch (e) {
+                                showSnackBar(
+                                    context, e.toString(), primaryRedColor);
+                              }
                             } catch (e) {
                               showSnackBar(
                                   context, e.toString(), primaryRedColor);
@@ -614,7 +841,10 @@ class _UEPViewState extends State<UEPView> {
                                       userPhone: controllerTextEditPhone.text
                                           .toString(),
                                       userJoiningDate:
-                                          DateTime.now().toString());
+                                          DateTime.now().toString(),
+                                      userCategory: widget.userCategory,
+                                      userCollegeType:
+                                          widget.selectedCollegeType);
                                   FirebaseAPI()
                                       .firebaseDatabase
                                       .ref(
@@ -624,14 +854,22 @@ class _UEPViewState extends State<UEPView> {
                                     "last_active":
                                         signUpModelUserData.getUserJoiningDate
                                   }).whenComplete(() {
-                                    sharedPrefUserData
-                                        .save('SP_SHIKSHA_USER_DATA',
-                                            signUpModelUserData)
-                                        .whenComplete(() {
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context)
-                                          .push(animatedRoute(const MyApp()));
-                                    });
+                                    try {
+                                      sharedPrefUserData
+                                          .save('SP_SHIKSHA_USER_DATA',
+                                              signUpModelUserData)
+                                          .whenComplete(() {
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context)
+                                            .pushAndRemoveUntil(
+                                                animatedRoute(const MyApp()),
+                                                (Route<dynamic> route) =>
+                                                    false);
+                                      });
+                                    } catch (e) {
+                                      showSnackBar(context, e.toString(),
+                                          primaryRedColor);
+                                    }
                                   });
                                 } catch (e) {
                                   showSnackBar(

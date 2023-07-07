@@ -5,7 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../ChatGPT/stores/ai_chat_store.dart';
 import '../HomeView/profile_view.dart';
 import '../SettingsViews/settings_view.dart';
 import '../colors/colors.dart';
@@ -343,6 +345,36 @@ Route animatedRoute(final Widget activity) {
           end: Offset.zero,
         ).animate(animation),
         child: child,
+      );
+    },
+  );
+}
+
+Future<void> showDeleteConfirmationDialog(
+    BuildContext context,
+    String chatId,
+    ) async {
+  final store = Provider.of<AIChatStore>(context, listen: false);
+  await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: customTextBold(text: "Confirm Deletion ?", textSize: 18, color: primaryDarkColor),
+        actions: <Widget>[
+          TextButton(
+            child: customTextBold(text: "Cancel", textSize: 16, color: primaryDarkColor),
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+          ),
+          TextButton(
+            child: customTextBold(text: "Delete", textSize: 16, color: primaryRedColor),
+            onPressed: () async {
+              await store.deleteChatById(chatId);
+              Navigator.of(context).pop(true);
+            },
+          ),
+        ],
       );
     },
   );

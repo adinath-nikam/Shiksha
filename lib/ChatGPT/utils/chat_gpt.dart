@@ -1,4 +1,5 @@
 import 'package:dart_openai/dart_openai.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_storage/get_storage.dart';
@@ -18,8 +19,12 @@ class ChatGPT {
 
   static GetStorage storage = GetStorage();
 
-  static String chatGptToken =
-      dotenv.env['OPENAI_CHATGPT_TOKEN'] ?? ''; // token
+  // static String chatGptToken = dotenv.env['OPENAI_CHATGPT_TOKEN'] ?? ''; // token
+  static String chatGptToken = dotenv.env['OPENAI_CHATGPT_TOKEN'] ?? ''; // token
+
+
+
+
   static String defaultModel = 'gpt-3.5-turbo';
   static List defaultRoles = [
     'system',
@@ -218,34 +223,11 @@ class ChatGPT {
       ],
     },
   ];
-
-  static Future<void> setOpenAIKey(String key) async {
-    await storage.write('OpenAIKey', key);
-    await initChatGPT();
-  }
-
-  static String getCacheOpenAIKey() {
-    String? key = storage.read('OpenAIKey');
-    if (key != null && key != '' && key != chatGptToken) {
-      return key;
-    }
-    return '';
-  }
-
-  static Future<void> setOpenAIBaseUrl(String url) async {
-    await storage.write('OpenAIBaseUrl', url);
-    await initChatGPT();
-  }
-
-  static String getCacheOpenAIBaseUrl() {
-    String? key = storage.read('OpenAIBaseUrl');
-    return (key ?? "").isEmpty ? "" : key!;
-  }
-
+  
   static Set chatModelTypeList =
       chatModelList.map((map) => map['type']).toSet();
 
-  /// 实现通过type获取信息
+
   static getAiInfoByType(String chatType) {
     return chatModelList.firstWhere(
       (item) => item['type'] == chatType,
@@ -254,14 +236,10 @@ class ChatGPT {
   }
 
   static Future<void> initChatGPT() async {
-    String cacheKey = getCacheOpenAIKey();
-    String cacheUrl = getCacheOpenAIBaseUrl();
-    var apiKey = cacheKey != '' ? cacheKey : chatGptToken;
-    OpenAI.apiKey = apiKey;
-    if (apiKey != chatGptToken) {
-      OpenAI.baseUrl =
-          cacheUrl.isNotEmpty ? cacheUrl : "https://api.openai.com";
-    }
+    DataSnapshot ds = await FirebaseDatabase.instance.ref("SHIKSHA_APP/CHAT_GPT/TOKEN").get();
+    chatGptToken = ds.value.toString();
+    OpenAI.apiKey = chatGptToken;
+    OpenAI.baseUrl = "https://api.openai.com";
   }
 
   static getRoleFromString(String role) {

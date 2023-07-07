@@ -1,5 +1,3 @@
-import 'package:shiksha/ChatGPT/utils/chat_gpt.dart';
-
 class Config {
   static final Config _instance = Config._();
   factory Config() => _getInstance();
@@ -10,24 +8,7 @@ class Config {
     return _instance;
   }
 
-  static bool get isDebug => !const bool.fromEnvironment('dart.vm.product');
-  // static bool get isDebug => true;
-
-  /// TODO VIP
-  static bool isAdShow() {
-    if (isInfiniteNumberVersion) {
-      return false;
-    }
-    // If a custom key is set, no ads are displayed
-    if (ChatGPT.getCacheOpenAIKey() != '') {
-      return false;
-    }
-    return true;
-  }
-
   static bool isInfiniteNumberVersion = true; // Unlimited frequency. Development and use
   static String appName = 'SHIKSHA BOT (BETA)';
-  static String contactEmail = '895535702@qq.com';
-  static int watchAdApiCount = 3;
-  static int appUserAdCount = 20; // Do not actively display advertisements if the number of times exceeds (redemption page)
+  static String contactEmail = 'mgcshiksha@gmail.com';
 }

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shiksha/ChatGPT/stores/ai_chat_store.dart';
 import 'package:provider/provider.dart';
-
 import '../../Components/common_component_widgets.dart';
 
 class ChatHistoryPage extends StatefulWidget {
@@ -22,19 +21,8 @@ class _ChatHistoryPageState extends State<ChatHistoryPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final store = Provider.of<AIChatStore>(context, listen: true);
-
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(60.0),
@@ -54,22 +42,6 @@ class _ChatHistoryPageState extends State<ChatHistoryPage> {
   }
 
   Widget _renderChatListWidget(List chatList) {
-    // List<Widget> list = [];
-    // for (var i = 0; i < chatList.length; i++) {
-    //   list.add(
-    //     _genChatItemWidget(chatList[i]),
-    //   );
-    // }
-    // return SingleChildScrollView(
-    //   child: Column(
-    //     crossAxisAlignment: CrossAxisAlignment.start,
-    //     children: [
-    //       ...list,
-    //       const SizedBox(height: 20),
-    //     ],
-    //   ),
-    // );
-
     return ListView.builder(
       reverse: false,
       itemCount: chatList.length,
@@ -142,7 +114,7 @@ class _ChatHistoryPageState extends State<ChatHistoryPage> {
                 ),
                 color: const Color.fromARGB(255, 145, 145, 145),
                 onPressed: () {
-                  _showDeleteConfirmationDialog(context, chat['id']);
+                  showDeleteConfirmationDialog(context, chat['id']);
                 },
               ),
             ],
@@ -154,36 +126,6 @@ class _ChatHistoryPageState extends State<ChatHistoryPage> {
           ),
         ],
       ),
-    );
-  }
-
-  Future<void> _showDeleteConfirmationDialog(
-    BuildContext context,
-    String chatId,
-  ) async {
-    final store = Provider.of<AIChatStore>(context, listen: false);
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirm deletion?'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-            ),
-            TextButton(
-              child: const Text('Confirm'),
-              onPressed: () async {
-                await store.deleteChatById(chatId);
-                Navigator.of(context).pop(true);
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }

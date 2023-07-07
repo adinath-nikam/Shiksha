@@ -6,10 +6,12 @@ class ModelUserData {
   late final String userUSN;
   late final String userSemester;
   late final String userStream;
+  late final String userCategory;
   late final String userCollege;
   late final String userEmail;
   late final String userPhone;
   late final String userJoiningDate;
+  late final String userCollegeType;
   bool userCanPostEvent = false;
   bool userCanPostJob = false;
   bool userIsAdmin = false;
@@ -20,8 +22,10 @@ class ModelUserData {
       required this.userCollege,
       required this.userSemester,
       required this.userStream,
+      required this.userCategory,
       required this.userJoiningDate,
       required this.userEmail,
+      required this.userCollegeType,
       required this.userPhone});
 
   String get getUserUID {
@@ -42,6 +46,14 @@ class ModelUserData {
 
   String get getUserStream {
     return userStream;
+  }
+
+  String get getUserCategory {
+    return userCategory;
+  }
+
+  String get getUserCollegeType {
+    return userCollegeType;
   }
 
   String get getUserEmail {
@@ -80,12 +92,20 @@ class ModelUserData {
     this.userCollege = userCollege;
   }
 
+  set setUserCollegeType(String userCollegeType) {
+    this.userCollegeType = userCollegeType;
+  }
+
   set setUserBranch(String userStream) {
     this.userStream = userStream;
   }
 
   set setUserSemester(String userSemester) {
     this.userSemester = userSemester;
+  }
+
+  set setUserCategory(String userCategory) {
+    this.userCategory = userCategory;
   }
 
   set setUserEmail(String userEmail) {
@@ -118,8 +138,10 @@ class ModelUserData {
         'userCollege': userCollege,
         'userStream': userStream,
         'userSemester': userSemester,
-    'userEmail': userEmail,
-    'userPhone': userPhone,
+        'userEmail': userEmail,
+        'userPhone': userPhone,
+        'userCategory': userCategory,
+        'userCollegeType': userCollegeType,
         'userJoiningDate': userJoiningDate,
         'userCanPostEvent': userCanPostEvent,
         'userCanPostJob': userCanPostJob,
@@ -133,7 +155,9 @@ class ModelUserData {
     userStream = json['userStream'] as String;
     userSemester = json['userSemester'] as String;
     userEmail = json['userEmail'] as String;
+    userCategory = json['userCategory'] as String;
     userPhone = json['userPhone'] as String;
+    userCollegeType = json['userCollegeType'] as String;
     userJoiningDate = json['userJoiningDate'] as String;
     userCanPostEvent = json['userCanPostEvent'] as bool;
     userCanPostJob = json['userCanPostJob'] as bool;
@@ -150,7 +174,7 @@ Future<ModelUserData> getUserData() async {
 
     return modelUserData;
   } catch (e) {
-    print(">>> $e");
+    print(">>>"+e.toString());
     return modelUserData;
   }
 }

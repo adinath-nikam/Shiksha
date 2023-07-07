@@ -106,10 +106,8 @@ class _WorkViewContentState extends State<WorkViewContent> {
               const SizedBox(
                 width: 10,
               ),
-              customTextBold(
-                  text: 'No Job Posts :(',
-                  textSize: 22,
-                  color: primaryDarkColor)
+              customTextBold(text: 'No Jobs Posted :(', textSize: 22, color: primaryDarkColor),
+              customTextBold(text: 'Any Job Posting\nwill appear here...', textSize: 14, color: primaryDarkColor.withOpacity(0.5)),
             ],
           ));
         }

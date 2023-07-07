@@ -79,8 +79,11 @@ class _ProfileViewContentState extends State<ProfileViewContent> {
                                     height: circleRadius / 2,
                                   ),
                                   GestureDetector(
-                                    onTap: (){
-                                      Navigator.of(context).push(animatedRoute(const CollegeSelectView(isUpdate: true,)));
+                                    onTap: () {
+                                      Navigator.of(context).push(animatedRoute(
+                                          const CollegeTypeSelectView(
+                                        isUpdate: true,
+                                      )));
                                     },
                                     child: Row(
                                       mainAxisAlignment:
@@ -118,8 +121,6 @@ class _ProfileViewContentState extends State<ProfileViewContent> {
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  Text(modelUserData.getUserEmail),
-                                  Text(modelUserData.getUserPhone),
                                   GestureDetector(
                                     onTap: () async {
                                       await Clipboard.setData(ClipboardData(
@@ -211,7 +212,8 @@ class _ProfileViewContentState extends State<ProfileViewContent> {
                                           child: Row(
                                             children: [
                                               Icon(
-                                                Icons.perm_contact_calendar_rounded,
+                                                Icons
+                                                    .perm_contact_calendar_rounded,
                                                 size: 30,
                                                 color: primaryDarkColor,
                                               ),
@@ -295,7 +297,8 @@ class _ProfileViewContentState extends State<ProfileViewContent> {
                               child: Image(
                                 width: 60,
                                 height: 60,
-                                image: AssetImage('assets/images/क्षा_logo_dark.png'),
+                                image: AssetImage(
+                                    'assets/images/क्षा_logo_dark.png'),
                               ),
                             ),
                           ),
