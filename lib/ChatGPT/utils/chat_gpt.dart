@@ -1,7 +1,6 @@
 import 'package:dart_openai/dart_openai.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_storage/get_storage.dart';
 
 class ChatGPT {
@@ -20,7 +19,7 @@ class ChatGPT {
   static GetStorage storage = GetStorage();
 
   // static String chatGptToken = dotenv.env['OPENAI_CHATGPT_TOKEN'] ?? ''; // token
-  static String chatGptToken = dotenv.env['OPENAI_CHATGPT_TOKEN'] ?? ''; // token
+  // String chatGptToken;
 
 
 
@@ -223,7 +222,7 @@ class ChatGPT {
       ],
     },
   ];
-  
+
   static Set chatModelTypeList =
       chatModelList.map((map) => map['type']).toSet();
 
@@ -237,7 +236,7 @@ class ChatGPT {
 
   static Future<void> initChatGPT() async {
     DataSnapshot ds = await FirebaseDatabase.instance.ref("SHIKSHA_APP/CHAT_GPT/TOKEN").get();
-    chatGptToken = ds.value.toString();
+    String chatGptToken = ds.value.toString();
     OpenAI.apiKey = chatGptToken;
     OpenAI.baseUrl = "https://api.openai.com";
   }

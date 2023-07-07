@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shiksha/AuthViews/splash_view.dart';
 import 'package:shiksha/Components/AuthButtons.dart';
 import 'package:shiksha/Components/common_component_widgets.dart';
@@ -12,9 +11,7 @@ import 'package:flutter/material.dart';
 import 'colors/colors.dart';
 import 'package:shiksha/ChatGPT/stores/ai_chat_store.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
@@ -56,7 +53,10 @@ Future<void> main() async {
   });
 
   runApp(
-    const MyApp(),
+    MaterialApp(
+        color: primaryWhiteColor,
+        debugShowCheckedModeBanner: false,
+        home: const MyApp()),
   );
 }
 
@@ -84,33 +84,28 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => AIChatStore(),
-      child: MaterialApp(
-        color: primaryWhiteColor,
-        debugShowCheckedModeBanner: false,
-        builder: EasyLoading.init(),
-        home: SafeArea(
-          child: Scaffold(
-            backgroundColor: primaryWhiteColor,
-            body: FutureBuilder<ModelUserData?>(
-                future: getUserData(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: progressIndicator());
-                  } else if (snapshot.hasData) {
-                    FlutterNativeSplash.remove();
-                    return const TabView();
-                  } else if (snapshot.hasError) {
-                    FlutterNativeSplash.remove();
-                    print(snapshot.hasError);
-                    return const IntroView();
-                  } else {
-                    FlutterNativeSplash.remove();
-                    return const Center(child: ErrorView());
-                  }
-                }),
-          ),
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: primaryWhiteColor,
+          body: FutureBuilder<ModelUserData?>(
+              future: getUserData(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: progressIndicator());
+                } else if (snapshot.hasData) {
+                  FlutterNativeSplash.remove();
+                  return const TabView();
+                } else if (snapshot.hasError) {
+                  FlutterNativeSplash.remove();
+                  print(snapshot.hasError);
+                  return const IntroView();
+                } else {
+                  FlutterNativeSplash.remove();
+                  return const Center(child: ErrorView());
+                }
+              }),
         ),
-      ),
+      )
     );
   }
 }
@@ -126,7 +121,7 @@ class ErrorView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            MdiIcons.trophyBroken,
+            Icons.error_rounded,
             color: primaryDarkColor,
             size: 80,
           ),

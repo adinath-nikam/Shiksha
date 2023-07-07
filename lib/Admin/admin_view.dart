@@ -28,7 +28,8 @@ class _AdminViewState extends State<AdminView> {
               child: Column(
                 children: [
                   GestureDetector(
-                    onTap: () => Navigator.of(context).push(animatedRoute(const AddWOTDView())),
+                    onTap: () => Navigator.of(context)
+                        .push(animatedRoute(const AddWOTDView())),
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 10),
@@ -59,7 +60,8 @@ class _AdminViewState extends State<AdminView> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => Navigator.of(context).push(animatedRoute(const AppUsers())),
+                    onTap: () => Navigator.of(context)
+                        .push(animatedRoute(const AppUsers())),
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 10),
@@ -90,7 +92,8 @@ class _AdminViewState extends State<AdminView> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => Navigator.of(context).push(animatedRoute(const CampaignView())),
+                    onTap: () => Navigator.of(context)
+                        .push(animatedRoute(const CampaignView())),
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 10),
@@ -143,7 +146,7 @@ class _AppUsersState extends State<AppUsers> {
           preferredSize: const Size.fromHeight(60.0),
           child: appBarCommon(context, "APP USERS")),
       body: StreamBuilder(
-          stream: FirebaseAPI().realtimeDBStream("SHIKSA_APP/USERS_DATA"),
+          stream: FirebaseAPI().realtimeDBStream("SHIKSHA_APP/USERS_DATA"),
           builder:
               (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
             if (!snapshot.hasData) {
@@ -188,7 +191,7 @@ class _AppUsersState extends State<AppUsers> {
                           return ListTile(
                             title: ExpansionTile(
                               title: customTextBold(
-                                  text: list[index]['userUID'],
+                                  text: list[index]['user_id'],
                                   textSize: 14,
                                   color: primaryDarkColor),
                               children: [
@@ -201,108 +204,15 @@ class _AppUsersState extends State<AppUsers> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                            "USN: ${list[index]['userUSN']}"),
-                                        Text(
-                                            "College: ${list[index]['userCollege']}"),
-                                        Text(
-                                            "Stream: ${list[index]['userStream']}"),
-                                        Text(
-                                            "Semester: ${list[index]['userSemester']}"),
-                                        Row(
-                                          children: [
-                                            Text(
-                                                "Can Post Event: ${list[index]['userCanPostEvent']}"),
-                                            StatefulBuilder(builder:
-                                                (BuildContext context,
-                                                    StateSetter setState) {
-                                              return Center(
-                                                child: Switch(
-                                                  value: list[index]
-                                                      ['userCanPostEvent'],
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      FirebaseDatabase.instance
-                                                          .ref(
-                                                              "SHIKSHA_APP/USERS_DATA")
-                                                          .child(list[index]
-                                                              ['userUID'])
-                                                          .update({
-                                                        'userCanPostEvent':
-                                                            value
-                                                      });
-                                                    });
-                                                  },
-                                                  activeTrackColor:
-                                                      Colors.lightGreenAccent,
-                                                  activeColor: Colors.green,
-                                                ),
-                                              );
-                                            }),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                                "Can Post Job: ${list[index]['userCanPostJob']}"),
-                                            StatefulBuilder(builder:
-                                                (BuildContext context,
-                                                    StateSetter setState) {
-                                              return Center(
-                                                child: Switch(
-                                                  value: list[index]
-                                                      ['userCanPostJob'],
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      FirebaseDatabase.instance
-                                                          .ref(
-                                                              "SHIKSHA_APP/USERS_DATA")
-                                                          .child(list[index]
-                                                              ['userUID'])
-                                                          .update({
-                                                        'userCanPostJob': value
-                                                      });
-                                                    });
-                                                  },
-                                                  activeTrackColor:
-                                                      Colors.lightGreenAccent,
-                                                  activeColor: Colors.green,
-                                                ),
-                                              );
-                                            }),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                                "Is Admin: ${list[index]['userIsAdmin']}"),
-                                            StatefulBuilder(builder:
-                                                (BuildContext context,
-                                                    StateSetter setState) {
-                                              return Center(
-                                                child: Switch(
-                                                  value: list[index]
-                                                      ['userIsAdmin'],
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      FirebaseDatabase.instance
-                                                          .ref(
-                                                              "SHIKSHA_APP/USERS_DATA")
-                                                          .child(list[index]
-                                                              ['userUID'])
-                                                          .update({
-                                                        'userIsAdmin': value
-                                                      });
-                                                    });
-                                                  },
-                                                  activeTrackColor:
-                                                      Colors.lightGreenAccent,
-                                                  activeColor: Colors.green,
-                                                ),
-                                              );
-                                            }),
-                                          ],
-                                        ),
+                                        customTextRegular(
+                                            text: "${list[index]['user_id']}",
+                                            textSize: 14,
+                                            color: primaryDarkColor),
+                                        customTextRegular(
+                                            text:
+                                                "${list[index]['last_active']}",
+                                            textSize: 14,
+                                            color: primaryDarkColor)
                                       ],
                                     ),
                                   ),

@@ -8,7 +8,5 @@ String BRANCH_DROPDOWN_INTIAL_VALUE = "Select your Branch";
 String CLUB_DROPDOWN_INTIAL_VALUE = "Select Event Club";
 String WORK_CONSTANTS = "WORK";
 String WORK_CONSTANTS_OFFCAMPUS = "WORK_OFF_CAMPUS";
-String APP_STORE_URL = "https://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftwareUpdate?id=YOUR-APP-ID&mt=8";
-String PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.whatsapp";
 String APP_UPDATE_DIALOG_TITLE = "New Update Available!";
 String APP_UPDATE_DIALOG_MESSAGE = "There is a newer version of app available please update it now.";

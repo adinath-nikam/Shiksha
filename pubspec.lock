@@ -25,14 +25,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.13.0"
-  animated_flip_counter:
-    dependency: "direct main"
-    description:
-      name: animated_flip_counter
-      sha256: abbb8368bf30cb027af59a1ed3747868790070d70c24405ce39dcd65fd3eba33
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.5"
   animated_text_kit:
     dependency: "direct main"
     description:
@@ -377,14 +369,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.1.2"
-  expandable:
-    dependency: "direct main"
-    description:
-      name: expandable
-      sha256: "9604d612d4d1146dafa96c6d8eec9c2ff0994658d6d09fed720ab788c7f5afc2"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.0.1"
   fake_async:
     dependency: transitive
     description:
@@ -577,14 +561,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
-  flip_card:
-    dependency: "direct main"
-    description:
-      name: flip_card
-      sha256: "5d4aa58f3983cced0782f4ce45826b7eea36e8e464964d9209dcbc7a87b2292f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.7.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -638,30 +614,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  flutter_dotenv:
-    dependency: "direct dev"
-    description:
-      name: flutter_dotenv
-      sha256: d9283d92059a22e9834bc0a31336658ffba77089fb6f3cc36751f1fc7c6661a3
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.0.2"
-  flutter_easyloading:
-    dependency: "direct main"
-    description:
-      name: flutter_easyloading
-      sha256: ba21a3c883544e582f9cc455a4a0907556714e1e9cf0eababfcb600da191d17c
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.5"
-  flutter_emoji:
-    dependency: "direct main"
-    description:
-      name: flutter_emoji
-      sha256: a4341f2440b7f97c2ec4bb19a0903f313918a755c55d30ac746f1312085788dd
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.4.0"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -718,22 +670,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.15"
-  flutter_rating_bar:
-    dependency: transitive
-    description:
-      name: flutter_rating_bar
-      sha256: d2af03469eac832c591a1eba47c91ecc871fe5708e69967073c043b2d775ed93
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.0.1"
-  flutter_spinkit:
-    dependency: transitive
-    description:
-      name: flutter_spinkit
-      sha256: b39c753e909d4796906c5696a14daf33639a76e017136c8d82bf3e620ce5bb8e
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.2.0"
   flutter_staggered_animations:
     dependency: "direct main"
     description:
@@ -1176,14 +1112,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.0"
-  material_design_icons_flutter:
-    dependency: "direct main"
-    description:
-      name: material_design_icons_flutter
-      sha256: "8ef8562d16e747b2d93e5da5c2508931588939c5c00ebc8e2768e803db7dfd3c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.0.7096"
   meta:
     dependency: transitive
     description:
@@ -1400,14 +1328,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.3"
-  quickalert:
-    dependency: "direct main"
-    description:
-      name: quickalert
-      sha256: "33a52870b2a87c55d0649d0cd228efaa2368d5df39231fdecebb71f349a9b221"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.1"
   quiver:
     dependency: transitive
     description:
@@ -1416,14 +1336,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.2.1"
-  rating_dialog:
-    dependency: "direct main"
-    description:
-      name: rating_dialog
-      sha256: "4856ba266c255081f05c57148345ea13f0d86c4049859d66e14c47e2ab1f90d3"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.4"
   requests:
     dependency: "direct main"
     description:
@@ -1549,14 +1461,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.1"
-  sp_util:
-    dependency: "direct main"
-    description:
-      name: sp_util
-      sha256: "9da43dce5de79c17a787d0626bf01538d63090ca32521200d22a232171c495dc"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.3"
   sqflite:
     dependency: transitive
     description:

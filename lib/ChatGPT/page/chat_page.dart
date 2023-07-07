@@ -5,7 +5,6 @@ import 'package:shiksha/ChatGPT/utils/chat_gpt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shiksha/ChatGPT/stores/ai_chat_store.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -425,10 +424,7 @@ class _ChatPageState extends State<ChatPage> {
             text: message['content'],
           ),
         );
-        EasyLoading.showToast(
-          'Copy successfully!',
-          dismissOnTap: true,
-        );
+        showSnackBar(context, "Copy Successful!", primaryGreenColor);
         _isCopying = false;
       },
       child: Icon(

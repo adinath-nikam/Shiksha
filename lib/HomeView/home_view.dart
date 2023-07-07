@@ -78,8 +78,8 @@ class _HomeViewState extends State<HomeView> {
                   chatBotWidget(),
                   HomeMenuView(context),
                   getWordOfTheDay(),
-                  SizedBox(height: 200, child: eventsListView()),
-                  Container(height: 210, child: workListView()),
+                  eventsListView(),
+                  workListView(),
                   // recentJobPosting(),
                   const SizedBox(
                     height: 25,
@@ -287,123 +287,128 @@ class _HomeViewState extends State<HomeView> {
         if (!snapshot.hasData) {
           return Center(child: progressIndicator());
         } else if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
-                  child: customTextBold(
-                      text: "Upcoming Events",
-                      textSize: 16,
-                      color: primaryDarkColor)),
-              Expanded(
-                child: ListView(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  children: snapshot.data!.docs.map((data) {
-                    final ModelEventNew modelEvent =
-                        ModelEventNew.fromSnapshot(data);
-                    final startDate = DateFormat("yyyy-MM-dd")
-                        .parse(modelEvent.eventStartDate!);
-                    final postedDate = DateFormat("yyyy-MM-dd")
-                        .parse(modelEvent.eventPostedDate!);
+          return SizedBox(
+            height: 200,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 25),
+                    child: customTextBold(
+                        text: "Upcoming Events",
+                        textSize: 16,
+                        color: primaryDarkColor)),
+                Expanded(
+                  child: ListView(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    children: snapshot.data!.docs.map((data) {
+                      final ModelEventNew modelEvent =
+                          ModelEventNew.fromSnapshot(data);
+                      final startDate = DateFormat("yyyy-MM-dd")
+                          .parse(modelEvent.eventStartDate!);
+                      final postedDate = DateFormat("yyyy-MM-dd")
+                          .parse(modelEvent.eventPostedDate!);
 
-                    final monthString = DateFormat('MMMM').format(startDate);
-                    final dayString = DateFormat('EEE').format(startDate);
-                    final dayNumber = DateFormat('dd').format(startDate);
+                      final monthString = DateFormat('MMMM').format(startDate);
+                      final dayString = DateFormat('EEE').format(startDate);
+                      final dayNumber = DateFormat('dd').format(startDate);
 
-                    final postedYearNumber =
-                        DateFormat('yyyy').format(postedDate);
+                      final postedYearNumber =
+                          DateFormat('yyyy').format(postedDate);
 
-                    return GestureDetector(
-                      onTap: () {
-                        ModelEventNew e = ModelEventNew.fromData(
-                            modelEvent.id,
-                            modelEvent.userId,
-                            modelEvent.eventName,
-                            modelEvent.eventStartDate,
-                            modelEvent.eventStartTime,
-                            modelEvent.eventVenue,
-                            modelEvent.eventDescription,
-                            modelEvent.eventInstructions,
-                            modelEvent.eventGoogleFormLink,
-                            modelEvent.eventPostedDate,
-                            modelEvent.eventClub);
+                      return GestureDetector(
+                        onTap: () {
+                          ModelEventNew e = ModelEventNew.fromData(
+                              modelEvent.id,
+                              modelEvent.userId,
+                              modelEvent.eventName,
+                              modelEvent.eventStartDate,
+                              modelEvent.eventStartTime,
+                              modelEvent.eventVenue,
+                              modelEvent.eventDescription,
+                              modelEvent.eventInstructions,
+                              modelEvent.eventGoogleFormLink,
+                              modelEvent.eventPostedDate,
+                              modelEvent.eventClub);
 
-                        Navigator.of(context).push(animatedRoute(e));
-                      },
-                      child: Row(
-                        children: [
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          SizedBox(
-                            height: 120,
-                            width: 120,
-                            child: Card(
-                              elevation: 5,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.vertical(
-                                          top: Radius.circular(10),
-                                          bottom: Radius.zero),
-                                      color: primaryDarkColor,
+                          Navigator.of(context).push(animatedRoute(e));
+                        },
+                        child: Row(
+                          children: [
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            SizedBox(
+                              height: 120,
+                              width: 120,
+                              child: Card(
+                                elevation: 5,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            const BorderRadius.vertical(
+                                                top: Radius.circular(10),
+                                                bottom: Radius.zero),
+                                        color: primaryDarkColor,
+                                      ),
+                                      width: double.maxFinite,
+                                      height: 30,
+                                      child: Center(
+                                          child: customTextBold(
+                                              text: monthString,
+                                              textSize: 14,
+                                              color: primaryWhiteColor)),
                                     ),
-                                    width: double.maxFinite,
-                                    height: 30,
-                                    child: Center(
-                                        child: customTextBold(
-                                            text: monthString,
-                                            textSize: 14,
-                                            color: primaryWhiteColor)),
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      padding: const EdgeInsets.all(8),
-                                      child: Column(
-                                        children: [
-                                          customTextBold(
-                                              text: dayString,
-                                              textSize: 12,
-                                              color: primaryDarkColor),
-                                          customTextBold(
-                                              text: dayNumber,
-                                              textSize: 20,
-                                              color: primaryDarkColor),
-                                          customTextBold(
-                                              text: postedYearNumber,
-                                              textSize: 12,
-                                              color: primaryDarkColor),
-                                        ],
+                                    Expanded(
+                                      child: Container(
+                                        padding: const EdgeInsets.all(8),
+                                        child: Column(
+                                          children: [
+                                            customTextBold(
+                                                text: dayString,
+                                                textSize: 12,
+                                                color: primaryDarkColor),
+                                            customTextBold(
+                                                text: dayNumber,
+                                                textSize: 20,
+                                                color: primaryDarkColor),
+                                            customTextBold(
+                                                text: postedYearNumber,
+                                                textSize: 12,
+                                                color: primaryDarkColor),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Container(
-                                    height: 8,
-                                    decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.vertical(
-                                          top: Radius.zero,
-                                          bottom: Radius.circular(10)),
-                                      color: primaryDarkColor,
+                                    Container(
+                                      height: 8,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            const BorderRadius.vertical(
+                                                top: Radius.zero,
+                                                bottom: Radius.circular(10)),
+                                        color: primaryDarkColor,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }).toList(),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         } else if (snapshot.data!.docs.isEmpty) {
           return const SizedBox();
@@ -421,157 +426,163 @@ class _HomeViewState extends State<HomeView> {
         if (!snapshot.hasData) {
           return Center(child: progressIndicator());
         } else if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
-                  child: customTextBold(
-                      text: "Recent Posts",
-                      textSize: 16,
-                      color: primaryDarkColor)),
-              Expanded(
-                child: ListView(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  children: snapshot.data!.docs.map((data) {
-                    final ModelWork modelWork = ModelWork.fromSnapshot(data);
-                    return GestureDetector(
-                      onTap: () {
-                        ModelWork e = ModelWork.fromData(
-                          modelWork.id,
-                          modelWork.workTitle,
-                          modelWork.workCompanyName,
-                          modelWork.workCompensation,
-                          modelWork.workDescription,
-                          modelWork.workLocation,
-                          modelWork.workType,
-                          modelWork.workPostURL,
-                          modelWork.workImageURL,
-                          modelWork.workPostedDate,
-                        );
-                        Navigator.of(context).push(animatedRoute(e));
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Container(
-                            constraints: BoxConstraints(
-                              minWidth: 250,
+          return Container(
+            height: 210,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 25),
+                    child: customTextBold(
+                        text: "Recent Posts",
+                        textSize: 16,
+                        color: primaryDarkColor)),
+                Expanded(
+                  child: ListView(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    children: snapshot.data!.docs.map((data) {
+                      final ModelWork modelWork = ModelWork.fromSnapshot(data);
+                      return GestureDetector(
+                        onTap: () {
+                          ModelWork e = ModelWork.fromData(
+                            modelWork.id,
+                            modelWork.workTitle,
+                            modelWork.workCompanyName,
+                            modelWork.workCompensation,
+                            modelWork.workDescription,
+                            modelWork.workLocation,
+                            modelWork.workType,
+                            modelWork.workPostURL,
+                            modelWork.workImageURL,
+                            modelWork.workPostedDate,
+                          );
+                          Navigator.of(context).push(animatedRoute(e));
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              width: 20,
                             ),
-                            child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                color: primaryWhiteColor,
-                                elevation: 2,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 20, horizontal: 20),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(10.0),
-                                            child: Image.network(
-                                              modelWork.workImageURL!,
-                                              fit: BoxFit.cover,
-                                              height: 55,
-                                              width: 55,
-                                              loadingBuilder:
-                                                  (BuildContext context,
-                                                      Widget child,
-                                                      ImageChunkEvent?
-                                                          loadingProgress) {
-                                                if (loadingProgress == null)
-                                                  return child;
-                                                return Center(
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                    value: loadingProgress
-                                                                .expectedTotalBytes !=
-                                                            null
-                                                        ? loadingProgress
-                                                                .cumulativeBytesLoaded /
-                                                            loadingProgress
-                                                                .expectedTotalBytes!
-                                                        : null,
-                                                  ),
-                                                );
-                                              },
+                            Container(
+                              constraints: BoxConstraints(
+                                minWidth: 250,
+                              ),
+                              child: Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  color: primaryWhiteColor,
+                                  elevation: 2,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 20, horizontal: 20),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                              child: Image.network(
+                                                modelWork.workImageURL!,
+                                                fit: BoxFit.cover,
+                                                height: 55,
+                                                width: 55,
+                                                loadingBuilder:
+                                                    (BuildContext context,
+                                                        Widget child,
+                                                        ImageChunkEvent?
+                                                            loadingProgress) {
+                                                  if (loadingProgress == null)
+                                                    return child;
+                                                  return Center(
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      value: loadingProgress
+                                                                  .expectedTotalBytes !=
+                                                              null
+                                                          ? loadingProgress
+                                                                  .cumulativeBytesLoaded /
+                                                              loadingProgress
+                                                                  .expectedTotalBytes!
+                                                          : null,
+                                                    ),
+                                                  );
+                                                },
+                                              ),
                                             ),
-                                          ),
-                                          const SizedBox(
-                                            width: 20,
-                                          ),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              customTextBold(
-                                                  text: modelWork
-                                                      .workCompanyName!,
+                                            const SizedBox(
+                                              width: 20,
+                                            ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                customTextBold(
+                                                    text: modelWork
+                                                        .workCompanyName!,
+                                                    textSize: 12,
+                                                    color: primaryDarkColor),
+                                                customTextBold(
+                                                    text: modelWork.workTitle!,
+                                                    textSize: 14,
+                                                    color: primaryDarkColor),
+                                                customTextBold(
+                                                    text: modelWork
+                                                            .workCompensation! +
+                                                        " LPA",
+                                                    textSize: 10,
+                                                    color: primaryDarkColor),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5.0),
+                                                color: primaryDarkColor
+                                                    .withAlpha(50),
+                                              ),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 5,
+                                                      horizontal: 5),
+                                              child: customTextBold(
+                                                  text: modelWork.workType!,
                                                   textSize: 12,
                                                   color: primaryDarkColor),
-                                              customTextBold(
-                                                  text: modelWork.workTitle!,
-                                                  textSize: 14,
-                                                  color: primaryDarkColor),
-                                              customTextBold(
-                                                  text: modelWork
-                                                          .workCompensation! +
-                                                      " LPA",
-                                                  textSize: 10,
-                                                  color: primaryDarkColor),
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5.0),
-                                              color: primaryDarkColor
-                                                  .withAlpha(50),
                                             ),
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 5, horizontal: 5),
-                                            child: customTextBold(
-                                                text: modelWork.workType!,
-                                                textSize: 12,
-                                                color: primaryDarkColor),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                )),
-                          ),
-                        ],
-                      ),
-                    );
-                  }).toList(),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  )),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         } else if (snapshot.data!.docs.isEmpty) {
           return const SizedBox();

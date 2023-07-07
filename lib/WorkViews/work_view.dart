@@ -106,8 +106,20 @@ class _WorkViewContentState extends State<WorkViewContent> {
               const SizedBox(
                 width: 10,
               ),
-              customTextBold(text: 'No Jobs Posted :(', textSize: 22, color: primaryDarkColor),
-              customTextBold(text: 'Any Job Posting\nwill appear here...', textSize: 14, color: primaryDarkColor.withOpacity(0.5)),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  customTextBold(
+                      text: 'No Jobs Posted :(',
+                      textSize: 22,
+                      color: primaryDarkColor),
+                  customTextBold(
+                      text: 'Any Job Posting\nwill appear here...',
+                      textSize: 14,
+                      color: primaryDarkColor.withOpacity(0.5)),
+                ],
+              )
             ],
           ));
         }
@@ -145,7 +157,6 @@ class _WorkViewContentState extends State<WorkViewContent> {
             Navigator.of(context).push(animatedRoute(e));
           },
           child: Card(
-
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -157,7 +168,6 @@ class _WorkViewContentState extends State<WorkViewContent> {
                   color: primaryWhiteColor,
                 ),
                 margin: EdgeInsets.all(2),
-
                 padding:
                     const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                 child: Column(
@@ -204,7 +214,9 @@ class _WorkViewContentState extends State<WorkViewContent> {
                                 textSize: 14,
                                 color: primaryDarkColor),
                             customTextBold(
-                                text: "CTC: "+modelWork.workCompensation!+" LPA",
+                                text: "CTC: " +
+                                    modelWork.workCompensation! +
+                                    " LPA",
                                 textSize: 10,
                                 color: primaryDarkColor),
                           ],
@@ -231,7 +243,9 @@ class _WorkViewContentState extends State<WorkViewContent> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 15,),
+                    SizedBox(
+                      height: 15,
+                    ),
                     Text(
                       "Posted on: $postedDayNumber $postedMonthString, $postedYearNumber",
                       style: TextStyle(

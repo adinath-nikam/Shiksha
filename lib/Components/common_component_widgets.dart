@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:shiksha/FirebaseServices/firebase_api.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../ChatGPT/stores/ai_chat_store.dart';
 import '../HomeView/profile_view.dart';
@@ -196,55 +198,89 @@ versionCheck(context) async {
   }
 }
 
+Future<String> getUpdateURL() async {
+  if (Platform.isAndroid) {
+    DataSnapshot dataSnapshotAndroid = await FirebaseAPI()
+        .firebaseDatabase
+        .ref("SHIKSHA_APP/APP_UPDATE_URL/ANDROID")
+        .get();
+    String urlAndroid = dataSnapshotAndroid.value.toString();
+    return urlAndroid;
+  } else {
+    DataSnapshot dataSnapshotIOS = await FirebaseAPI()
+        .firebaseDatabase
+        .ref("SHIKSHA_APP/APP_UPDATE_URL/IOS")
+        .get();
+
+    String urlIOS = dataSnapshotIOS.value.toString();
+    return urlIOS;
+  }
+}
+
 showVersionDialog(context) async {
   await showDialog<String>(
     context: context,
     barrierDismissible: false,
     builder: (BuildContext context) {
       return Platform.isIOS
-          ? CupertinoAlertDialog(
-              title: customTextBold(
-                  text: APP_UPDATE_DIALOG_TITLE,
-                  textSize: 16,
-                  color: primaryDarkColor),
-              content: customTextBold(
-                  text: APP_UPDATE_DIALOG_MESSAGE,
-                  textSize: 16,
-                  color: primaryDarkColor),
-              actions: <Widget>[
-                CustomButton(
-                  text: "Update",
-                  buttonSize: 50,
-                  context: context,
-                  function: () async {
-                    if (await canLaunch(PLAY_STORE_URL)) {
-                      await launchUrl(Uri.parse(PLAY_STORE_URL));
-                    } else {
-                      throw 'Could not launch $PLAY_STORE_URL';
-                    }
-                  },
-                ),
-              ],
-            )
-          : AlertDialog(
-              title: customTextBold(
-                  text: APP_UPDATE_DIALOG_TITLE,
-                  textSize: 22,
-                  color: primaryDarkColor),
-              content: customTextBold(
-                  text: APP_UPDATE_DIALOG_MESSAGE,
-                  textSize: 16,
-                  color: primaryDarkColor,
-                  softwrap: true),
-              actions: <Widget>[
-                CustomButton(
-                  text: "Update",
-                  buttonSize: 50,
-                  context: context,
-                  function: () => launchUrl(Uri.parse(PLAY_STORE_URL)),
-                ),
-              ],
-            );
+          ? WillPopScope(
+        onWillPop: () async => false,
+            child: CupertinoAlertDialog(
+                title: customTextBold(
+                    text: APP_UPDATE_DIALOG_TITLE,
+                    textSize: 16,
+                    color: primaryDarkColor),
+                content: customTextBold(
+                    text: APP_UPDATE_DIALOG_MESSAGE,
+                    textSize: 16,
+                    color: primaryDarkColor),
+                actions: <Widget>[
+                  CustomButton(
+                    text: "Update",
+                    buttonSize: 50,
+                    context: context,
+                    function: () async {
+                      String url = await getUpdateURL();
+                      if (await canLaunchUrl(Uri.parse(url))) {
+                        await launchUrl(Uri.parse(url),
+                            mode: LaunchMode.externalApplication);
+                      } else {
+                        throw 'Could not launch $url';
+                      }
+                    },
+                  ),
+                ],
+              ),
+          )
+          : WillPopScope(
+        onWillPop: () async => false,
+            child: AlertDialog(
+                title: customTextBold(
+                    text: APP_UPDATE_DIALOG_TITLE,
+                    textSize: 22,
+                    color: primaryDarkColor),
+                content: customTextBold(
+                    text: APP_UPDATE_DIALOG_MESSAGE,
+                    textSize: 16,
+                    color: primaryDarkColor,
+                    softwrap: true),
+                actions: <Widget>[
+                  CustomButton(
+                    text: "Update",
+                    buttonSize: 50,
+                    context: context,
+                    function: () async {
+                      String url = await getUpdateURL();
+
+                      print(url);
+
+                      launchUrl(Uri.parse(url),
+                          mode: LaunchMode.externalApplication);
+                    },
+                  ),
+                ],
+              ),
+          );
     },
   );
 }
@@ -351,24 +387,27 @@ Route animatedRoute(final Widget activity) {
 }
 
 Future<void> showDeleteConfirmationDialog(
-    BuildContext context,
-    String chatId,
-    ) async {
+  BuildContext context,
+  String chatId,
+) async {
   final store = Provider.of<AIChatStore>(context, listen: false);
   await showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: customTextBold(text: "Confirm Deletion ?", textSize: 18, color: primaryDarkColor),
+        title: customTextBold(
+            text: "Confirm Deletion ?", textSize: 18, color: primaryDarkColor),
         actions: <Widget>[
           TextButton(
-            child: customTextBold(text: "Cancel", textSize: 16, color: primaryDarkColor),
+            child: customTextBold(
+                text: "Cancel", textSize: 16, color: primaryDarkColor),
             onPressed: () {
               Navigator.of(context).pop(false);
             },
           ),
           TextButton(
-            child: customTextBold(text: "Delete", textSize: 16, color: primaryRedColor),
+            child: customTextBold(
+                text: "Delete", textSize: 16, color: primaryRedColor),
             onPressed: () async {
               await store.deleteChatById(chatId);
               Navigator.of(context).pop(true);
