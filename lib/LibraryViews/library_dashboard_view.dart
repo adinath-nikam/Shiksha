@@ -10,6 +10,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:xml/xml.dart' as xml;
 import 'package:requests/requests.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class LibraryMenuItems {
   late String title;
@@ -234,8 +235,14 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
               return progressIndicator();
             } else if (snapshot.hasData && snapshot.data == true) {
               return SingleChildScrollView(
-                child: Container(
-                  child: libraryInfo(),
+                child: AnimationLimiter(
+                  child: AnimationConfiguration.synchronized(
+                      child: SlideAnimation(
+                    verticalOffset: MediaQuery.of(context).size.height,
+                    child: Container(
+                      child: libraryInfo(),
+                    ),
+                  )),
                 ),
               );
             } else if (snapshot.hasData && snapshot.data == false) {

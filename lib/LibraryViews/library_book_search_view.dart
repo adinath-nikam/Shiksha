@@ -29,7 +29,8 @@ class _LibraryBookSearchViewState extends State<LibraryBookSearchView> {
   String searchByOptionTitleSelected = 'Title';
   String searchByOptionCodeSelected = 'ti';
 
-  TextEditingController controllerTextEditLibraryBookSearch = TextEditingController();
+  TextEditingController controllerTextEditLibraryBookSearch =
+      TextEditingController();
 
   final List<_ModelSearchByOptions> _listSearchByOptions = [
     _ModelSearchByOptions(
@@ -145,7 +146,6 @@ class _LibraryBookSearchViewState extends State<LibraryBookSearchView> {
 
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
         child: Scaffold(
             appBar: PreferredSize(
@@ -187,7 +187,9 @@ class _LibraryBookSearchViewState extends State<LibraryBookSearchView> {
                             child: IconButton(
                               color: primaryDarkColor,
                               onPressed: () {
-                                searchBook(controllerTextEditLibraryBookSearch.text.toString());
+                                searchBook(controllerTextEditLibraryBookSearch
+                                    .text
+                                    .toString());
                               },
                               tooltip: 'Search',
                               icon: Icon(

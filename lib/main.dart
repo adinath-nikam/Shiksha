@@ -53,10 +53,13 @@ Future<void> main() async {
   });
 
   runApp(
-    MaterialApp(
-        color: primaryWhiteColor,
-        debugShowCheckedModeBanner: false,
-        home: const MyApp()),
+      ChangeNotifierProvider(
+        create: (context) => AIChatStore(),
+        child: MaterialApp(
+            color: primaryWhiteColor,
+            debugShowCheckedModeBanner: false,
+            home: const MyApp()),
+      )
   );
 }
 
@@ -82,30 +85,27 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => AIChatStore(),
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: primaryWhiteColor,
-          body: FutureBuilder<ModelUserData?>(
-              future: getUserData(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: progressIndicator());
-                } else if (snapshot.hasData) {
-                  FlutterNativeSplash.remove();
-                  return const TabView();
-                } else if (snapshot.hasError) {
-                  FlutterNativeSplash.remove();
-                  print(snapshot.hasError);
-                  return const IntroView();
-                } else {
-                  FlutterNativeSplash.remove();
-                  return const Center(child: ErrorView());
-                }
-              }),
-        ),
-      )
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: primaryWhiteColor,
+        body: FutureBuilder<ModelUserData?>(
+            future: getUserData(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: progressIndicator());
+              } else if (snapshot.hasData) {
+                FlutterNativeSplash.remove();
+                return const TabView();
+              } else if (snapshot.hasError) {
+                FlutterNativeSplash.remove();
+                print(snapshot.hasError);
+                return const IntroView();
+              } else {
+                FlutterNativeSplash.remove();
+                return const Center(child: ErrorView());
+              }
+            }),
+      ),
     );
   }
 }

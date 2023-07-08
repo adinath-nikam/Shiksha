@@ -1,138 +1,34 @@
 {
   "project_info": {
-    "project_number": "874921514581",
-    "firebase_url": "https://trash-add22-default-rtdb.firebaseio.com",
-    "project_id": "trash-add22",
-    "storage_bucket": "trash-add22.appspot.com"
+    "project_number": "813591696346",
+    "project_id": "mgc-shiksha-82736",
+    "storage_bucket": "mgc-shiksha-82736.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:874921514581:android:f13ebf2dc3293b736d66dc",
+        "mobilesdk_app_id": "1:813591696346:android:8d0c720afef4d17138a6e3",
         "android_client_info": {
           "package_name": "com.adinath.shiksha"
         }
       },
       "oauth_client": [
         {
-          "client_id": "874921514581-q3m2a8636d55a2dkd7gt0v9aa95jjq53.apps.googleusercontent.com",
+          "client_id": "813591696346-lr03lggt5272hkr9vchkp544fp8mis3a.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBts-bWPHUK3hTXtiAdd8KkbNuq3EYqGfI"
+          "current_key": "AIzaSyBg_Uhf1SK0y07p_x_-3gd5JqlgTcd_Tok"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "874921514581-q3m2a8636d55a2dkd7gt0v9aa95jjq53.apps.googleusercontent.com",
+              "client_id": "813591696346-lr03lggt5272hkr9vchkp544fp8mis3a.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "874921514581-a7rmbhvnhfohk9jc8lb2mo1brgn9i912.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.adinath.shiksha"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:874921514581:android:5278b8b2b647b8406d66dc",
-        "android_client_info": {
-          "package_name": "com.adinathanikam.trashadmin"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "874921514581-u5k4avjc98q7e8auunvvu7ckgdddpe43.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.adinathanikam.trashadmin",
-            "certificate_hash": "1df81a0f75d1fa348833f34d7be74a3bd6a8c590"
-          }
-        },
-        {
-          "client_id": "874921514581-q3m2a8636d55a2dkd7gt0v9aa95jjq53.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBts-bWPHUK3hTXtiAdd8KkbNuq3EYqGfI"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "874921514581-q3m2a8636d55a2dkd7gt0v9aa95jjq53.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "874921514581-a7rmbhvnhfohk9jc8lb2mo1brgn9i912.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.adinath.shiksha"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:874921514581:android:cdeae520908db1e96d66dc",
-        "android_client_info": {
-          "package_name": "com.adinathanikam.trashdriver"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "874921514581-80k0ob7vlk8coc3m8tufar0rk56b9sci.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.adinathanikam.trashdriver",
-            "certificate_hash": "1df81a0f75d1fa348833f34d7be74a3bd6a8c590"
-          }
-        },
-        {
-          "client_id": "874921514581-h2iv1qfn2njtk5h1r0tv0sjrfm3jt7ou.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.adinathanikam.trashdriver",
-            "certificate_hash": "0161e23ad7b4c45d1df7ec3aabcbe0169a26d39b"
-          }
-        },
-        {
-          "client_id": "874921514581-q3m2a8636d55a2dkd7gt0v9aa95jjq53.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBts-bWPHUK3hTXtiAdd8KkbNuq3EYqGfI"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "874921514581-q3m2a8636d55a2dkd7gt0v9aa95jjq53.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "874921514581-a7rmbhvnhfohk9jc8lb2mo1brgn9i912.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.adinath.shiksha"
-              }
             }
           ]
         }
