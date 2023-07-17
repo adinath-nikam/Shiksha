@@ -1,18 +1,40 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:shiksha/AuthViews/splash_view.dart';
-import 'package:shiksha/Models/model_user_data.dart';
-
 import 'package:shiksha/colors/colors.dart';
-import 'package:shiksha/main.dart';
-
 import '../Components/AuthButtons.dart';
 import '../Components/common_component_widgets.dart';
-import '../HomeView/main_tab_view.dart';
 import '../Models/utilty_shared_preferences.dart';
 
-class SettingsView extends StatelessWidget {
+class SettingsView extends StatefulWidget {
   const SettingsView({Key? key}) : super(key: key);
+
+  @override
+  State<SettingsView> createState() => _SettingsViewState();
+}
+
+class _SettingsViewState extends State<SettingsView> {
+
+  late final String aboutURL,tcURL,ppURL;
+  late final Map wordOfTheDay;
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseDatabase.instance
+        .ref('SHIKSHA_APP/SETTINGS/URLS')
+        .once()
+        .then((value) {
+      Map settingsURLS = value.snapshot.value as Map;
+
+      setState(() {
+        aboutURL = settingsURLS['ABOUT_URL'];
+        tcURL = settingsURLS['TC_URL'];
+        ppURL = settingsURLS['PP_URL'];
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +81,7 @@ class SettingsView extends StatelessWidget {
                           GestureDetector(
                             onTap: () {
                               try {
-                                launch(
-                                    'https://github.com/adinath-nikam/Shiksha-Documentation/blob/main/docs/terms_and_conditions.md');
+                                launch(tcURL);
                               } catch (e) {
                                 debugPrint(e.toString());
                               }
@@ -87,8 +108,7 @@ class SettingsView extends StatelessWidget {
                           GestureDetector(
                             onTap: () {
                               try {
-                                launch(
-                                    'https://github.com/adinath-nikam/Shiksha-Documentation/blob/main/docs/privacy_policy.md');
+                                launch(ppURL);
                               } catch (e) {
                                 debugPrint(e.toString());
                               }
@@ -114,8 +134,7 @@ class SettingsView extends StatelessWidget {
                           GestureDetector(
                             onTap: () {
                               try {
-                                launch(
-                                    'https://github.com/adinath-nikam/Shiksha-Documentation/blob/main/docs/about_us.md');
+                                launch(aboutURL);
                               } catch (e) {
                                 debugPrint(e.toString());
                               }

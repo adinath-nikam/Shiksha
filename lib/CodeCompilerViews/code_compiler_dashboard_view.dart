@@ -1,11 +1,15 @@
+import 'dart:convert';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../Components/common_component_widgets.dart';
 import '../FirebaseServices/firebase_api.dart';
 import '../colors/colors.dart';
+import 'package:http/http.dart' as http;
+import 'model_blog_posts.dart';
 
 class CodeCompilerDashBoard extends StatefulWidget {
   const CodeCompilerDashBoard({Key? key}) : super(key: key);
@@ -14,9 +18,14 @@ class CodeCompilerDashBoard extends StatefulWidget {
   State<CodeCompilerDashBoard> createState() => _CodeCompilerDashBoardState();
 }
 
-class _CodeCompilerDashBoardState extends State<CodeCompilerDashBoard> {
+class _CodeCompilerDashBoardState extends State<CodeCompilerDashBoard> with AutomaticKeepAliveClientMixin<CodeCompilerDashBoard> {
+
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SafeArea(
         child: Scaffold(
       backgroundColor: primaryWhiteColor,
@@ -24,19 +33,22 @@ class _CodeCompilerDashBoardState extends State<CodeCompilerDashBoard> {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
         child: Column(
           children: [
-            infoWidget("Compilers", "Compilers for other programming languages will be added in next update.", primaryDarkColor, primaryYellowColor),
+            infoWidget(
+                "Welcome to Code Compiler! 🎉",
+                "'Top 100 Codes' included in compiler, Slide up to view in compiler.",
+                primaryDarkColor,
+                primaryGreenColor),
             const SizedBox(
               height: 25,
             ),
             Expanded(
               child: StreamBuilder(
-                  stream: FirebaseAPI().realtimeDBStream("SHIKSHA_APP/COMPILERS"),
+                  stream:
+                      FirebaseAPI().realtimeDBStream("SHIKSHA_APP/COMPILERS"),
                   builder: (BuildContext context,
                       AsyncSnapshot<DatabaseEvent> snapshot) {
                     if (!snapshot.hasData) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
+                      return progressIndicator();
                     } else {
                       Map<dynamic, dynamic> map =
                           snapshot.data!.snapshot.value as dynamic;
@@ -76,22 +88,26 @@ class _CodeCompilerDashBoardState extends State<CodeCompilerDashBoard> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
                                       children: <Widget>[
-                                      SvgPicture.network(
-                                        list[index]['ICON'],
-                                        semanticsLabel: 'programming language icon',
-                                        height: 50,
-                                        width: 50,
-                                        placeholderBuilder: (BuildContext context) => Container(
-                                            padding: const EdgeInsets.all(30.0),
-                                            child: progressIndicator()),
-                                      ),
+                                        SvgPicture.network(
+                                          list[index]['ICON'],
+                                          semanticsLabel:
+                                              'programming language icon',
+                                          height: 50,
+                                          width: 50,
+                                          placeholderBuilder:
+                                              (BuildContext context) =>
+                                                  Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              30.0),
+                                                      child:
+                                                          progressIndicator()),
+                                        ),
                                         ElevatedButton(
                                           onPressed: () {
-
-                                            Navigator.of(context)
-                                                .push(animatedRoute(CompilerView(
-                                                url: list[index]
-                                                ['URL'])));
+                                            Navigator.of(context).push(
+                                                animatedRoute(CompilerView(
+                                                    url: list[index]['URL'])));
                                           },
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: primaryDarkColor,
@@ -142,11 +158,26 @@ class _CompilerViewState extends State<CompilerView> {
     controller.loadRequest(Uri.parse(widget.url));
     controller
         .setNavigationDelegate(NavigationDelegate(onPageFinished: (String url) {
-      controller.runJavaScript("document.getElementsByClassName('header')[0].style.display='none';");
+      controller.runJavaScript(
+          "document.getElementsByClassName('header')[0].style.display='none';");
+      controller.runJavaScript(
+          "document.getElementsByClassName('mobile-run-button run')[0].style.display='none'");
       setState(() {
         _loading = true;
       });
     }));
+  }
+
+  Future<PostList> fetchPosts(
+      {required String blogId, required String apiKey}) async {
+    var postListUrl = Uri.https(
+        "blogger.googleapis.com", "/v3/blogs/$blogId/posts/", {"key": apiKey});
+    final response = await http.get(postListUrl);
+    if (response.statusCode == 200) {
+      return PostList.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception();
+    }
   }
 
   @override
@@ -162,7 +193,111 @@ class _CompilerViewState extends State<CompilerView> {
                 ? WebViewWidget(
                     controller: controller,
                   )
-                : progressIndicator()
+                : progressIndicator(),
+            DraggableScrollableSheet(
+              initialChildSize: 0.05,
+              minChildSize: 0.05,
+              builder:
+                  (BuildContext context, ScrollController scrollController) {
+                return Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(25),
+                        topRight: Radius.circular(25)),
+                    color: primaryWhiteColor,
+                  ),
+                  child: SingleChildScrollView(
+                    controller: scrollController,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: primaryDarkColor.withOpacity(0.5),
+                            ),
+                            height: 10,
+                            width: 50,
+                            margin: EdgeInsets.symmetric(vertical: 10),
+                          ),
+                          FutureBuilder(
+                              future: fetchPosts(
+                                  blogId: '7732100168008150577',
+                                  apiKey:
+                                      'AIzaSyBDPlHIlNACtFCL7SQftcnWhMYOa6jkAaA'),
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData) {
+                                  return progressIndicator();
+                                } else
+                                  return ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: snapshot.data?.posts.length ?? 1,
+                                    itemBuilder: (context, index) {
+                                      return Card(
+                                        shape: RoundedRectangleBorder(
+                                            side: const BorderSide(
+                                                color: primaryDarkColor,
+                                                width: 1.0),
+                                            borderRadius:
+                                                BorderRadius.circular(4.0)),
+                                        child: ExpansionTile(
+                                          tilePadding: EdgeInsets.symmetric(
+                                              vertical: 15, horizontal: 10),
+                                          leading: const Icon(
+                                            Icons.code_rounded,
+                                            color: primaryDarkColor,
+                                          ),
+                                          title: customTextBold(
+                                              text: snapshot.data?.posts[index]
+                                                      .title ??
+                                                  "no items",
+                                              textSize: 18,
+                                              color: primaryDarkColor),
+                                          controlAffinity:
+                                              ListTileControlAffinity.trailing,
+                                          children: <Widget>[
+                                            ListTile(
+                                              subtitle: customTextRegular(
+                                                  text: snapshot
+                                                          .data
+                                                          ?.posts[index]
+                                                          .title ??
+                                                      "no items",
+                                                  textSize: 18,
+                                                  color: primaryDarkColor),
+                                              trailing: GestureDetector(
+                                                onTap: () async {
+                                                  await Clipboard.setData(
+                                                      ClipboardData(
+                                                          text: snapshot
+                                                              .data!
+                                                              .posts[index]
+                                                              .title));
+                                                  showSnackBar(
+                                                      context,
+                                                      "Code Copied Successfully.",
+                                                      primaryGreenColor);
+                                                },
+                                                child: Icon(Icons.copy_rounded,
+                                                    color: primaryDarkColor),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
+                              }),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),

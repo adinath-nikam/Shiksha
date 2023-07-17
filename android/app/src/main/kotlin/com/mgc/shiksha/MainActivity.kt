@@ -1,4 +1,4 @@
-package com.adinath.shiksha
+package com.mgc.shiksha
 
 import io.flutter.embedding.android.FlutterActivity
 

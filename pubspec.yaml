@@ -82,6 +82,10 @@ dependencies:
   animated_text_kit: ^4.2.2
 
 
+  font_awesome_flutter: ^10.3.0
+  html_unescape: ^2.0.0
+
+
 
 dev_dependencies:
   flutter_test:

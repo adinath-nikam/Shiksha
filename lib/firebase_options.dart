@@ -50,20 +50,23 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBg_Uhf1SK0y07p_x_-3gd5JqlgTcd_Tok',
-    appId: '1:813591696346:android:8d0c720afef4d17138a6e3',
-    messagingSenderId: '813591696346',
-    projectId: 'mgc-shiksha-82736',
-    storageBucket: 'mgc-shiksha-82736.appspot.com',
+    apiKey: 'AIzaSyBts-bWPHUK3hTXtiAdd8KkbNuq3EYqGfI',
+    appId: '1:874921514581:android:9cabff61baafcfe46d66dc',
+    messagingSenderId: '874921514581',
+    projectId: 'trash-add22',
+    databaseURL: 'https://trash-add22-default-rtdb.firebaseio.com',
+    storageBucket: 'trash-add22.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDF4GEJTf-vRNm3vegy4HnfJFAgtlIBo-k',
-    appId: '1:813591696346:ios:8bf39eb46a2ba9d138a6e3',
-    messagingSenderId: '813591696346',
-    projectId: 'mgc-shiksha-82736',
-    storageBucket: 'mgc-shiksha-82736.appspot.com',
-    iosClientId: '813591696346-93hppsdm2fi08da68n9okc8rap8a3l08.apps.googleusercontent.com',
+    apiKey: 'AIzaSyBDPlHIlNACtFCL7SQftcnWhMYOa6jkAaA',
+    appId: '1:874921514581:ios:b8fc20abbeaf7e4e6d66dc',
+    messagingSenderId: '874921514581',
+    projectId: 'trash-add22',
+    databaseURL: 'https://trash-add22-default-rtdb.firebaseio.com',
+    storageBucket: 'trash-add22.appspot.com',
+    androidClientId: '874921514581-80k0ob7vlk8coc3m8tufar0rk56b9sci.apps.googleusercontent.com',
+    iosClientId: '874921514581-a7rmbhvnhfohk9jc8lb2mo1brgn9i912.apps.googleusercontent.com',
     iosBundleId: 'com.adinath.shiksha',
   );
 }

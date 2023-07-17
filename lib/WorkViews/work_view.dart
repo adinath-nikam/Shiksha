@@ -156,106 +156,197 @@ class _WorkViewContentState extends State<WorkViewContent> {
 
             Navigator.of(context).push(animatedRoute(e));
           },
-          child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              color: primaryDarkColor.withOpacity(1),
-              elevation: 2,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: primaryWhiteColor,
-                ),
-                margin: EdgeInsets.all(2),
-                padding:
-                    const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+          child:
+
+          Container(
+              width: MediaQuery.of(context).size.width*0.8,
+              child: Card(
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                      side: const BorderSide(
+                          color: primaryDarkColor, width: 2.0),
+                      borderRadius: BorderRadius.circular(10.0)),
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                    title: customTextBold(text: modelWork.workTitle!, textSize: 16, color: primaryDarkColor),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0),
-                          child: Image.network(
-                            modelWork.workImageURL!,
-                            fit: BoxFit.fitWidth,
-                            height: 55,
-                            width: 55,
-                            loadingBuilder: (BuildContext context, Widget child,
-                                ImageChunkEvent? loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return Center(
-                                child: CircularProgressIndicator(
-                                  value: loadingProgress.expectedTotalBytes !=
-                                          null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                          loadingProgress.expectedTotalBytes!
-                                      : null,
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            customTextBold(
-                                text: modelWork.workCompanyName!,
-                                textSize: 12,
-                                color: primaryDarkColor),
-                            customTextBold(
-                                text: modelWork.workTitle!,
-                                textSize: 14,
-                                color: primaryDarkColor),
-                            customTextBold(
-                                text: "CTC: " +
-                                    modelWork.workCompensation! +
-                                    " LPA",
-                                textSize: 10,
-                                color: primaryDarkColor),
-                          ],
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                        customTextBold(text: modelWork.workCompensation!, textSize: 12, color: primaryDarkColor),
+                        SizedBox(height: 15,),
                         Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5.0),
-                            color: primaryDarkColor.withAlpha(50),
+                            borderRadius:
+                            BorderRadius.circular(5.0),
+                            color: primaryDarkColor
+                                .withAlpha(50),
                           ),
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 5, horizontal: 5),
+                          padding:
+                          const EdgeInsets.symmetric(
+                              vertical: 5,
+                              horizontal: 5),
                           child: customTextBold(
                               text: modelWork.workType!,
                               textSize: 12,
                               color: primaryDarkColor),
                         ),
+                    SizedBox(height: 15,),
+                    Text(
+                                  "Posted on: $postedDayNumber $postedMonthString, $postedYearNumber",
+                                  style: TextStyle(
+                                      fontStyle: FontStyle.italic,
+                                      fontSize: 10,
+                                      color: primaryDarkColor),
+                                ),
                       ],
                     ),
-                    SizedBox(
-                      height: 15,
+                    leading: Container(
+                      height: 55,
+                      width: 55,
+                      padding: const EdgeInsets.all(6),
+                      child: ClipRRect(
+                        borderRadius:
+                        BorderRadius.circular(10.0),
+                        child: Image.network(
+                          modelWork.workImageURL!,
+                          fit: BoxFit.contain,
+                          height: 55,
+                          width: 55,
+                          loadingBuilder:
+                              (BuildContext context,
+                              Widget child,
+                              ImageChunkEvent?
+                              loadingProgress) {
+                            if (loadingProgress == null)
+                              return child;
+                            return Center(
+                              child:
+                              progressIndicator(),
+                            );
+                          },
+                        ),
+                      ),
                     ),
-                    Text(
-                      "Posted on: $postedDayNumber $postedMonthString, $postedYearNumber",
-                      style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          fontSize: 10,
-                          color: primaryDarkColor),
-                    ),
-                  ],
-                ),
-              )),
+
+                  )))
+
+
+          // Card(
+          //     shape: RoundedRectangleBorder(
+          //       borderRadius: BorderRadius.circular(12),
+          //     ),
+          //     color: primaryDarkColor.withOpacity(1),
+          //     elevation: 2,
+          //     child:
+          //
+          //
+          //
+          //
+          //
+          //
+          //     Container(
+          //       decoration: BoxDecoration(
+          //         borderRadius: BorderRadius.circular(10),
+          //         color: primaryWhiteColor,
+          //       ),
+          //       margin: EdgeInsets.all(2),
+          //       padding:
+          //           const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          //       child: Column(
+          //         mainAxisAlignment: MainAxisAlignment.center,
+          //         crossAxisAlignment: CrossAxisAlignment.start,
+          //         children: [
+          //           Row(
+          //             mainAxisAlignment: MainAxisAlignment.start,
+          //             children: [
+          //               ClipRRect(
+          //                 borderRadius: BorderRadius.circular(10.0),
+          //                 child: Image.network(
+          //                   modelWork.workImageURL!,
+          //                   fit: BoxFit.fitWidth,
+          //                   height: 55,
+          //                   width: 55,
+          //                   loadingBuilder: (BuildContext context, Widget child,
+          //                       ImageChunkEvent? loadingProgress) {
+          //                     if (loadingProgress == null) return child;
+          //                     return Center(
+          //                       child: CircularProgressIndicator(
+          //                         value: loadingProgress.expectedTotalBytes !=
+          //                                 null
+          //                             ? loadingProgress.cumulativeBytesLoaded /
+          //                                 loadingProgress.expectedTotalBytes!
+          //                             : null,
+          //                       ),
+          //                     );
+          //                   },
+          //                 ),
+          //               ),
+          //               const SizedBox(
+          //                 width: 20,
+          //               ),
+          //               Column(
+          //                 crossAxisAlignment: CrossAxisAlignment.start,
+          //                 children: [
+          //                   customTextBold(
+          //                       text: modelWork.workCompanyName!,
+          //                       textSize: 12,
+          //                       color: primaryDarkColor),
+          //                   customTextBold(
+          //                       text: modelWork.workTitle!,
+          //                       textSize: 14,
+          //                       color: primaryDarkColor),
+          //                   customTextBold(
+          //                       text: "CTC: " +
+          //                           modelWork.workCompensation! +
+          //                           " LPA",
+          //                       textSize: 10,
+          //                       color: primaryDarkColor),
+          //                 ],
+          //               )
+          //             ],
+          //           ),
+          //           const SizedBox(
+          //             height: 20,
+          //           ),
+          //           Row(
+          //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //             children: [
+          //               Container(
+          //                 decoration: BoxDecoration(
+          //                   borderRadius: BorderRadius.circular(5.0),
+          //                   color: primaryDarkColor.withAlpha(50),
+          //                 ),
+          //                 padding: const EdgeInsets.symmetric(
+          //                     vertical: 5, horizontal: 5),
+          //                 child: customTextBold(
+          //                     text: modelWork.workType!,
+          //                     textSize: 12,
+          //                     color: primaryDarkColor),
+          //               ),
+          //             ],
+          //           ),
+          //           SizedBox(
+          //             height: 15,
+          //           ),
+          //           Text(
+          //             "Posted on: $postedDayNumber $postedMonthString, $postedYearNumber",
+          //             style: TextStyle(
+          //                 fontStyle: FontStyle.italic,
+          //                 fontSize: 10,
+          //                 color: primaryDarkColor),
+          //           ),
+          //         ],
+          //       ),
+          //     )
+          //
+          //
+          //
+          //
+          //
+          // ),
+
+
+
         ));
   }
 }
