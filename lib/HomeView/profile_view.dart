@@ -40,6 +40,7 @@ class _ProfileViewContentState extends State<ProfileViewContent> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: Column(

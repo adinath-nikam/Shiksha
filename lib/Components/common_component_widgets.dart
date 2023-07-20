@@ -173,6 +173,7 @@ versionCheck(context) async {
   late final FirebaseRemoteConfig remoteConfig;
   info = await PackageInfo.fromPlatform();
   currentVersion = double.parse(info.version.trim().replaceAll(".", ""));
+  print("current version: "+currentVersion.toString());
   remoteConfig = FirebaseRemoteConfig.instance;
   await remoteConfig.setConfigSettings(RemoteConfigSettings(
     fetchTimeout: const Duration(seconds: 1),

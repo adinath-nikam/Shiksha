@@ -235,6 +235,7 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
               return progressIndicator();
             } else if (snapshot.hasData && snapshot.data == true) {
               return SingleChildScrollView(
+                physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                 child: AnimationLimiter(
                   child: AnimationConfiguration.synchronized(
                       child: SlideAnimation(

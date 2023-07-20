@@ -20,6 +20,7 @@ class FirebaseAPI {
         .collection(DB_ROOT_NAME)
         .doc(WORK_CONSTANTS)
         .collection(WORK_CONSTANTS_OFFCAMPUS)
+    .orderBy('workPostedDate',descending: true)
         .snapshots();
   }
 

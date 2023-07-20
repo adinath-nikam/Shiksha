@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shiksha/ClubsViews/clubs_view.dart';
+import 'package:shiksha/CodeCompilerViews/cc_tabbar_view.dart';
 import 'package:shiksha/HomeView/home_view.dart';
 import 'package:shiksha/WorkViews/work_view.dart';
 import 'package:shiksha/colors/colors.dart';
@@ -21,7 +22,7 @@ class _TabViewState extends State<TabView> {
   Widget build(BuildContext context) {
     final buildBody = <Widget>[
       const HomeView(),
-      const CodeCompilerDashBoard(),
+      const CCTabBarView(),
       const ClubsView(),
       const WorkView(),
     ];

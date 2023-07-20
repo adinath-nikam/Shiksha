@@ -59,35 +59,35 @@ class CollegeTypeSelectView extends StatelessWidget {
                           child: SlideAnimation(
                             horizontalOffset: 50.0,
                             child: FadeInAnimation(
-                              child: Container(
-                                margin: const EdgeInsets.all(10),
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                      side: const BorderSide(
-                                          color: primaryDarkColor, width: 1.0),
-                                      borderRadius: BorderRadius.circular(4.0)),
-                                  child: ListTile(
-                                    contentPadding: const EdgeInsets.all(15),
-                                    leading: const Icon(
-                                      Icons.school_rounded,
-                                      color: primaryDarkColor,
+                              child: GestureDetector(
+                                onTap: (){
+                                  Navigator.of(context)
+                                      .push(animatedRoute(
+                                    CollegeSelectView(
+                                      selectedCollegeType:
+                                      list[index].toString(),
+                                      isUpdate: isUpdate,
                                     ),
-                                    title: customTextBold(
-                                        text: list[index],
-                                        textSize: 18,
-                                        color: primaryDarkColor),
-                                    trailing: GestureDetector(
-                                      onTap: () {
-                                        Navigator.of(context)
-                                            .push(animatedRoute(
-                                          CollegeSelectView(
-                                            selectedCollegeType:
-                                                list[index].toString(),
-                                            isUpdate: isUpdate,
-                                          ),
-                                        ));
-                                      },
-                                      child: const Icon(
+                                  ));
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.all(10),
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                        side: const BorderSide(
+                                            color: primaryDarkColor, width: 1.0),
+                                        borderRadius: BorderRadius.circular(4.0)),
+                                    child: ListTile(
+                                      contentPadding: const EdgeInsets.all(15),
+                                      leading: const Icon(
+                                        Icons.school_rounded,
+                                        color: primaryDarkColor,
+                                      ),
+                                      title: customTextBold(
+                                          text: list[index],
+                                          textSize: 18,
+                                          color: primaryDarkColor),
+                                      trailing: const Icon(
                                         Icons.arrow_forward_ios,
                                         color: primaryDarkColor,
                                       ),
@@ -157,37 +157,37 @@ class CollegeSelectView extends StatelessWidget {
                           child: SlideAnimation(
                             horizontalOffset: 50.0,
                             child: FadeInAnimation(
-                              child: Container(
-                                margin: const EdgeInsets.all(10),
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                      side: const BorderSide(
-                                          color: primaryDarkColor, width: 1.0),
-                                      borderRadius: BorderRadius.circular(4.0)),
-                                  child: ListTile(
-                                    contentPadding: const EdgeInsets.all(15),
-                                    leading: const Icon(
-                                      Icons.school_rounded,
-                                      color: primaryDarkColor,
+                              child: GestureDetector(
+                                onTap: (){
+                                  Navigator.of(context)
+                                      .push(animatedRoute(
+                                    UserCategorySelectView(
+                                      selectedCollegeType:
+                                      selectedCollegeType,
+                                      selectedCollege:
+                                      list[index].toString(),
+                                      isUpdate: isUpdate,
                                     ),
-                                    title: customTextBold(
-                                        text: list[index],
-                                        textSize: 18,
-                                        color: primaryDarkColor),
-                                    trailing: GestureDetector(
-                                      onTap: () {
-                                        Navigator.of(context)
-                                            .push(animatedRoute(
-                                          UserCategorySelectView(
-                                            selectedCollegeType:
-                                                selectedCollegeType,
-                                            selectedCollege:
-                                                list[index].toString(),
-                                            isUpdate: isUpdate,
-                                          ),
-                                        ));
-                                      },
-                                      child: const Icon(
+                                  ));
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.all(10),
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                        side: const BorderSide(
+                                            color: primaryDarkColor, width: 1.0),
+                                        borderRadius: BorderRadius.circular(4.0)),
+                                    child: ListTile(
+                                      contentPadding: const EdgeInsets.all(15),
+                                      leading: const Icon(
+                                        Icons.school_rounded,
+                                        color: primaryDarkColor,
+                                      ),
+                                      title: customTextBold(
+                                          text: list[index],
+                                          textSize: 18,
+                                          color: primaryDarkColor),
+                                      trailing: const Icon(
                                         Icons.arrow_forward_ios,
                                         color: primaryDarkColor,
                                       ),
@@ -259,38 +259,38 @@ class UserCategorySelectView extends StatelessWidget {
                           child: SlideAnimation(
                             horizontalOffset: 50.0,
                             child: FadeInAnimation(
-                              child: Container(
-                                margin: const EdgeInsets.all(10),
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                      side: const BorderSide(
-                                          color: primaryDarkColor, width: 1.0),
-                                      borderRadius: BorderRadius.circular(4.0)),
-                                  child: ListTile(
-                                    contentPadding: const EdgeInsets.all(15),
-                                    leading: const Icon(
-                                      Icons.school_rounded,
-                                      color: primaryDarkColor,
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context)
+                                      .push(animatedRoute(
+                                    StreamSelectView(
+                                      selectedCollegeType:
+                                      selectedCollegeType,
+                                      selectedCollege: selectedCollege,
+                                      isUpdate: isUpdate,
+                                      userCategory:
+                                      list[index].toString(),
                                     ),
-                                    title: customTextBold(
-                                        text: list[index],
-                                        textSize: 18,
-                                        color: primaryDarkColor),
-                                    trailing: GestureDetector(
-                                      onTap: () {
-                                        Navigator.of(context)
-                                            .push(animatedRoute(
-                                          StreamSelectView(
-                                            selectedCollegeType:
-                                                selectedCollegeType,
-                                            selectedCollege: selectedCollege,
-                                            isUpdate: isUpdate,
-                                            userCategory:
-                                                list[index].toString(),
-                                          ),
-                                        ));
-                                      },
-                                      child: const Icon(
+                                  ));
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.all(10),
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                        side: const BorderSide(
+                                            color: primaryDarkColor, width: 1.0),
+                                        borderRadius: BorderRadius.circular(4.0)),
+                                    child: ListTile(
+                                      contentPadding: const EdgeInsets.all(15),
+                                      leading: const Icon(
+                                        Icons.school_rounded,
+                                        color: primaryDarkColor,
+                                      ),
+                                      title: customTextBold(
+                                          text: list[index],
+                                          textSize: 18,
+                                          color: primaryDarkColor),
+                                      trailing: const Icon(
                                         Icons.arrow_forward_ios,
                                         color: primaryDarkColor,
                                       ),
@@ -363,39 +363,39 @@ class StreamSelectView extends StatelessWidget {
                           child: SlideAnimation(
                             horizontalOffset: 50.0,
                             child: FadeInAnimation(
-                              child: Container(
-                                margin: const EdgeInsets.all(10),
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                      side: const BorderSide(
-                                          color: primaryDarkColor, width: 1.0),
-                                      borderRadius: BorderRadius.circular(4.0)),
-                                  child: ListTile(
-                                    contentPadding: const EdgeInsets.all(15),
-                                    leading: const Icon(
-                                      Icons.school_rounded,
-                                      color: primaryDarkColor,
+                              child: GestureDetector(
+                                onTap: (){
+                                  Navigator.of(context)
+                                      .push(animatedRoute(
+                                    SemesterSelectView(
+                                      selectedCollegeType:
+                                      selectedCollegeType,
+                                      userCategory: userCategory,
+                                      selectedCollege: selectedCollege,
+                                      selectedStream:
+                                      list[index].toString(),
+                                      isUpdate: isUpdate,
                                     ),
-                                    title: customTextBold(
-                                        text: list[index],
-                                        textSize: 18,
-                                        color: primaryDarkColor),
-                                    trailing: GestureDetector(
-                                      onTap: () {
-                                        Navigator.of(context)
-                                            .push(animatedRoute(
-                                          SemesterSelectView(
-                                            selectedCollegeType:
-                                                selectedCollegeType,
-                                            userCategory: userCategory,
-                                            selectedCollege: selectedCollege,
-                                            selectedStream:
-                                                list[index].toString(),
-                                            isUpdate: isUpdate,
-                                          ),
-                                        ));
-                                      },
-                                      child: const Icon(
+                                  ));
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.all(10),
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                        side: const BorderSide(
+                                            color: primaryDarkColor, width: 1.0),
+                                        borderRadius: BorderRadius.circular(4.0)),
+                                    child: ListTile(
+                                      contentPadding: const EdgeInsets.all(15),
+                                      leading: const Icon(
+                                        Icons.school_rounded,
+                                        color: primaryDarkColor,
+                                      ),
+                                      title: customTextBold(
+                                          text: list[index],
+                                          textSize: 18,
+                                          color: primaryDarkColor),
+                                      trailing: const Icon(
                                         Icons.arrow_forward_ios,
                                         color: primaryDarkColor,
                                       ),
@@ -471,40 +471,40 @@ class SemesterSelectView extends StatelessWidget {
                           child: SlideAnimation(
                             horizontalOffset: 50.0,
                             child: FadeInAnimation(
-                              child: Container(
-                                margin: const EdgeInsets.all(10),
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                      side: const BorderSide(
-                                          color: primaryDarkColor, width: 1.0),
-                                      borderRadius: BorderRadius.circular(4.0)),
-                                  child: ListTile(
-                                    contentPadding: const EdgeInsets.all(15),
-                                    leading: const Icon(
-                                      Icons.school_rounded,
-                                      color: primaryDarkColor,
+                              child: GestureDetector(
+                                onTap: (){
+                                  Navigator.of(context)
+                                      .push(animatedRoute(
+                                    UEPView(
+                                      selectedCollegeType:
+                                      selectedCollegeType,
+                                      selectedCollege: selectedCollege,
+                                      selectedStream: selectedStream,
+                                      selectedSemester:
+                                      list[index].toString(),
+                                      isUpdate: isUpdate,
+                                      userCategory: userCategory,
                                     ),
-                                    title: customTextBold(
-                                        text: list[index],
-                                        textSize: 18,
-                                        color: primaryDarkColor),
-                                    trailing: GestureDetector(
-                                      onTap: () {
-                                        Navigator.of(context)
-                                            .push(animatedRoute(
-                                          UEPView(
-                                            selectedCollegeType:
-                                                selectedCollegeType,
-                                            selectedCollege: selectedCollege,
-                                            selectedStream: selectedStream,
-                                            selectedSemester:
-                                                list[index].toString(),
-                                            isUpdate: isUpdate,
-                                            userCategory: userCategory,
-                                          ),
-                                        ));
-                                      },
-                                      child: const Icon(
+                                  ));
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.all(10),
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                        side: const BorderSide(
+                                            color: primaryDarkColor, width: 1.0),
+                                        borderRadius: BorderRadius.circular(4.0)),
+                                    child: ListTile(
+                                      contentPadding: const EdgeInsets.all(15),
+                                      leading: const Icon(
+                                        Icons.school_rounded,
+                                        color: primaryDarkColor,
+                                      ),
+                                      title: customTextBold(
+                                          text: list[index],
+                                          textSize: 18,
+                                          color: primaryDarkColor),
+                                      trailing: const Icon(
                                         Icons.arrow_forward_ios,
                                         color: primaryDarkColor,
                                       ),

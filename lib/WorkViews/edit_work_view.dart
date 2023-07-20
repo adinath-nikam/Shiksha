@@ -296,6 +296,9 @@ class _EditWorkViewState extends State<EditWorkView> {
 
                               addJobFormKey.currentState!.save();
 
+                              modelWork.workPostedDate =
+                                  DateTime.now().toString();
+
                               if (addJobFormKey.currentState!.validate()) {
                                 FirebaseFirestore.instance
                                     .collection(DB_ROOT_NAME)
