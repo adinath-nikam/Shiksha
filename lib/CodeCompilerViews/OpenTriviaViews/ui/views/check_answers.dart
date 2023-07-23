@@ -21,6 +21,7 @@ class CheckAnswersPage extends StatelessWidget {
           preferredSize: const Size.fromHeight(60.0),
           child: appBarCommon(context, "ANSWERS")),
       body: ListView.builder(
+        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         padding: const EdgeInsets.all(16.0),
         itemCount: questions.length + 1,
         itemBuilder: _buildItem,

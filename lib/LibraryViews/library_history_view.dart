@@ -19,10 +19,15 @@ class LibraryHistoryView extends StatelessWidget {
             body: libraryBooksIssueHistory != null
                 ? Center(
                     child: SingleChildScrollView(
+                      physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                       child: SingleChildScrollView(
+                          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                           scrollDirection: Axis.horizontal,
                           child: SizedBox(
                               child: HtmlWidget(
+                                  onLoadingBuilder: (context, element, loadingProgress) {
+                                    return progressIndicator();
+                                  },
                                   "<table border='1' cellpadding='15'>$libraryBooksIssueHistory</table>"))),
                     ),
                   )

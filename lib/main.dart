@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shiksha/AuthViews/splash_view.dart';
 import 'package:shiksha/Components/AuthButtons.dart';
 import 'package:shiksha/Components/common_component_widgets.dart';
@@ -23,6 +24,9 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
+  MobileAds.instance.initialize();
+  MobileAds.instance.updateRequestConfiguration(RequestConfiguration(testDeviceIds: ["30867EFE30934F7B1001BA4ADDCA4E74"]));
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await GetStorage.init();
@@ -52,15 +56,13 @@ Future<void> main() async {
     }
   });
 
-  runApp(
-      ChangeNotifierProvider(
-        create: (context) => AIChatStore(),
-        child: MaterialApp(
-            color: primaryWhiteColor,
-            debugShowCheckedModeBanner: false,
-            home: const MyApp()),
-      )
-  );
+  runApp(ChangeNotifierProvider(
+    create: (context) => AIChatStore(),
+    child: MaterialApp(
+        color: primaryWhiteColor,
+        debugShowCheckedModeBanner: false,
+        home: const MyApp()),
+  ));
 }
 
 class MyApp extends StatefulWidget {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shiksha/CodeCompilerViews/OpenTriviaViews/ui/views/open_trivia_home_view.dart';
 import '../Components/common_component_widgets.dart';
 import '../colors/colors.dart';
+import 'Top100CodesViews/Top100CodesTabBarView.dart';
 
 class InterviewPrepView extends StatefulWidget {
   const InterviewPrepView({Key? key}) : super(key: key);
@@ -19,17 +20,20 @@ class _InterviewPrepViewState extends State<InterviewPrepView> with AutomaticKee
     super.build(context);
     return SafeArea(
         child: Scaffold(
-      body: Column(
-        children: [
-          Container(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              child: infoWidget(
-                  "Welcome to Shiksha Placement Preparation 🎊",
-                  "Interview Preparation Tips & Tricks.",
-                  primaryDarkColor,
-                  primaryGreenColor.withOpacity(0.5))),
-          InterviewMenuView(context),
-        ],
+      body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        child: Column(
+          children: [
+            Container(
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                child: infoWidget(
+                    "Welcome to Shiksha Placement Preparation 🎊",
+                    "Interview Preparation Tips & Tricks.",
+                    primaryDarkColor,
+                    primaryGreenColor.withOpacity(0.5))),
+            InterviewMenuView(context),
+          ],
+        ),
       ),
     ));
   }
@@ -46,13 +50,25 @@ class _InterviewPrepViewState extends State<InterviewPrepView> with AutomaticKee
         activity: TriviaHomePage());
 
 
+    InterviewMenuItems item2 = InterviewMenuItems(
+        text: "Top 100 Coding Questions.",
+        img: Image(
+          image: AssetImage("assets/images/top100codes_img.png"),
+          height: 100,
+          width: 100,
+          fit: BoxFit.contain,
+        ),
+        activity: Top100CodesTabBarView());
+
     List<InterviewMenuItems> expansionMenuItemsList = [
       item1,
+      item2,
     ];
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: GridView.count(
+          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           shrinkWrap: true,
           childAspectRatio: 0.85,
           crossAxisCount: 2,

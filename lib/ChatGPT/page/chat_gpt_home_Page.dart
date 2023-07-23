@@ -80,6 +80,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               Expanded(
                 child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

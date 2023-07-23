@@ -52,7 +52,7 @@ class _WorkViewContentState extends State<WorkViewContent> {
   Widget build(BuildContext context) {
     return Container(
         margin: const EdgeInsets.symmetric(
-          vertical: 20,
+          vertical: 0,
         ),
         child: workListView());
   }
@@ -62,12 +62,7 @@ class _WorkViewContentState extends State<WorkViewContent> {
       stream: FirebaseAPI().workStream(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              backgroundColor: primaryWhiteColor,
-            ),
-          );
+          return progressIndicator();
         } else if (snapshot.hasData && snapshot.data!.size > 0) {
           return Column(
             children: [
@@ -84,6 +79,7 @@ class _WorkViewContentState extends State<WorkViewContent> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                   child: ListView(
+                    physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                     shrinkWrap: true,
                     children: snapshot.data!.docs
                         .map((data) => workListViewItem(context, data))
@@ -229,122 +225,6 @@ class _WorkViewContentState extends State<WorkViewContent> {
                     ),
 
                   )))
-
-
-          // Card(
-          //     shape: RoundedRectangleBorder(
-          //       borderRadius: BorderRadius.circular(12),
-          //     ),
-          //     color: primaryDarkColor.withOpacity(1),
-          //     elevation: 2,
-          //     child:
-          //
-          //
-          //
-          //
-          //
-          //
-          //     Container(
-          //       decoration: BoxDecoration(
-          //         borderRadius: BorderRadius.circular(10),
-          //         color: primaryWhiteColor,
-          //       ),
-          //       margin: EdgeInsets.all(2),
-          //       padding:
-          //           const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          //       child: Column(
-          //         mainAxisAlignment: MainAxisAlignment.center,
-          //         crossAxisAlignment: CrossAxisAlignment.start,
-          //         children: [
-          //           Row(
-          //             mainAxisAlignment: MainAxisAlignment.start,
-          //             children: [
-          //               ClipRRect(
-          //                 borderRadius: BorderRadius.circular(10.0),
-          //                 child: Image.network(
-          //                   modelWork.workImageURL!,
-          //                   fit: BoxFit.fitWidth,
-          //                   height: 55,
-          //                   width: 55,
-          //                   loadingBuilder: (BuildContext context, Widget child,
-          //                       ImageChunkEvent? loadingProgress) {
-          //                     if (loadingProgress == null) return child;
-          //                     return Center(
-          //                       child: CircularProgressIndicator(
-          //                         value: loadingProgress.expectedTotalBytes !=
-          //                                 null
-          //                             ? loadingProgress.cumulativeBytesLoaded /
-          //                                 loadingProgress.expectedTotalBytes!
-          //                             : null,
-          //                       ),
-          //                     );
-          //                   },
-          //                 ),
-          //               ),
-          //               const SizedBox(
-          //                 width: 20,
-          //               ),
-          //               Column(
-          //                 crossAxisAlignment: CrossAxisAlignment.start,
-          //                 children: [
-          //                   customTextBold(
-          //                       text: modelWork.workCompanyName!,
-          //                       textSize: 12,
-          //                       color: primaryDarkColor),
-          //                   customTextBold(
-          //                       text: modelWork.workTitle!,
-          //                       textSize: 14,
-          //                       color: primaryDarkColor),
-          //                   customTextBold(
-          //                       text: "CTC: " +
-          //                           modelWork.workCompensation! +
-          //                           " LPA",
-          //                       textSize: 10,
-          //                       color: primaryDarkColor),
-          //                 ],
-          //               )
-          //             ],
-          //           ),
-          //           const SizedBox(
-          //             height: 20,
-          //           ),
-          //           Row(
-          //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //             children: [
-          //               Container(
-          //                 decoration: BoxDecoration(
-          //                   borderRadius: BorderRadius.circular(5.0),
-          //                   color: primaryDarkColor.withAlpha(50),
-          //                 ),
-          //                 padding: const EdgeInsets.symmetric(
-          //                     vertical: 5, horizontal: 5),
-          //                 child: customTextBold(
-          //                     text: modelWork.workType!,
-          //                     textSize: 12,
-          //                     color: primaryDarkColor),
-          //               ),
-          //             ],
-          //           ),
-          //           SizedBox(
-          //             height: 15,
-          //           ),
-          //           Text(
-          //             "Posted on: $postedDayNumber $postedMonthString, $postedYearNumber",
-          //             style: TextStyle(
-          //                 fontStyle: FontStyle.italic,
-          //                 fontSize: 10,
-          //                 color: primaryDarkColor),
-          //           ),
-          //         ],
-          //       ),
-          //     )
-          //
-          //
-          //
-          //
-          //
-          // ),
-
 
 
         ));

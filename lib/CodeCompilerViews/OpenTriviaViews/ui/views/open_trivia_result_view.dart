@@ -35,6 +35,7 @@ class _QuizFinishedPageState extends State<QuizFinishedPage> {
         height: double.infinity,
         width: double.infinity,
         child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: <Widget>[

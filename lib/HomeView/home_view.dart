@@ -66,6 +66,7 @@ class _HomeViewState extends State<HomeView> {
     return SafeArea(
         child: Scaffold(
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         child: AnimationLimiter(
           child: AnimationConfiguration.synchronized(
             child: SlideAnimation(
@@ -461,33 +462,40 @@ class _HomeViewState extends State<HomeView> {
                           Navigator.of(context).push(animatedRoute(e));
                         },
                         child: Container(
-                            width: MediaQuery.of(context).size.width*0.8,
+                            width: MediaQuery.of(context).size.width * 0.8,
                             margin: EdgeInsets.only(left: 15.0, right: 5.0),
                             child: Card(
-                              elevation: 2,
+                                elevation: 2,
                                 shape: RoundedRectangleBorder(
                                     side: const BorderSide(
                                         color: primaryDarkColor, width: 2.0),
                                     borderRadius: BorderRadius.circular(10.0)),
                                 child: ListTile(
-                                  contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                                  title: customTextBold(text: modelWork.workTitle!, textSize: 16, color: primaryDarkColor),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 15, horizontal: 15),
+                                  title: customTextBold(
+                                      text: modelWork.workTitle!,
+                                      textSize: 16,
+                                      color: primaryDarkColor),
                                   subtitle: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      customTextBold(text: modelWork.workCompensation!, textSize: 12, color: primaryDarkColor),
-                                      SizedBox(height: 15,),
+                                      customTextBold(
+                                          text: modelWork.workCompensation!,
+                                          textSize: 12,
+                                          color: primaryDarkColor),
+                                      SizedBox(
+                                        height: 15,
+                                      ),
                                       Container(
                                         decoration: BoxDecoration(
                                           borderRadius:
-                                          BorderRadius.circular(5.0),
-                                          color: primaryDarkColor
-                                              .withAlpha(50),
+                                              BorderRadius.circular(5.0),
+                                          color: primaryDarkColor.withAlpha(50),
                                         ),
-                                        padding:
-                                        const EdgeInsets.symmetric(
-                                            vertical: 5,
-                                            horizontal: 5),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 5, horizontal: 5),
                                         child: customTextBold(
                                             text: modelWork.workType!,
                                             textSize: 12,
@@ -500,29 +508,24 @@ class _HomeViewState extends State<HomeView> {
                                     width: 55,
                                     padding: const EdgeInsets.all(6),
                                     child: ClipRRect(
-                                      borderRadius:
-                                      BorderRadius.circular(10.0),
+                                      borderRadius: BorderRadius.circular(10.0),
                                       child: Image.network(
                                         modelWork.workImageURL!,
                                         fit: BoxFit.contain,
                                         height: 55,
                                         width: 55,
-                                        loadingBuilder:
-                                            (BuildContext context,
+                                        loadingBuilder: (BuildContext context,
                                             Widget child,
-                                            ImageChunkEvent?
-                                            loadingProgress) {
+                                            ImageChunkEvent? loadingProgress) {
                                           if (loadingProgress == null)
                                             return child;
                                           return Center(
-                                            child:
-                                            progressIndicator(),
+                                            child: progressIndicator(),
                                           );
                                         },
                                       ),
                                     ),
                                   ),
-
                                 ))),
                       );
                     }).toList(),

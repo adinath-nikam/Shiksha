@@ -45,6 +45,7 @@ class _SettingsViewState extends State<SettingsView> {
             child: appBarCommon(context, "SETTINGS")),
         backgroundColor: primaryWhiteColor,
         body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           child: Center(
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),

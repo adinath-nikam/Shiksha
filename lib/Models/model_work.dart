@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shiksha/Models/model_user_data.dart';
+import '../AdControllers/ad_manager.dart';
 import '../Components/AuthButtons.dart';
 import '../Components/common_component_widgets.dart';
 import '../Components/constants.dart';
@@ -85,7 +87,19 @@ class ModelWork extends StatefulWidget {
   State<ModelWork> createState() => _ModelWorkState();
 }
 
-class _ModelWorkState extends State<ModelWork> {
+class _ModelWorkState extends State<ModelWork> implements BannerAdListener {
+  late BannerAd adBannerWorkView;
+  bool isWorkBannerAdLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    AdManager.loadBannerAd(this).then((ad) => setState(() {
+      adBannerWorkView = ad;
+      isWorkBannerAdLoaded = true;
+        }));
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -95,12 +109,23 @@ class _ModelWorkState extends State<ModelWork> {
           preferredSize: const Size.fromHeight(60.0),
           child: appBarCommon(context, "WORK")),
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              isWorkBannerAdLoaded
+                  ? Center(
+                      child: SizedBox(
+                        height: adBannerWorkView.size.height.toDouble(),
+                        width: adBannerWorkView.size.width.toDouble(),
+                        child: AdWidget(ad: adBannerWorkView),
+                      ),
+                    )
+                  : const SizedBox(),
+              SizedBox(height: 25,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -114,17 +139,14 @@ class _ModelWorkState extends State<ModelWork> {
                       loadingBuilder: (BuildContext context, Widget child,
                           ImageChunkEvent? loadingProgress) {
                         if (loadingProgress == null) return child;
-                        return Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
-                          ),
-                        );
+                        return progressIndicator();
                       },
                     ),
                   ),
+
+
+                  modelUserData.getUserIsAdmin ?
+
                   IconButton(
                       onPressed: () {
                         ModelWork e = ModelWork.fromData(
@@ -146,7 +168,7 @@ class _ModelWorkState extends State<ModelWork> {
                         Icons.settings_rounded,
                         color: primaryDarkColor,
                         size: 30,
-                      ))
+                      )) : SizedBox(),
                 ],
               ),
               const SizedBox(
@@ -294,4 +316,36 @@ class _ModelWorkState extends State<ModelWork> {
       ),
     ));
   }
+
+  @override
+  // TODO: implement onAdClicked
+  AdEventCallback? get onAdClicked => throw UnimplementedError();
+
+  @override
+  // TODO: implement onAdClosed
+  AdEventCallback? get onAdClosed => throw UnimplementedError();
+
+  @override
+  // TODO: implement onAdFailedToLoad
+  AdLoadErrorCallback? get onAdFailedToLoad => throw UnimplementedError();
+
+  @override
+  // TODO: implement onAdImpression
+  AdEventCallback? get onAdImpression => throw UnimplementedError();
+
+  @override
+  // TODO: implement onAdLoaded
+  AdEventCallback? get onAdLoaded => throw UnimplementedError();
+
+  @override
+  // TODO: implement onAdOpened
+  AdEventCallback? get onAdOpened => throw UnimplementedError();
+
+  @override
+  // TODO: implement onAdWillDismissScreen
+  AdEventCallback? get onAdWillDismissScreen => throw UnimplementedError();
+
+  @override
+  // TODO: implement onPaidEvent
+  OnPaidEventCallback? get onPaidEvent => throw UnimplementedError();
 }

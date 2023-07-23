@@ -18,6 +18,7 @@ class LibraryFinesView extends StatelessWidget {
               ? Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: ListView.builder(
+              physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
               itemCount: booksFinesList.length,
               itemBuilder: (context, index) => Card(
                 key: ValueKey(booksFinesList[index]['issuedBookTitle']),

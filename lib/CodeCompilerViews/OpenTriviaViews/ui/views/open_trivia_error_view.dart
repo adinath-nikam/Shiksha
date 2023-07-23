@@ -28,16 +28,16 @@ class ErrorPage extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-
-                    customTextRegular(text: message, textSize: 18, color: primaryRedColor),
-
-
+                    customTextRegular(
+                        text: message, textSize: 18, color: primaryRedColor),
                     SizedBox(height: 20.0),
-
-                    CustomButton(text: "Try Again", buttonSize: 60, context: context, function: (){
-                      Navigator.pop(context);
-                    })
-
+                    CustomButton(
+                        text: "Try Again",
+                        buttonSize: 60,
+                        context: context,
+                        function: () {
+                          Navigator.pop(context);
+                        })
                   ],
                 ),
               ),

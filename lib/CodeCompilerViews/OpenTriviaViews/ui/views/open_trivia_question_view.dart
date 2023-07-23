@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shiksha/CodeCompilerViews/OpenTriviaViews/models/model_category.dart';
 import 'package:shiksha/CodeCompilerViews/OpenTriviaViews/models/model_question.dart';
 import 'package:shiksha/CodeCompilerViews/OpenTriviaViews/ui/views/open_trivia_result_view.dart';
@@ -6,6 +7,7 @@ import 'package:html_unescape/html_unescape.dart';
 import 'package:shiksha/Components/AuthButtons.dart';
 import 'dart:async';
 
+import '../../../../AdControllers/ad_manager.dart';
 import '../../../../Components/common_component_widgets.dart';
 import '../../../../colors/colors.dart';
 
@@ -20,11 +22,23 @@ class QuizPage extends StatefulWidget {
   _QuizPageState createState() => _QuizPageState();
 }
 
-class _QuizPageState extends State<QuizPage> {
-
+class _QuizPageState extends State<QuizPage> implements BannerAdListener {
   int _currentIndex = 0;
   final Map<int, dynamic> _answers = {};
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
+
+  late BannerAd adBannerTrivia;
+  bool isTriviaBannerAdLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    AdManager.loadBannerAd(this).then((ad) => setState(() {
+          adBannerTrivia = ad;
+          isTriviaBannerAdLoaded = true;
+        }));
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +56,21 @@ class _QuizPageState extends State<QuizPage> {
             preferredSize: const Size.fromHeight(60.0),
             child: appBarCommon(context, widget.category!.name)),
         body: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
           child: Column(
             children: <Widget>[
+              isTriviaBannerAdLoaded
+                  ? Center(
+                      child: SizedBox(
+                        height: adBannerTrivia.size.height.toDouble(),
+                        width: adBannerTrivia.size.width.toDouble(),
+                        child: AdWidget(ad: adBannerTrivia),
+                      ),
+                    )
+                  : const SizedBox(),
+              SizedBox(
+                height: 25,
+              ),
               Row(
                 children: <Widget>[
                   CircleAvatar(
@@ -153,4 +179,36 @@ class _QuizPageState extends State<QuizPage> {
         });
     return resp ?? false;
   }
+
+  @override
+  // TODO: implement onAdClicked
+  AdEventCallback? get onAdClicked => throw UnimplementedError();
+
+  @override
+  // TODO: implement onAdClosed
+  AdEventCallback? get onAdClosed => throw UnimplementedError();
+
+  @override
+  // TODO: implement onAdFailedToLoad
+  AdLoadErrorCallback? get onAdFailedToLoad => throw UnimplementedError();
+
+  @override
+  // TODO: implement onAdImpression
+  AdEventCallback? get onAdImpression => throw UnimplementedError();
+
+  @override
+  // TODO: implement onAdLoaded
+  AdEventCallback? get onAdLoaded => throw UnimplementedError();
+
+  @override
+  // TODO: implement onAdOpened
+  AdEventCallback? get onAdOpened => throw UnimplementedError();
+
+  @override
+  // TODO: implement onAdWillDismissScreen
+  AdEventCallback? get onAdWillDismissScreen => throw UnimplementedError();
+
+  @override
+  // TODO: implement onPaidEvent
+  OnPaidEventCallback? get onPaidEvent => throw UnimplementedError();
 }

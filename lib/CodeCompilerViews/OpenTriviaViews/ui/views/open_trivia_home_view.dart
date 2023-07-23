@@ -41,6 +41,7 @@ class TriviaHomePage extends StatelessWidget {
                         list = map.values.toList();
                         return AnimationLimiter(
                           child: GridView.builder(
+                              physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                               gridDelegate:
                                   const SliverGridDelegateWithMaxCrossAxisExtent(
                                 childAspectRatio: 1.0,

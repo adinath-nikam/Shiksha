@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../Components/common_component_widgets.dart';
 import '../FirebaseServices/firebase_api.dart';
@@ -18,8 +20,8 @@ class CodeCompilerDashBoard extends StatefulWidget {
   State<CodeCompilerDashBoard> createState() => _CodeCompilerDashBoardState();
 }
 
-class _CodeCompilerDashBoardState extends State<CodeCompilerDashBoard> with AutomaticKeepAliveClientMixin<CodeCompilerDashBoard> {
-
+class _CodeCompilerDashBoardState extends State<CodeCompilerDashBoard>
+    with AutomaticKeepAliveClientMixin<CodeCompilerDashBoard> {
   @override
   bool get wantKeepAlive => true;
 
@@ -58,6 +60,8 @@ class _CodeCompilerDashBoardState extends State<CodeCompilerDashBoard> with Auto
 
                       return AnimationLimiter(
                         child: GridView.builder(
+                            physics: BouncingScrollPhysics(
+                                parent: AlwaysScrollableScrollPhysics()),
                             gridDelegate:
                                 const SliverGridDelegateWithMaxCrossAxisExtent(
                               childAspectRatio: 1.0,
@@ -107,7 +111,12 @@ class _CodeCompilerDashBoardState extends State<CodeCompilerDashBoard> with Auto
                                           onPressed: () {
                                             Navigator.of(context).push(
                                                 animatedRoute(CompilerView(
-                                                    url: list[index]['URL'])));
+                                              url: list[index]['URL'],
+                                              codeBlogID: list[index]
+                                                  ['BLOG_ID'],
+                                              blogAPIKey: list[index]
+                                                  ['BLOG_API_KEY'],
+                                            )));
                                           },
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: primaryDarkColor,
@@ -139,9 +148,14 @@ class _CodeCompilerDashBoardState extends State<CodeCompilerDashBoard> with Auto
 }
 
 class CompilerView extends StatefulWidget {
-  final String url;
+  final String url, codeBlogID, blogAPIKey;
 
-  const CompilerView({Key? key, required this.url}) : super(key: key);
+  const CompilerView(
+      {Key? key,
+      required this.url,
+      required this.codeBlogID,
+      required this.blogAPIKey})
+      : super(key: key);
 
   @override
   State<CompilerView> createState() => _CompilerViewState();
@@ -172,6 +186,7 @@ class _CompilerViewState extends State<CompilerView> {
       {required String blogId, required String apiKey}) async {
     var postListUrl = Uri.https(
         "blogger.googleapis.com", "/v3/blogs/$blogId/posts/", {"key": apiKey});
+    // String url = 'https://www.googleapis.com/blogger/v3/blogs/$blogId/posts?key=$apiKey';
     final response = await http.get(postListUrl);
     if (response.statusCode == 200) {
       return PostList.fromJson(jsonDecode(response.body));
@@ -225,9 +240,8 @@ class _CompilerViewState extends State<CompilerView> {
                           ),
                           FutureBuilder(
                               future: fetchPosts(
-                                  blogId: '7732100168008150577',
-                                  apiKey:
-                                      'AIzaSyBDPlHIlNACtFCL7SQftcnWhMYOa6jkAaA'),
+                                  blogId: widget.codeBlogID,
+                                  apiKey: widget.blogAPIKey),
                               builder: (context, snapshot) {
                                 if (!snapshot.hasData) {
                                   return progressIndicator();
@@ -260,14 +274,17 @@ class _CompilerViewState extends State<CompilerView> {
                                               ListTileControlAffinity.trailing,
                                           children: <Widget>[
                                             ListTile(
-                                              subtitle: customTextRegular(
-                                                  text: snapshot
+                                              subtitle: Padding(
+                                                padding: const EdgeInsets.all(10.0),
+                                                child: HtmlWidget(
+                                                  HtmlUnescape().convert(snapshot
                                                           .data
                                                           ?.posts[index]
-                                                          .title ??
-                                                      "no items",
-                                                  textSize: 18,
-                                                  color: primaryDarkColor),
+                                                          .content ??
+                                                      "no items"),
+                                                  enableCaching: true,
+                                                ),
+                                              ),
                                               trailing: GestureDetector(
                                                 onTap: () async {
                                                   await Clipboard.setData(
@@ -275,7 +292,7 @@ class _CompilerViewState extends State<CompilerView> {
                                                           text: snapshot
                                                               .data!
                                                               .posts[index]
-                                                              .title));
+                                                              .content));
                                                   showSnackBar(
                                                       context,
                                                       "Code Copied Successfully.",

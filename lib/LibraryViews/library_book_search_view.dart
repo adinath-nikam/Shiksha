@@ -65,6 +65,7 @@ class _LibraryBookSearchViewState extends State<LibraryBookSearchView> {
               builder: (BuildContext context,
                   void Function(void Function()) setState) {
                 return SingleChildScrollView(
+                  physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                   child: SizedBox(
                     width: double.infinity,
                     child: Column(
@@ -203,6 +204,7 @@ class _LibraryBookSearchViewState extends State<LibraryBookSearchView> {
                   listBookSearchResult.isNotEmpty
                       ? Expanded(
                           child: ListView.builder(
+                            physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                             itemCount: listBookSearchResult.length,
                             itemBuilder: (context, index) => Card(
                               key: ValueKey(
