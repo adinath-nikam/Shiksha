@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_code_editor/flutter_code_editor.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:html_unescape/html_unescape.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_highlight/themes/sunburst.dart';
-
 import '../../Components/common_component_widgets.dart';
-
-import 'package:html/parser.dart' show parse;
 import 'package:highlight/languages/cpp.dart';
-
 import '../../colors/colors.dart';
 
 class Top100CodesDetailView extends StatefulWidget {
-  final String codeContent;
+  final String title, codeContent, timeComplexity;
 
-  const Top100CodesDetailView({Key? key, required this.codeContent})
+  const Top100CodesDetailView(
+      {Key? key,
+      required this.codeContent,
+      required this.timeComplexity,
+      required this.title})
       : super(key: key);
 
   @override
@@ -43,40 +41,82 @@ class _Top100CodesDetailViewState extends State<Top100CodesDetailView> {
       child: Scaffold(
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(60.0),
-            child: appBarCommon(context, "Top 100 Codes")),
+            child: appBarCommon(context, "TOP 100 CODES")),
         body: SingleChildScrollView(
-          child: Column(
-            children: [
-              ListTile(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 30),
-                title: customTextBold(
-                    text: "Prime Number",
-                    textSize: 18,
-                    color: primaryDarkColor),
-                subtitle: customTextRegular(
-                    text: "Prime Number",
-                    textSize: 14,
-                    color: primaryDarkColor),
-              ),
-              
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                        color: primaryDarkColor, width: 1)),
-                child: CodeTheme(
-                  data: CodeThemeData(styles: sunburstTheme),
-                  child: SingleChildScrollView(
-                    child: CodeField(
-                      controller: controller,
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+            child: Column(
+              children: [
+                ListTile(
+                  leading: Icon(
+                    Icons.tag_rounded,
+                    color: primaryDarkColor.withOpacity(0.5),
+                  ),
+                  trailing: GestureDetector(
+                    onTap: () async {
+                      await Clipboard.setData(
+                          ClipboardData(text: widget.codeContent));
+                      showSnackBar(context, "Code Copied Successfully.",
+                          primaryGreenColor);
+                    },
+                    child: Icon(Icons.copy_rounded, color: primaryDarkColor),
+                  ),
+                  title: customTextBold(
+                      text: widget.title,
+                      textSize: 18,
+                      color: primaryDarkColor),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+                  decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(5),
+                          topLeft: Radius.circular(5)),
+                      border: Border.all(color: primaryDarkColor, width: 1)),
+                  child: CodeTheme(
+                    data: CodeThemeData(styles: sunburstTheme),
+                    child: SingleChildScrollView(
+                      child: CodeField(
+                        controller: controller,
+                        textStyle: TextStyle(fontSize: 14),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+                SizedBox(
+                  height: 0,
+                ),
+                Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                    decoration: BoxDecoration(
+                      color: primaryDarkColor.withOpacity(1),
+                      borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(5),
+                          bottomLeft: Radius.circular(5)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        customTextBold(
+                            text: "Complexities",
+                            textSize: 18,
+                            color: primaryWhiteColor),
+                        Divider(
+                          color: primaryWhiteColor,
+                          height: 25,
+                        ),
+                        customTextRegular(
+                            text: widget.timeComplexity,
+                            textSize: 14,
+                            color: primaryGreenColor),
+                      ],
+                    )),
+              ],
+            ),
           ),
         ),
       ),

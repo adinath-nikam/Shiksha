@@ -20,14 +20,17 @@ class PostList {
 class Post {
   late final String title;
   late final String content;
+  late final List<String> labels;
 
   Post({
     required this.title,
     required this.content,
+    required this.labels,
   });
 
   Post.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     content = json['content'];
+    labels = json['labels'].cast<String>();
   }
 }

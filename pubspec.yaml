@@ -38,6 +38,7 @@ dependencies:
   crypto: ^3.0.3
   lottie: ^2.4.0
   flutter_code_editor: ^0.3.0
+  syncfusion_flutter_pdfviewer: ^22.1.39
 #  google_maps_flutter: ^0.4.0
   flutter_custom_tabs: ^1.0.4
   get_it: ^7.6.0
