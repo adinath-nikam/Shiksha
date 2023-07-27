@@ -168,7 +168,8 @@ class _WorkViewContentState extends State<WorkViewContent> {
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        customTextBold(text: modelWork.workCompensation!, textSize: 12, color: primaryDarkColor),
+                        SizedBox(height: 5,),
+                        customTextBold(text: modelWork.workCompensation!+" LPA", textSize: 12, color: primaryDarkColor.withOpacity(0.5)),
                         SizedBox(height: 15,),
                         Container(
                           decoration: BoxDecoration(

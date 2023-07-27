@@ -182,10 +182,8 @@ class _SettingsViewState extends State<SettingsView> {
                       ),
                     ),
                   ),
-                  Image(
-                      height: 150,
-                      width: 150,
-                      image: AssetImage("assets/images/tag_mib.png")),
+                  SizedBox(height: 50,),
+                  customTextBold(text: "Made with ♥ in Belgaum", textSize: 14, color: primaryDarkColor.withOpacity(0.5)),
                 ],
               ),
             ),

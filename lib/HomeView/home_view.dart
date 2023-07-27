@@ -481,10 +481,13 @@ class _HomeViewState extends State<HomeView> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
+                                      SizedBox(
+                                        height: 5,
+                                      ),
                                       customTextBold(
-                                          text: modelWork.workCompensation!,
+                                          text: modelWork.workCompensation!+" LPA",
                                           textSize: 12,
-                                          color: primaryDarkColor),
+                                          color: primaryDarkColor.withOpacity(0.5)),
                                       SizedBox(
                                         height: 15,
                                       ),

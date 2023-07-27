@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shiksha/CodeCompilerViews/OpenTriviaViews/ui/views/open_trivia_home_view.dart';
 import '../Components/common_component_widgets.dart';
 import '../colors/colors.dart';
+import 'Top100CodesViews/Top100CodesTabBarView.dart';
 
 class InterviewPrepView extends StatefulWidget {
   const InterviewPrepView({Key? key}) : super(key: key);
@@ -48,9 +49,20 @@ class _InterviewPrepViewState extends State<InterviewPrepView> with AutomaticKee
         ),
         activity: TriviaHomePage());
 
+    InterviewMenuItems item2 = InterviewMenuItems(
+        text: "Top 100 Coding Questions which is asked in Technical Interviews.",
+        img: Image(
+          image: AssetImage("assets/images/top100codes_img.png"),
+          height: 100,
+          width: 100,
+          fit: BoxFit.contain,
+        ),
+        activity: Top100CodesTabBarView());
+
 
     List<InterviewMenuItems> expansionMenuItemsList = [
       item1,
+      item2,
     ];
 
     return Padding(
