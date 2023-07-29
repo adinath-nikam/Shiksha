@@ -11,18 +11,19 @@ import 'package:html/parser.dart' show parse;
 import 'package:xml/xml.dart' as xml;
 import 'package:requests/requests.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class LibraryMenuItems {
-  late String title;
-  late Icon img;
-  late Widget Activity;
+  late final String title;
+  late final Icon img;
+  late final Widget Activity;
 
   LibraryMenuItems(
       {required this.title, required this.img, required this.Activity});
 }
 
 class LibraryDashboardView extends StatefulWidget {
-  String appUserUSN;
+  late final String appUserUSN;
 
   LibraryDashboardView({Key? key, required this.appUserUSN}) : super(key: key);
 
@@ -31,6 +32,7 @@ class LibraryDashboardView extends StatefulWidget {
 }
 
 class _LibraryDashboardViewState extends State<LibraryDashboardView> {
+  late final Map collegeLibraryCreds;
   String _scanBarcode = 'Unknown';
   String username = 'Not Defined';
   String category = 'Not Defined';
@@ -63,8 +65,8 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
   }
 
   Future<bool> libraryAppAdminAuth() async {
-    var responseAppAdminAuth = await Requests.get(
-        'http://103.139.157.231:8080/cgi-bin/koha/svc/authentication?userid=app_admin&password=admin@app1');
+    String libraryURL = await getCollegeLibraryURL();
+    var responseAppAdminAuth = await Requests.get(libraryURL);
     final String responseString =
         xml.XmlDocument.parse(responseAppAdminAuth.body)
             .getElement("response")!
@@ -203,6 +205,17 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
     }
   }
 
+  Future<String> getCollegeLibraryURL() async {
+    late Map mapLibraryURL;
+    await FirebaseDatabase.instance
+        .ref('SHIKSHA_APP/COLLEGE_LIBRARY_CREDS/C1')
+        .once()
+        .then((value) {
+      mapLibraryURL = value.snapshot.value as Map;
+    });
+    return mapLibraryURL['URL'];
+  }
+
   @override
   void initState() {
     super.initState();
@@ -235,7 +248,8 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
               return progressIndicator();
             } else if (snapshot.hasData && snapshot.data == true) {
               return SingleChildScrollView(
-                physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                physics: BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
                 child: AnimationLimiter(
                   child: AnimationConfiguration.synchronized(
                       child: SlideAnimation(

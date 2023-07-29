@@ -187,7 +187,6 @@ class _AppUsersState extends State<AppUsers> {
                         shrinkWrap: true,
                         itemCount: snapshot.data!.snapshot.children.length,
                         itemBuilder: (context, index) {
-                          print(snapshot.data!.snapshot.value as dynamic);
                           return ListTile(
                             title: ExpansionTile(
                               title: customTextBold(

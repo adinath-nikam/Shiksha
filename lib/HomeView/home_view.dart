@@ -72,7 +72,7 @@ class _HomeViewState extends State<HomeView> {
             child: SlideAnimation(
               verticalOffset: MediaQuery.of(context).size.height,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   campaignListView(),
@@ -81,7 +81,10 @@ class _HomeViewState extends State<HomeView> {
                   getWordOfTheDay(),
                   eventsListView(),
                   workListView(),
-                  // recentJobPosting(),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  showVersionCode(),
                   const SizedBox(
                     height: 50,
                   ),
