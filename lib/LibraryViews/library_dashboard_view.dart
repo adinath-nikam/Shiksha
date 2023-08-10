@@ -4,6 +4,7 @@ import 'package:shiksha/LibraryViews/library_book_search_view.dart';
 import 'package:shiksha/LibraryViews/library_fines_view.dart';
 import 'package:shiksha/LibraryViews/library_history_view.dart';
 import 'package:shiksha/LibraryViews/library_issued_books_view.dart';
+import 'package:shiksha/Models/model_user_data.dart';
 import '../Components/common_component_widgets.dart';
 import '../colors/colors.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -103,8 +104,6 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
   Future<bool> httpClient(String appUserUSN) async {
     if (await libraryAppAdminAuth()) {
       String? patronID = await getPatronID(appUserUSN, appUserUSN);
-
-      print(patronID);
 
       if (patronID != 'Patron Not Found') {
         var responsePatronInfo = await Requests.get(
@@ -208,7 +207,7 @@ class _LibraryDashboardViewState extends State<LibraryDashboardView> {
   Future<String> getCollegeLibraryURL() async {
     late Map mapLibraryURL;
     await FirebaseDatabase.instance
-        .ref('SHIKSHA_APP/COLLEGE_LIBRARY_CREDS/C1')
+        .ref('SHIKSHA_APP/COLLEGE_LIBRARY_CREDS/${modelUserData.getUserCollege}')
         .once()
         .then((value) {
       mapLibraryURL = value.snapshot.value as Map;

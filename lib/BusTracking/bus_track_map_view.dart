@@ -1,95 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shiksha/Components/constants.dart';
+import 'package:shiksha/Models/model_user_data.dart';
+import 'package:shiksha/colors/colors.dart';
 import '../Components/common_component_widgets.dart';
-import '../colors/colors.dart';
 
-class MapScreenView extends StatefulWidget {
-  const MapScreenView({super.key});
+class MapViewBusTrack extends StatelessWidget {
+  final String busNumber;
 
-  @override
-  State<MapScreenView> createState() => _MapScreenViewState();
-}
-
-class _MapScreenViewState extends State<MapScreenView> {
-  late GoogleMapController mapController;
-  String busCount = '0';
-
-  Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
-
-  final LatLng _center = const LatLng(15.849363993462724, 74.50009735933146);
-
-  late LatLng currentLocationLatLng;
-
-  final CustomInfoWindowController _customInfoWindowController =
-      CustomInfoWindowController();
-
-  Future<void> _onMapCreated(controller) async {
-    setState(() {
-      mapController = controller;
-      _customInfoWindowController.googleMapController = controller;
-    });
-  }
-
-  @override
-  void dispose() {
-    _customInfoWindowController.dispose();
-    super.dispose();
-  }
-
-  void initMarker(specify, specifyId) async {
-    var markerIdVal = specifyId;
-    final MarkerId markerId = MarkerId(markerIdVal);
-    final Marker marker = Marker(
-        markerId: markerId,
-        position:
-            LatLng(specify['location'].latitude, specify['location'].longitude),
-        // icon: await MarkerIcon.downloadResizePicture(
-        //     url:
-        //         'https://firebasestorage.googleapis.com/v0/b/trash-add22.appspot.com/o/ic_bus.png?alt=media&token=840c8711-12f4-4a9d-8e20-c7add820c70a&_gl=1*128q90t*_ga*MTIwMjIyNDg3My4xNjg1MTA5NTc3*_ga_CW55HF8NVT*MTY4NjA0MjA5Mi4xNi4xLjE2ODYwNDIzNTUuMC4wLjA.',
-        //     imageSize: 125),
-        infoWindow: InfoWindow(
-          title: 'Bus Id',
-          snippet: specifyId,
-        ));
-    setState(() {
-      markers[markerId] = marker;
-    });
-  }
-
-  getMarkerData() async {
-    FirebaseFirestore.instance
-        .collection('BUS_TRACK_DATA')
-        .snapshots()
-        .listen((querySnapshot) {
-      if (querySnapshot.docs.isNotEmpty) {
-        setState(() {
-          busCount = querySnapshot.docs.length.toString();
-        });
-        for (int i = 0; i < querySnapshot.docs.length; i++) {
-          initMarker(querySnapshot.docs[i].data(), querySnapshot.docs[i].id);
-        }
-      }
-
-      // querySnapshot.docChanges.forEach((change) {
-      //   print('>>>>>>>>>>>>>>>>>> '+change.doc.id);
-      // });
-    });
-
-    // FirebaseFirestore.instance.collection('BUS_TRACK_DATA').get().then((value) {
-    //   if (value.docs.isNotEmpty) {
-    //     setState(() {
-    //       busCount = value.docs.length.toString();
-    //     });
-    //     for (int i = 0; i < value.docs.length; i++) {
-    //       initMarker(value.docs[i].data(), value.docs[i].id);
-    //     }
-    //   }
-    // });
-  }
+  const MapViewBusTrack({Key? key, required this.busNumber}) : super(key: key);
 
   Future<Position> getUserCurrentLocation() async {
     await Geolocator.requestPermission()
@@ -105,111 +27,160 @@ class _MapScreenViewState extends State<MapScreenView> {
   }
 
   @override
-  void initState() {
-    getMarkerData();
-    getUserCurrentLocation();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    Set<Marker> markers = Set();
+
     return SafeArea(
       child: Scaffold(
-          appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(60.0),
-              child: appBarCommon(context, "TRACK BUS (BETA)")),
-          body: Stack(
-            children: [
-              GoogleMap(
-                zoomControlsEnabled: false,
-                compassEnabled: true,
-                onTap: (position) {
-                  _customInfoWindowController.hideInfoWindow!();
-                },
-                markers: Set<Marker>.of(markers.values),
-                onMapCreated: _onMapCreated,
-                initialCameraPosition: CameraPosition(
-                  target: _center,
-                  zoom: 11.0,
-                ),
-                onCameraMove: (position) {
-                  _customInfoWindowController.onCameraMove!();
-                },
-              ),
-              CustomInfoWindow(
-                controller: _customInfoWindowController,
-                height: 300,
-                width: 300,
-                offset: 50,
-              ),
-              Align(
-                alignment: Alignment.topRight,
-                child: Container(
-                  padding: const EdgeInsets.all(15),
-                  child: FloatingActionButton.extended(
-                    backgroundColor: primaryDarkColor,
-                    onPressed: () async {},
-                    label: customTextBold(
-                        text: busCount, textSize: 16, color: primaryWhiteColor),
-                    icon: const Icon(Icons.directions_bus),
+        appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(60.0),
+            child: appBarCommon(context, 'TRACK BUS')),
+        body: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection(DB_ROOT_NAME_DRIVER)
+              .doc(modelUserData.getUserCollege)
+              .collection('BUSES')
+              .doc(busNumber)
+              .snapshots(),
+          builder: (context, snapshot) {
+            print(snapshot);
+            if (snapshot.hasData) {
+              GeoPoint location = snapshot.data!.get("location");
+              markers.clear();
+
+              final latLng = LatLng(location.latitude, location.longitude);
+
+              markers.add(
+                  Marker(markerId: MarkerId("location"), position: latLng));
+
+              return Stack(
+                children: [
+                  GoogleMap(
+                    zoomControlsEnabled: false,
+                    myLocationEnabled: false,
+                    initialCameraPosition: CameraPosition(
+                        target: LatLng(location.latitude, location.longitude),
+                        zoom: 15),
+                    markers: markers,
+                    onMapCreated: (controller) {},
                   ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Container(
-                  padding: const EdgeInsets.all(15),
-                  child: FloatingActionButton(
-                    mini: true,
-                    backgroundColor: primaryRedColor,
-                    onPressed: () async {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) => WillPopScope(
-                          onWillPop: () async => false,
-                          child: commonAlertDialog(
-                              context,
-                              "Experimental Feature!",
-                              Icon(
-                                Icons.info_rounded,
-                                color: primaryDarkColor,
-                                size: 50,
-                              ), () {
-                            Navigator.of(context).pop();
-                          }, 1),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Container(
+                      padding: const EdgeInsets.all(15),
+                      child: FloatingActionButton.extended(
+                        backgroundColor: primaryDarkColor,
+                        onPressed: () async {},
+                        label: customTextBold(
+                            text: busNumber,
+                            textSize: 16,
+                            color: primaryWhiteColor),
+                        icon: const Icon(Icons.directions_bus),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Container(
+                      padding: const EdgeInsets.all(15),
+                      child: FloatingActionButton(
+                        mini: true,
+                        backgroundColor: primaryRedColor,
+                        onPressed: () async {
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) => WillPopScope(
+                              onWillPop: () async => false,
+                              child: commonAlertDialog(
+                                  context,
+                                  "Experimental Feature!",
+                                  Icon(
+                                    Icons.info_rounded,
+                                    color: primaryDarkColor,
+                                    size: 50,
+                                  ), () {
+                                Navigator.of(context).pop();
+                              }, 1),
+                            ),
+                          );
+                        },
+                        child: const Icon(Icons.info_rounded),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 25, horizontal: 20),
+                      child: Card(
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                            side: const BorderSide(
+                                color: primaryDarkColor, width: 1.0),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.all(15),
+                          leading: customTextBold(
+                              text: busNumber,
+                              textSize: 45,
+                              color: primaryDarkColor),
+                          title: Container(
+                            height: 70,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.person,
+                                      color: primaryDarkColor,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    customTextBold(
+                                        text: snapshot.data!.get('driverName'),
+                                        textSize: 18,
+                                        color: primaryDarkColor),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.call,
+                                      color: primaryDarkColor,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    customTextBold(
+                                        text: snapshot.data!
+                                            .get('driverPhoneNumber'),
+                                        textSize: 18,
+                                        color: primaryDarkColor),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      );
-                    },
-                    child: const Icon(Icons.info_rounded),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: primaryDarkColor,
-            onPressed: () async {
-              getUserCurrentLocation().then((value) async {
-                initMarker(GeoPoint(value.latitude, value.longitude) as dynamic,
-                    "My Location");
-
-                // specified current users location
-                CameraPosition cameraPosition = CameraPosition(
-                  target: LatLng(value.latitude, value.longitude),
-                  zoom: 14,
-                );
-
-                mapController.animateCamera(
-                    CameraUpdate.newCameraPosition(cameraPosition));
-                setState(() {
-                  currentLocationLatLng =
-                      LatLng(value.latitude, value.longitude);
-                });
-              });
-            },
-            child: const Icon(Icons.gps_fixed_rounded),
-          )),
+                      ),
+                    ),
+                  )
+                ],
+              );
+            }
+            return Center(
+              child: progressIndicator(),
+            );
+          },
+        ),
+      ),
     );
   }
 }

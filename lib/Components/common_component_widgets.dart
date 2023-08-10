@@ -53,6 +53,20 @@ Widget customTextRegular(
   );
 }
 
+// Widget customPullToRefresh({required Widget widget}){
+//   return RefreshIndicator(
+//     displacement: 150,
+//     backgroundColor: primaryDarkColor,
+//     color: primaryWhiteColor,
+//     strokeWidth: 3,
+//     triggerMode: RefreshIndicatorTriggerMode.onEdge,
+//     onRefresh: () async {
+//       await widget;
+//     },
+//     child: widget,
+//   );
+// }
+
 Widget commonAlertDialog(BuildContext context, String buttonText, Icon icon,
     Function function, int functionCount) {
   return AlertDialog(

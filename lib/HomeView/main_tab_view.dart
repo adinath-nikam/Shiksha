@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:shiksha/ClubsViews/clubs_view.dart';
 import 'package:shiksha/CodeCompilerViews/cc_tabbar_view.dart';
 import 'package:shiksha/HomeView/home_view.dart';
 import 'package:shiksha/WorkViews/work_view.dart';
 import 'package:shiksha/colors/colors.dart';
-import '../CodeCompilerViews/code_compiler_dashboard_view.dart';
+import '../AlumniPortal/alumni_dashboard_view.dart';
 import '../Components/common_component_widgets.dart';
 
 class TabView extends StatefulWidget {
@@ -22,8 +21,8 @@ class _TabViewState extends State<TabView> {
   Widget build(BuildContext context) {
     final buildBody = <Widget>[
       const HomeView(),
+      const AlumniDashboardView(),
       const CCTabBarView(),
-      const ClubsView(),
       const WorkView(),
     ];
 
@@ -58,13 +57,13 @@ class _TabViewState extends State<TabView> {
                 ),
                 label: "HOME"),
             BottomNavigationBarItem(
+                icon: Icon(Icons.people_rounded, size: 30), label: "ALUMNI"),
+            BottomNavigationBarItem(
                 icon: Icon(
                   Icons.code_rounded,
                   size: 30,
                 ),
                 label: "CODE"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.event_outlined, size: 30), label: "CLUBS"),
             BottomNavigationBarItem(
                 icon: Icon(Icons.work_outline_rounded, size: 30),
                 label: "WORK"),

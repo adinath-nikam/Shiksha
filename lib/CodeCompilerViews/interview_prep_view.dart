@@ -27,8 +27,8 @@ class _InterviewPrepViewState extends State<InterviewPrepView> with AutomaticKee
             Container(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 child: infoWidget(
-                    "Welcome to Shiksha Placement Preparation 🎊",
-                    "Interview Preparation Tips & Tricks.",
+                    "Welcome to Shiksha App",
+                    "Prepare for Aptitude Tests & Technical Interviews.",
                     primaryDarkColor,
                     primaryGreenColor.withOpacity(0.5))),
             InterviewMenuView(context),

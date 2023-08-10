@@ -55,7 +55,9 @@ class _Top100CodesDetailViewState extends State<Top100CodesDetailView> {
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(60.0),
             child: appBarCommon(context, "TOP 100 CODES")),
-        body: _loading
+        body:
+
+        _loading
             ? WebViewWidget(
                 controller: webViewController,
               )

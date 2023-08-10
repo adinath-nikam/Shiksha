@@ -37,7 +37,7 @@ dependencies:
   flutter_svg: ^2.0.7
   crypto: ^3.0.3
   lottie: ^2.4.0
-#  google_maps_flutter: ^0.4.0
+  #  google_maps_flutter: ^0.4.0
   flutter_custom_tabs: ^1.0.4
   get_it: ^7.6.0
   firebase_auth: ^4.2.5
@@ -53,20 +53,20 @@ dependencies:
   datetime_picker_formfield: ^2.0.1
   csv:
   open_file: ^3.2.1
-#  default_path_provider:
+  #  default_path_provider:
   cached_network_image: ^3.2.3
   flutter_native_splash: ^2.2.17
   syncfusion_flutter_barcodes: ^21.2.6
   shared_preferences: ^2.0.17
-  package_info_plus:
+  package_info_plus: ^4.1.0
   firebase_remote_config: ^4.0.0
   chat_gpt_sdk: ^2.1.5
   http:
   firebase_messaging: ^14.6.4
   flutter_local_notifications: ^14.1.1
-  dart_openai: ^1.9.1
+  dart_openai: ^4.0.0
   get_storage: ^2.1.1
-  share_plus: ^6.3.1
+  share_plus: ^7.1.0
   flutter_tts: ^3.6.3
   flutter_markdown: ^0.6.14
   uuid: ^3.0.7
@@ -76,15 +76,16 @@ dependencies:
   flutter_barcode_scanner: ^2.0.0
   flutter_widget_from_html:
   xml: ^6.3.0
-  requests: ^4.7.0
+  #  requests: ^4.7.0
   webview_flutter: ^4.2.2
   flutter_staggered_animations: ^1.1.1
-  animated_text_kit: ^4.2.2
-
-
   font_awesome_flutter: ^10.3.0
   html_unescape: ^2.0.0
   google_mobile_ads: ^3.0.0
+  linkedin_login: ^2.3.1
+  firebase_ui_firestore: ^1.5.6
+  requests:
+    path: ./requests
 
 
 

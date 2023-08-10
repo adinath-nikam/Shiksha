@@ -2,19 +2,19 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:intl/intl.dart';
 import 'package:shiksha/Admin/admin_view.dart';
 import 'package:shiksha/FirebaseServices/firebase_api.dart';
 import 'package:shiksha/Models/model_user_data.dart';
 import 'package:shiksha/Models/model_work.dart';
 import '../BusTracking/bus_track_map_view.dart';
+import '../BusTracking/bus_tracking_dashboard_view.dart';
 import '../ChatGPT/page/chat_gpt_home_Page.dart';
 import '../Components/common_component_widgets.dart';
 import '../LibraryViews/library_dashboard_view.dart';
-import '../Models/model_event.dart';
 import '../colors/colors.dart';
 
 class HomeView extends StatefulWidget {
@@ -79,7 +79,6 @@ class _HomeViewState extends State<HomeView> {
                   chatBotWidget(),
                   HomeMenuView(context),
                   getWordOfTheDay(),
-                  eventsListView(),
                   workListView(),
                   const SizedBox(
                     height: 20,
@@ -231,7 +230,7 @@ class _HomeViewState extends State<HomeView> {
           width: 100,
           fit: BoxFit.contain,
         ),
-        activity: const MapScreenView());
+        activity: const BusTrackingDashboard());
 
     List<HomeMenuItems> expansionMenuItemsList = [
       item1,
@@ -283,269 +282,123 @@ class _HomeViewState extends State<HomeView> {
           }).toList()),
     );
   }
-
-  Widget eventsListView() {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseAPI().eventsStream(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(child: progressIndicator());
-        } else if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
-          return SizedBox(
-            height: 200,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 25),
-                    child: customTextBold(
-                        text: "Upcoming Events",
-                        textSize: 16,
-                        color: primaryDarkColor)),
-                Expanded(
-                  child: ListView(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    children: snapshot.data!.docs.map((data) {
-                      final ModelEventNew modelEvent =
-                          ModelEventNew.fromSnapshot(data);
-                      final startDate = DateFormat("yyyy-MM-dd")
-                          .parse(modelEvent.eventStartDate!);
-                      final postedDate = DateFormat("yyyy-MM-dd")
-                          .parse(modelEvent.eventPostedDate!);
-
-                      final monthString = DateFormat('MMMM').format(startDate);
-                      final dayString = DateFormat('EEE').format(startDate);
-                      final dayNumber = DateFormat('dd').format(startDate);
-
-                      final postedYearNumber =
-                          DateFormat('yyyy').format(postedDate);
-
-                      return GestureDetector(
-                        onTap: () {
-                          ModelEventNew e = ModelEventNew.fromData(
-                              modelEvent.id,
-                              modelEvent.userId,
-                              modelEvent.eventName,
-                              modelEvent.eventStartDate,
-                              modelEvent.eventStartTime,
-                              modelEvent.eventVenue,
-                              modelEvent.eventDescription,
-                              modelEvent.eventInstructions,
-                              modelEvent.eventGoogleFormLink,
-                              modelEvent.eventPostedDate,
-                              modelEvent.eventClub);
-
-                          Navigator.of(context).push(animatedRoute(e));
-                        },
-                        child: Row(
-                          children: [
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            SizedBox(
-                              height: 120,
-                              width: 120,
-                              child: Card(
-                                elevation: 5,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+  Widget workListView() {
+    return Container(
+      height: 210,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+              padding: const EdgeInsets.symmetric(
+                  vertical: 20, horizontal: 25),
+              child: customTextBold(
+                  text: "Recent Posts",
+                  textSize: 16,
+                  color: primaryDarkColor)),
+          Expanded(
+            child: FirestoreListView<ModelWork>(
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+              query: FirebaseAPI().queryWorkStream(),
+              pageSize: 10,
+              loadingBuilder: (context) => progressIndicator(),
+              itemBuilder: (context, doc) {
+                final modelWork = doc.data();
+                return GestureDetector(
+                  onTap: () {
+                    ModelWork e = ModelWork.fromData(
+                      modelWork.id,
+                      modelWork.workTitle,
+                      modelWork.workCompanyName,
+                      modelWork.workCompensation,
+                      modelWork.workDescription,
+                      modelWork.workLocation,
+                      modelWork.workType,
+                      modelWork.workPostURL,
+                      modelWork.workImageURL,
+                      modelWork.workPostedDate,
+                    );
+                    Navigator.of(context).push(animatedRoute(e));
+                  },
+                  child: Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      margin: EdgeInsets.only(left: 20.0, right: 5.0),
+                      child: Card(
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                              side: const BorderSide(
+                                  color: primaryDarkColor, width: 2.0),
+                              borderRadius: BorderRadius.circular(10.0)),
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 15, horizontal: 15),
+                            title: customTextBold(
+                                text: modelWork.workTitle!,
+                                textSize: 16,
+                                color: primaryDarkColor),
+                            subtitle: Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 5,
                                 ),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            const BorderRadius.vertical(
-                                                top: Radius.circular(10),
-                                                bottom: Radius.zero),
-                                        color: primaryDarkColor,
-                                      ),
-                                      width: double.maxFinite,
-                                      height: 30,
-                                      child: Center(
-                                          child: customTextBold(
-                                              text: monthString,
-                                              textSize: 14,
-                                              color: primaryWhiteColor)),
-                                    ),
-                                    Expanded(
-                                      child: Container(
-                                        padding: const EdgeInsets.all(8),
-                                        child: Column(
-                                          children: [
-                                            customTextBold(
-                                                text: dayString,
-                                                textSize: 12,
-                                                color: primaryDarkColor),
-                                            customTextBold(
-                                                text: dayNumber,
-                                                textSize: 20,
-                                                color: primaryDarkColor),
-                                            customTextBold(
-                                                text: postedYearNumber,
-                                                textSize: 12,
-                                                color: primaryDarkColor),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      height: 8,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            const BorderRadius.vertical(
-                                                top: Radius.zero,
-                                                bottom: Radius.circular(10)),
-                                        color: primaryDarkColor,
-                                      ),
-                                    ),
-                                  ],
+                                customTextBold(
+                                    text: modelWork.workCompensation! +
+                                        " LPA",
+                                    textSize: 12,
+                                    color: primaryDarkColor
+                                        .withOpacity(0.5)),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                    BorderRadius.circular(5.0),
+                                    color: primaryDarkColor.withAlpha(50),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 5),
+                                  child: customTextBold(
+                                      text: modelWork.workType!,
+                                      textSize: 12,
+                                      color: primaryDarkColor),
+                                ),
+                              ],
+                            ),
+                            leading: Container(
+                              height: 55,
+                              width: 55,
+                              padding: const EdgeInsets.all(6),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10.0),
+                                child: Image.network(
+                                  modelWork.workImageURL!,
+                                  fit: BoxFit.contain,
+                                  height: 55,
+                                  width: 55,
+                                  loadingBuilder: (BuildContext context,
+                                      Widget child,
+                                      ImageChunkEvent? loadingProgress) {
+                                    if (loadingProgress == null)
+                                      return child;
+                                    return Center(
+                                      child: progressIndicator(),
+                                    );
+                                  },
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ],
+                          ))),
+                );
+              },
             ),
-          );
-        } else if (snapshot.data!.docs.isEmpty) {
-          return const SizedBox();
-        } else {
-          return const Text("Error");
-        }
-      },
-    );
-  }
-
-  Widget workListView() {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseAPI().workStream(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(child: progressIndicator());
-        } else if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
-          return Container(
-            height: 210,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 25),
-                    child: customTextBold(
-                        text: "Recent Posts",
-                        textSize: 16,
-                        color: primaryDarkColor)),
-                Expanded(
-                  child: ListView(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    children: snapshot.data!.docs.map((data) {
-                      final ModelWork modelWork = ModelWork.fromSnapshot(data);
-                      return GestureDetector(
-                        onTap: () {
-                          ModelWork e = ModelWork.fromData(
-                            modelWork.id,
-                            modelWork.workTitle,
-                            modelWork.workCompanyName,
-                            modelWork.workCompensation,
-                            modelWork.workDescription,
-                            modelWork.workLocation,
-                            modelWork.workType,
-                            modelWork.workPostURL,
-                            modelWork.workImageURL,
-                            modelWork.workPostedDate,
-                          );
-                          Navigator.of(context).push(animatedRoute(e));
-                        },
-                        child: Container(
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            margin: EdgeInsets.only(left: 15.0, right: 5.0),
-                            child: Card(
-                                elevation: 2,
-                                shape: RoundedRectangleBorder(
-                                    side: const BorderSide(
-                                        color: primaryDarkColor, width: 2.0),
-                                    borderRadius: BorderRadius.circular(10.0)),
-                                child: ListTile(
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 15, horizontal: 15),
-                                  title: customTextBold(
-                                      text: modelWork.workTitle!,
-                                      textSize: 16,
-                                      color: primaryDarkColor),
-                                  subtitle: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      customTextBold(
-                                          text: modelWork.workCompensation!+" LPA",
-                                          textSize: 12,
-                                          color: primaryDarkColor.withOpacity(0.5)),
-                                      SizedBox(
-                                        height: 15,
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(5.0),
-                                          color: primaryDarkColor.withAlpha(50),
-                                        ),
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 5, horizontal: 5),
-                                        child: customTextBold(
-                                            text: modelWork.workType!,
-                                            textSize: 12,
-                                            color: primaryDarkColor),
-                                      ),
-                                    ],
-                                  ),
-                                  leading: Container(
-                                    height: 55,
-                                    width: 55,
-                                    padding: const EdgeInsets.all(6),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      child: Image.network(
-                                        modelWork.workImageURL!,
-                                        fit: BoxFit.contain,
-                                        height: 55,
-                                        width: 55,
-                                        loadingBuilder: (BuildContext context,
-                                            Widget child,
-                                            ImageChunkEvent? loadingProgress) {
-                                          if (loadingProgress == null)
-                                            return child;
-                                          return Center(
-                                            child: progressIndicator(),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ))),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ],
-            ),
-          );
-        } else if (snapshot.data!.docs.isEmpty) {
-          return const SizedBox();
-        } else {
-          return const Text("Error");
-        }
-      },
+          ),
+        ],
+      ),
     );
   }
 

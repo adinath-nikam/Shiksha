@@ -32,8 +32,8 @@ class _CodeCompilerDashBoardState extends State<CodeCompilerDashBoard>
         child: Column(
           children: [
             infoWidget(
-                "Welcome to Code Compiler! 🎉",
-                "Many will be added Soon!.",
+                "Welcome to Shiksha App",
+                "Now you Can Code in Many Different Programming Languages. 👩‍💻",
                 primaryDarkColor,
                 primaryGreenColor),
             const SizedBox(

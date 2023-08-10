@@ -161,9 +161,9 @@ class _SettingsViewState extends State<SettingsView> {
                             height: 50,
                             thickness: 2,
                           ),
-                          CustomButton(
+                          CustomDeleteButton(
                               text: "DELETE ACCOUNT",
-                              buttonSize: 60,
+                              buttonHeight: 55,
                               context: context,
                               function: () {
 

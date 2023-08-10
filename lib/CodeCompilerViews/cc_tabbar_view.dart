@@ -73,7 +73,7 @@ class _CCTabBarViewState extends State<CCTabBarView> with AutomaticKeepAliveClie
                   ]),
             ),
             const SizedBox(
-              height: 50,
+              height: 20,
             ),
             Expanded(
               flex: 1,

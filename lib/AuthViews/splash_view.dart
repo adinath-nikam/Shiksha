@@ -1,4 +1,3 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:shiksha/AuthViews/profile_build_view.dart';
 import 'package:shiksha/Components/AuthButtons.dart';
@@ -13,52 +12,36 @@ class IntroView extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
       backgroundColor: primaryWhiteColor,
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              headerImage(),
-              Image(
-                image: AssetImage("assets/images/intro.gif"),
-                height: 300,
-                width: 300,
-              ),
-              SizedBox(
-                child: DefaultTextStyle(
-                  style: TextStyle(
-                      fontSize: 22.0,
-                      fontFamily: 'ProductSans-Bold',
-                      color: primaryDarkColor),
-                  child: AnimatedTextKit(
-                    pause: Duration(milliseconds: 3000),
-                    repeatForever: true,
-                    isRepeatingAnimation: true,
-                    animatedTexts: [
-                      TypewriterAnimatedText('< code > Hello < /code>'),
-                      TypewriterAnimatedText('Hunt a Job...'),
-                      TypewriterAnimatedText('Access to College Library.'),
-                    ],
-                  ),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                headerImage(),
+                Image(
+                  image: AssetImage("assets/images/splash_img.png"),
+                  height: 400,
+                  width: 400,
                 ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 50, horizontal: 80),
-                child: CustomButton(
-                    text: "Get Started",
-                    buttonSize: 60,
-                    context: context,
-                    function: () {
-                      Navigator.of(context)
-                          .push(animatedRoute(const CollegeTypeSelectView(
-                        isUpdate: false,
-                      )));
-                    }),
-              )
-            ],
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 40, horizontal: 80),
+                  child: CustomButton(
+                      text: "GET STARTED",
+                      buttonSize: 60,
+                      context: context,
+                      function: () {
+                        Navigator.of(context)
+                            .push(animatedRoute(const CollegeTypeSelectView(
+                          isUpdate: false,
+                        )));
+                      }),
+                )
+              ],
+            ),
           ),
         ),
       ),

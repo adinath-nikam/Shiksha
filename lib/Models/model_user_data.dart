@@ -12,9 +12,9 @@ class ModelUserData {
   late final String userPhone;
   late final String userJoiningDate;
   late final String userCollegeType;
-  bool userCanPostEvent = false;
-  bool userCanPostJob = false;
-  bool userIsAdmin = false;
+  bool userCanPostEvent = true;
+  bool userCanPostJob = true;
+  bool userIsAdmin = true;
 
   ModelUserData(
       {required this.userUID,
