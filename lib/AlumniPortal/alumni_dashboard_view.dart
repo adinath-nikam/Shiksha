@@ -229,7 +229,7 @@ class _AlumniListViewState extends State<AlumniListView>
             .doc(ALUMNI_CONSTANT)
             .collection(modelUserData.getUserCollege)
             .doc(widget.alumniBatchYear)
-            .collection(ALUMNI_CONSTANT_2),
+            .collection(ALUMNI_CONSTANT_2).orderBy('alumni_name'),
         pageSize: 10,
         loadingBuilder: (context) => progressIndicator(),
         itemBuilder: (context, doc) {
@@ -249,14 +249,14 @@ class _AlumniListViewState extends State<AlumniListView>
                     width: 55,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
-                      child: doc['profile_img_url'] == null
+                      child: doc['alumni_profile_img_url'] == 'nil'
                           ? Image.asset(
                               'assets/images/alumni_nil_icon.png',
                               height: 55,
                               width: 55,
                             )
                           : Image.network(
-                              doc['profile_img_url'],
+                              doc['alumni_profile_img_url'],
                               fit: BoxFit.contain,
                               height: 55,
                               width: 55,
@@ -272,11 +272,11 @@ class _AlumniListViewState extends State<AlumniListView>
                     ),
                   ),
                   title: customTextBold(
-                      text: doc['user_name'],
+                      text: doc['alumni_name'],
                       textSize: 14,
                       color: primaryDarkColor),
                   subtitle: customTextBold(
-                      text: '@' + doc['work_status'],
+                      text: doc['alumni_work_status'],
                       textSize: 12,
                       color: primaryDarkColor.withOpacity(0.5)),
                 ),

@@ -65,6 +65,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
+          backgroundColor: primaryWhiteColor,
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         child: AnimationLimiter(
@@ -75,6 +76,10 @@ class _HomeViewState extends State<HomeView> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                  //   child: Image.network('https://www.klescet.ac.in/wp-content/uploads/2021/01/cropped-cddfv-1024x112.png'),
+                  // ),
                   campaignListView(),
                   chatBotWidget(),
                   HomeMenuView(context),

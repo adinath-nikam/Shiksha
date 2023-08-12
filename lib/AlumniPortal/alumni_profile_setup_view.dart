@@ -71,7 +71,7 @@ class _AlumniProfileBuildViewState extends State<AlumniProfileBuildView> {
                 child: Padding(
                   padding: EdgeInsets.all(0), // Border radius
                   child: ClipOval(
-                    child: user?.profileImageUrl == null
+                    child: user != null ?  user?.profileImageUrl == "nil"
                         ? Image.asset(
                             'assets/images/alumni_nil_icon.png',
                             height: 100,
@@ -89,7 +89,11 @@ class _AlumniProfileBuildViewState extends State<AlumniProfileBuildView> {
                                 child: progressIndicator(),
                               );
                             },
-                          ),
+                          ) : Image.asset(
+                      'assets/images/alumni_nil_icon.png',
+                      height: 100,
+                      width: 100,
+                    ),
                   ),
                 ),
               ),
@@ -350,7 +354,7 @@ class _AlumniProfileBuildViewState extends State<AlumniProfileBuildView> {
                                                 ?.elementAt(0)
                                                 .identifier ==
                                             null
-                                        ? 'Nil'
+                                        ? 'nil'
                                         : linkedInUser.user.profilePicture
                                             ?.displayImageContent?.elements
                                             ?.elementAt(0)
@@ -411,13 +415,13 @@ class _AlumniProfileBuildViewState extends State<AlumniProfileBuildView> {
                                 .collection(ALUMNI_CONSTANT_2)
                                 .doc(modelUserData.getUserUID)
                                 .set({
-                              'user_name':
+                              'alumni_name':
                                   user!.firstName! + ' ' + user!.lastName!,
-                              'user_email': user!.email,
-                              'work_status':
+                              'alumni_email': user!.email,
+                              'alumni_work_status':
                                   controllerTextEditWorkStatus.text.toString(),
-                              'profile_img_url': user!.profileImageUrl,
-                              'user_stream': modelUserData.getUserStream,
+                              'alumni_profile_img_url': user!.profileImageUrl,
+                              'alumni_stream': modelUserData.getUserStream,
                             }).whenComplete(() {
                               Navigator.pop(context);
                               Navigator.pop(context);

@@ -4,6 +4,7 @@ import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:shiksha/Components/AuthButtons.dart';
 import 'package:shiksha/Components/common_component_widgets.dart';
+import 'package:shiksha/Components/constants.dart';
 import 'package:shiksha/Models/model_user_data.dart';
 import 'package:shiksha/colors/colors.dart';
 import 'package:shiksha/main.dart';
@@ -22,91 +23,99 @@ class CollegeTypeSelectView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      backgroundColor: primaryWhiteColor,
-      body: Container(
-        padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
-        child: Column(
-          children: [
-            Center(
-                child: customTextBold(
-                    text: "Select your College Type..",
-                    textSize: 28,
-                    color: primaryDarkColor)),
-            SizedBox(height: 50,),
-            Expanded(
-              child: StreamBuilder(
-                  stream: FirebaseAPI().realtimeDBStream("SHIKSHA_APP/COLLEGE_TYPE"),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
-                    if (!snapshot.hasData) {
-                      return progressIndicator();
-                    } else {
-                      Map<dynamic, dynamic> map =
+          backgroundColor: primaryWhiteColor,
+          body: Container(
+            padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
+            child: Column(
+              children: [
+                Center(
+                    child: customTextBold(
+                        text: "Select your College Type..",
+                        textSize: 28,
+                        color: primaryDarkColor)),
+                SizedBox(height: 50,),
+                Expanded(
+                  child: StreamBuilder(
+                      stream: FirebaseAPI().realtimeDBStream(
+                          "SHIKSHA_APP/COLLEGE_TYPE"),
+                      builder:
+                          (BuildContext context,
+                          AsyncSnapshot<DatabaseEvent> snapshot) {
+                        if (!snapshot.hasData) {
+                          return progressIndicator();
+                        } else {
+                          Map<dynamic, dynamic> map =
                           snapshot.data!.snapshot.value as dynamic;
-                      List<dynamic> list = [];
-                      list.clear();
-                      list = map.values.toList();
+                          List<dynamic> list = [];
+                          list.clear();
+                          list = map.values.toList();
 
-                      return AnimationLimiter(
-                        child: ListView.builder(
-                            physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                            shrinkWrap: true,
-                            itemCount: snapshot.data!.snapshot.children.length,
-                            itemBuilder: (context, index) {
-                              return AnimationConfiguration.staggeredList(
-                                duration: const Duration(milliseconds: 1000),
-                                position: index,
-                                child: SlideAnimation(
-                                  horizontalOffset: 50.0,
-                                  child: FadeInAnimation(
-                                    child: GestureDetector(
-                                      onTap: (){
-                                        Navigator.of(context)
-                                            .push(animatedRoute(
-                                          CollegeSelectView(
-                                            selectedCollegeType:
-                                            list[index].toString(),
-                                            isUpdate: isUpdate,
-                                          ),
-                                        ));
-                                      },
-                                      child: Container(
-                                        margin: const EdgeInsets.all(10),
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                              side: const BorderSide(
-                                                  color: primaryDarkColor, width: 1.0),
-                                              borderRadius: BorderRadius.circular(4.0)),
-                                          child: ListTile(
-                                            contentPadding: const EdgeInsets.all(15),
-                                            leading: const Icon(
-                                              Icons.school_rounded,
-                                              color: primaryDarkColor,
-                                            ),
-                                            title: customTextBold(
-                                                text: list[index],
-                                                textSize: 18,
-                                                color: primaryDarkColor),
-                                            trailing: const Icon(
-                                              Icons.arrow_forward_ios,
-                                              color: primaryDarkColor,
+                          return AnimationLimiter(
+                            child: ListView.builder(
+                                physics: BouncingScrollPhysics(
+                                    parent: AlwaysScrollableScrollPhysics()),
+                                shrinkWrap: true,
+                                itemCount: snapshot.data!.snapshot.children
+                                    .length,
+                                itemBuilder: (context, index) {
+                                  return AnimationConfiguration.staggeredList(
+                                    duration: const Duration(
+                                        milliseconds: 1000),
+                                    position: index,
+                                    child: SlideAnimation(
+                                      horizontalOffset: 50.0,
+                                      child: FadeInAnimation(
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.of(context)
+                                                .push(animatedRoute(
+                                              CollegeSelectView(
+                                                selectedCollegeType:
+                                                list[index].toString(),
+                                                isUpdate: isUpdate,
+                                              ),
+                                            ));
+                                          },
+                                          child: Container(
+                                            margin: const EdgeInsets.all(10),
+                                            child: Card(
+                                              shape: RoundedRectangleBorder(
+                                                  side: const BorderSide(
+                                                      color: primaryDarkColor,
+                                                      width: 1.0),
+                                                  borderRadius: BorderRadius
+                                                      .circular(4.0)),
+                                              child: ListTile(
+                                                contentPadding: const EdgeInsets
+                                                    .all(15),
+                                                leading: const Icon(
+                                                  Icons.school_rounded,
+                                                  color: primaryDarkColor,
+                                                ),
+                                                title: customTextBold(
+                                                    text: list[index],
+                                                    textSize: 18,
+                                                    color: primaryDarkColor),
+                                                trailing: const Icon(
+                                                  Icons.arrow_forward_ios,
+                                                  color: primaryDarkColor,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                              );
-                            }),
-                      );
-                    }
-                  }),
+                                  );
+                                }),
+                          );
+                        }
+                      }),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    ));
+          ),
+        ));
   }
 }
 
@@ -122,94 +131,102 @@ class CollegeSelectView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      backgroundColor: primaryWhiteColor,
-      body: Container(
-        padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
-        child: Column(
-          children: [
-            Center(
-                child: customTextBold(
-                    text: 'Select your College..',
-                    textSize: 28,
-                    color: primaryDarkColor)),
-            SizedBox(height: 50,),
-            Expanded(
-              child: StreamBuilder(
-                  stream: FirebaseAPI()
-                      .realtimeDBStream("SHIKSHA_APP/COLLEGES/$selectedCollegeType"),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
-                    if (!snapshot.hasData) {
-                      return progressIndicator();
-                    } else {
-                      Map<dynamic, dynamic> map =
+          backgroundColor: primaryWhiteColor,
+          body: Container(
+            padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
+            child: Column(
+              children: [
+                Center(
+                    child: customTextBold(
+                        text: 'Select your College..',
+                        textSize: 28,
+                        color: primaryDarkColor)),
+                SizedBox(height: 50,),
+                Expanded(
+                  child: StreamBuilder(
+                      stream: FirebaseAPI()
+                          .realtimeDBStream(
+                          "SHIKSHA_APP/COLLEGES/$selectedCollegeType"),
+                      builder:
+                          (BuildContext context,
+                          AsyncSnapshot<DatabaseEvent> snapshot) {
+                        if (!snapshot.hasData) {
+                          return progressIndicator();
+                        } else {
+                          Map<dynamic, dynamic> map =
                           snapshot.data!.snapshot.value as dynamic;
-                      List<dynamic> list = [];
-                      list.clear();
-                      list = map.values.toList();
+                          List<dynamic> list = [];
+                          list.clear();
+                          list = map.values.toList();
 
-                      return AnimationLimiter(
-                        child: ListView.builder(
-                            physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                            shrinkWrap: true,
-                            itemCount: snapshot.data!.snapshot.children.length,
-                            itemBuilder: (context, index) {
-                              return AnimationConfiguration.staggeredList(
-                                duration: const Duration(milliseconds: 1000),
-                                position: index,
-                                child: SlideAnimation(
-                                  horizontalOffset: 50.0,
-                                  child: FadeInAnimation(
-                                    child: GestureDetector(
-                                      onTap: (){
-                                        Navigator.of(context)
-                                            .push(animatedRoute(
-                                          UserCategorySelectView(
-                                            selectedCollegeType:
-                                            selectedCollegeType,
-                                            selectedCollege:
-                                            list[index].toString(),
-                                            isUpdate: isUpdate,
-                                          ),
-                                        ));
-                                      },
-                                      child: Container(
-                                        margin: const EdgeInsets.all(10),
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                              side: const BorderSide(
-                                                  color: primaryDarkColor, width: 1.0),
-                                              borderRadius: BorderRadius.circular(4.0)),
-                                          child: ListTile(
-                                            contentPadding: const EdgeInsets.all(15),
-                                            leading: const Icon(
-                                              Icons.school_rounded,
-                                              color: primaryDarkColor,
-                                            ),
-                                            title: customTextBold(
-                                                text: list[index],
-                                                textSize: 18,
-                                                color: primaryDarkColor),
-                                            trailing: const Icon(
-                                              Icons.arrow_forward_ios,
-                                              color: primaryDarkColor,
+                          return AnimationLimiter(
+                            child: ListView.builder(
+                                physics: BouncingScrollPhysics(
+                                    parent: AlwaysScrollableScrollPhysics()),
+                                shrinkWrap: true,
+                                itemCount: snapshot.data!.snapshot.children
+                                    .length,
+                                itemBuilder: (context, index) {
+                                  return AnimationConfiguration.staggeredList(
+                                    duration: const Duration(
+                                        milliseconds: 1000),
+                                    position: index,
+                                    child: SlideAnimation(
+                                      horizontalOffset: 50.0,
+                                      child: FadeInAnimation(
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.of(context)
+                                                .push(animatedRoute(
+                                              UserCategorySelectView(
+                                                selectedCollegeType:
+                                                selectedCollegeType,
+                                                selectedCollege:
+                                                list[index].toString(),
+                                                isUpdate: isUpdate,
+                                              ),
+                                            ));
+                                          },
+                                          child: Container(
+                                            margin: const EdgeInsets.all(10),
+                                            child: Card(
+                                              shape: RoundedRectangleBorder(
+                                                  side: const BorderSide(
+                                                      color: primaryDarkColor,
+                                                      width: 1.0),
+                                                  borderRadius: BorderRadius
+                                                      .circular(4.0)),
+                                              child: ListTile(
+                                                contentPadding: const EdgeInsets
+                                                    .all(15),
+                                                leading: const Icon(
+                                                  Icons.school_rounded,
+                                                  color: primaryDarkColor,
+                                                ),
+                                                title: customTextBold(
+                                                    text: list[index],
+                                                    textSize: 18,
+                                                    color: primaryDarkColor),
+                                                trailing: const Icon(
+                                                  Icons.arrow_forward_ios,
+                                                  color: primaryDarkColor,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                              );
-                            }),
-                      );
-                    }
-                  }),
+                                  );
+                                }),
+                          );
+                        }
+                      }),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    ));
+          ),
+        ));
   }
 }
 
@@ -217,105 +234,112 @@ class UserCategorySelectView extends StatelessWidget {
   final String selectedCollege, selectedCollegeType;
   final bool isUpdate;
 
-  const UserCategorySelectView(
-      {Key? key,
-      required this.isUpdate,
-      required this.selectedCollege,
-      required this.selectedCollegeType})
+  const UserCategorySelectView({Key? key,
+    required this.isUpdate,
+    required this.selectedCollege,
+    required this.selectedCollegeType})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      backgroundColor: primaryWhiteColor,
-      body: Container(
-        padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
-        child: Column(
-          children: [
-            Center(
-                child: customTextBold(
-                    text: "Select your Catgeory...",
-                    textSize: 28,
-                    color: primaryDarkColor)),
-            SizedBox(height: 50,),
-            Expanded(
-              child: StreamBuilder(
-                  stream: FirebaseAPI().realtimeDBStream("SHIKSHA_APP/USER_CATEGORY"),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
-                    if (!snapshot.hasData) {
-                      return progressIndicator();
-                    } else {
-                      Map<dynamic, dynamic> map =
+          backgroundColor: primaryWhiteColor,
+          body: Container(
+            padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
+            child: Column(
+              children: [
+                Center(
+                    child: customTextBold(
+                        text: "Select your Catgeory...",
+                        textSize: 28,
+                        color: primaryDarkColor)),
+                SizedBox(height: 50,),
+                Expanded(
+                  child: StreamBuilder(
+                      stream: FirebaseAPI().realtimeDBStream(
+                          "SHIKSHA_APP/USER_CATEGORY"),
+                      builder:
+                          (BuildContext context,
+                          AsyncSnapshot<DatabaseEvent> snapshot) {
+                        if (!snapshot.hasData) {
+                          return progressIndicator();
+                        } else {
+                          Map<dynamic, dynamic> map =
                           snapshot.data!.snapshot.value as dynamic;
-                      List<dynamic> list = [];
-                      list.clear();
-                      list = map.values.toList();
+                          List<dynamic> list = [];
+                          list.clear();
+                          list = map.values.toList();
 
-                      return AnimationLimiter(
-                        child: ListView.builder(
-                            physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                            shrinkWrap: true,
-                            itemCount: snapshot.data!.snapshot.children.length,
-                            itemBuilder: (context, index) {
-                              return AnimationConfiguration.staggeredList(
-                                duration: const Duration(milliseconds: 1000),
-                                position: index,
-                                child: SlideAnimation(
-                                  horizontalOffset: 50.0,
-                                  child: FadeInAnimation(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.of(context)
-                                            .push(animatedRoute(
-                                          StreamSelectView(
-                                            selectedCollegeType:
-                                            selectedCollegeType,
-                                            selectedCollege: selectedCollege,
-                                            isUpdate: isUpdate,
-                                            userCategory:
-                                            list[index].toString(),
-                                          ),
-                                        ));
-                                      },
-                                      child: Container(
-                                        margin: const EdgeInsets.all(10),
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                              side: const BorderSide(
-                                                  color: primaryDarkColor, width: 1.0),
-                                              borderRadius: BorderRadius.circular(4.0)),
-                                          child: ListTile(
-                                            contentPadding: const EdgeInsets.all(15),
-                                            leading: const Icon(
-                                              Icons.person_2_rounded,
-                                              color: primaryDarkColor,
-                                            ),
-                                            title: customTextBold(
-                                                text: list[index],
-                                                textSize: 18,
-                                                color: primaryDarkColor),
-                                            trailing: const Icon(
-                                              Icons.arrow_forward_ios,
-                                              color: primaryDarkColor,
+                          return AnimationLimiter(
+                            child: ListView.builder(
+                                physics: BouncingScrollPhysics(
+                                    parent: AlwaysScrollableScrollPhysics()),
+                                shrinkWrap: true,
+                                itemCount: snapshot.data!.snapshot.children
+                                    .length,
+                                itemBuilder: (context, index) {
+                                  return AnimationConfiguration.staggeredList(
+                                    duration: const Duration(
+                                        milliseconds: 1000),
+                                    position: index,
+                                    child: SlideAnimation(
+                                      horizontalOffset: 50.0,
+                                      child: FadeInAnimation(
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.of(context)
+                                                .push(animatedRoute(
+                                              StreamSelectView(
+                                                selectedCollegeType:
+                                                selectedCollegeType,
+                                                selectedCollege: selectedCollege,
+                                                isUpdate: isUpdate,
+                                                userCategory:
+                                                list[index].toString(),
+                                              ),
+                                            ));
+                                          },
+                                          child: Container(
+                                            margin: const EdgeInsets.all(10),
+                                            child: Card(
+                                              shape: RoundedRectangleBorder(
+                                                  side: const BorderSide(
+                                                      color: primaryDarkColor,
+                                                      width: 1.0),
+                                                  borderRadius: BorderRadius
+                                                      .circular(4.0)),
+                                              child: ListTile(
+                                                contentPadding: const EdgeInsets
+                                                    .all(15),
+                                                leading: const Icon(
+                                                  Icons.person_2_rounded,
+                                                  color: primaryDarkColor,
+                                                ),
+                                                title: customTextBold(
+                                                    text: list[index],
+                                                    textSize: 18,
+                                                    color: primaryDarkColor),
+                                                trailing: const Icon(
+                                                  Icons.arrow_forward_ios,
+                                                  color: primaryDarkColor,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                              );
-                            }),
-                      );
-                    }
-                  }),
+                                  );
+                                }),
+                          );
+                        }
+                      }),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    ));
+          ),
+        ));
   }
 }
 
@@ -323,107 +347,114 @@ class StreamSelectView extends StatelessWidget {
   final String selectedCollege, selectedCollegeType, userCategory;
   final bool isUpdate;
 
-  const StreamSelectView(
-      {Key? key,
-      required this.selectedCollege,
-      required this.isUpdate,
-      required this.userCategory,
-      required this.selectedCollegeType})
+  const StreamSelectView({Key? key,
+    required this.selectedCollege,
+    required this.isUpdate,
+    required this.userCategory,
+    required this.selectedCollegeType})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      backgroundColor: primaryWhiteColor,
-      body: Container(
-        padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
-        child: Column(
-          children: [
-            Center(
-                child: customTextBold(
-                    text: "Select your Stream..",
-                    textSize: 28,
-                    color: primaryDarkColor)),
-            SizedBox(height: 50,),
-            Expanded(
-              child: StreamBuilder(
-                  stream: FirebaseAPI().realtimeDBStream("SHIKSHA_APP/STREAMS"),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
-                    if (!snapshot.hasData) {
-                      return progressIndicator();
-                    } else {
-                      Map<dynamic, dynamic> map =
+          backgroundColor: primaryWhiteColor,
+          body: Container(
+            padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
+            child: Column(
+              children: [
+                Center(
+                    child: customTextBold(
+                        text: "Select your Stream..",
+                        textSize: 28,
+                        color: primaryDarkColor)),
+                SizedBox(height: 50,),
+                Expanded(
+                  child: StreamBuilder(
+                      stream: FirebaseAPI().realtimeDBStream(
+                          "SHIKSHA_APP/STREAMS"),
+                      builder:
+                          (BuildContext context,
+                          AsyncSnapshot<DatabaseEvent> snapshot) {
+                        if (!snapshot.hasData) {
+                          return progressIndicator();
+                        } else {
+                          Map<dynamic, dynamic> map =
                           snapshot.data!.snapshot.value as dynamic;
-                      List<dynamic> list = [];
-                      list.clear();
-                      list = map.values.toList();
+                          List<dynamic> list = [];
+                          list.clear();
+                          list = map.values.toList();
 
-                      return AnimationLimiter(
-                        child: ListView.builder(
-                            physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                            shrinkWrap: true,
-                            itemCount: snapshot.data!.snapshot.children.length,
-                            itemBuilder: (context, index) {
-                              return AnimationConfiguration.staggeredList(
-                                duration: const Duration(milliseconds: 1000),
-                                position: index,
-                                child: SlideAnimation(
-                                  horizontalOffset: 50.0,
-                                  child: FadeInAnimation(
-                                    child: GestureDetector(
-                                      onTap: (){
-                                        Navigator.of(context)
-                                            .push(animatedRoute(
-                                          SemesterSelectView(
-                                            selectedCollegeType:
-                                            selectedCollegeType,
-                                            userCategory: userCategory,
-                                            selectedCollege: selectedCollege,
-                                            selectedStream:
-                                            list[index].toString(),
-                                            isUpdate: isUpdate,
-                                          ),
-                                        ));
-                                      },
-                                      child: Container(
-                                        margin: const EdgeInsets.all(10),
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                              side: const BorderSide(
-                                                  color: primaryDarkColor, width: 1.0),
-                                              borderRadius: BorderRadius.circular(4.0)),
-                                          child: ListTile(
-                                            contentPadding: const EdgeInsets.all(15),
-                                            leading: const Icon(
-                                              Icons.school_rounded,
-                                              color: primaryDarkColor,
-                                            ),
-                                            title: customTextBold(
-                                                text: list[index],
-                                                textSize: 18,
-                                                color: primaryDarkColor),
-                                            trailing: const Icon(
-                                              Icons.arrow_forward_ios,
-                                              color: primaryDarkColor,
+                          return AnimationLimiter(
+                            child: ListView.builder(
+                                physics: BouncingScrollPhysics(
+                                    parent: AlwaysScrollableScrollPhysics()),
+                                shrinkWrap: true,
+                                itemCount: snapshot.data!.snapshot.children
+                                    .length,
+                                itemBuilder: (context, index) {
+                                  return AnimationConfiguration.staggeredList(
+                                    duration: const Duration(
+                                        milliseconds: 1000),
+                                    position: index,
+                                    child: SlideAnimation(
+                                      horizontalOffset: 50.0,
+                                      child: FadeInAnimation(
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.of(context)
+                                                .push(animatedRoute(
+                                              SemesterSelectView(
+                                                selectedCollegeType:
+                                                selectedCollegeType,
+                                                userCategory: userCategory,
+                                                selectedCollege: selectedCollege,
+                                                selectedStream:
+                                                list[index].toString(),
+                                                isUpdate: isUpdate,
+                                              ),
+                                            ));
+                                          },
+                                          child: Container(
+                                            margin: const EdgeInsets.all(10),
+                                            child: Card(
+                                              shape: RoundedRectangleBorder(
+                                                  side: const BorderSide(
+                                                      color: primaryDarkColor,
+                                                      width: 1.0),
+                                                  borderRadius: BorderRadius
+                                                      .circular(4.0)),
+                                              child: ListTile(
+                                                contentPadding: const EdgeInsets
+                                                    .all(15),
+                                                leading: const Icon(
+                                                  Icons.school_rounded,
+                                                  color: primaryDarkColor,
+                                                ),
+                                                title: customTextBold(
+                                                    text: list[index],
+                                                    textSize: 18,
+                                                    color: primaryDarkColor),
+                                                trailing: const Icon(
+                                                  Icons.arrow_forward_ios,
+                                                  color: primaryDarkColor,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                              );
-                            }),
-                      );
-                    }
-                  }),
+                                  );
+                                }),
+                          );
+                        }
+                      }),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    ));
+          ),
+        ));
   }
 }
 
@@ -434,108 +465,115 @@ class SemesterSelectView extends StatelessWidget {
       selectedCollegeType;
   final bool isUpdate;
 
-  const SemesterSelectView(
-      {Key? key,
-      required this.selectedCollege,
-      required this.selectedStream,
-      required this.isUpdate,
-      required this.userCategory,
-      required this.selectedCollegeType})
+  const SemesterSelectView({Key? key,
+    required this.selectedCollege,
+    required this.selectedStream,
+    required this.isUpdate,
+    required this.userCategory,
+    required this.selectedCollegeType})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      backgroundColor: primaryWhiteColor,
-      body: Container(
-        padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
-        child: Column(
-          children: [
-            Center(
-                child: customTextBold(
-                    text: "Select your Semester..",
-                    textSize: 28,
-                    color: primaryDarkColor)),
-            SizedBox(height: 50,),
-            Expanded(
-              child: StreamBuilder(
-                  stream: FirebaseAPI().realtimeDBStream("SHIKSHA_APP/SEMESTERS"),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
-                    if (!snapshot.hasData) {
-                      return progressIndicator();
-                    } else {
-                      Map<dynamic, dynamic> map =
+          backgroundColor: primaryWhiteColor,
+          body: Container(
+            padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
+            child: Column(
+              children: [
+                Center(
+                    child: customTextBold(
+                        text: "Select your Semester..",
+                        textSize: 28,
+                        color: primaryDarkColor)),
+                SizedBox(height: 50,),
+                Expanded(
+                  child: StreamBuilder(
+                      stream: FirebaseAPI().realtimeDBStream(
+                          "SHIKSHA_APP/SEMESTERS"),
+                      builder:
+                          (BuildContext context,
+                          AsyncSnapshot<DatabaseEvent> snapshot) {
+                        if (!snapshot.hasData) {
+                          return progressIndicator();
+                        } else {
+                          Map<dynamic, dynamic> map =
                           snapshot.data!.snapshot.value as dynamic;
-                      List<dynamic> list = [];
-                      list.clear();
-                      list = map.values.toList();
-                      return AnimationLimiter(
-                        child: ListView.builder(
-                            physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                            shrinkWrap: true,
-                            itemCount: snapshot.data!.snapshot.children.length,
-                            itemBuilder: (context, index) {
-                              return AnimationConfiguration.staggeredList(
-                                duration: const Duration(milliseconds: 1000),
-                                position: index,
-                                child: SlideAnimation(
-                                  horizontalOffset: 50.0,
-                                  child: FadeInAnimation(
-                                    child: GestureDetector(
-                                      onTap: (){
-                                        Navigator.of(context)
-                                            .push(animatedRoute(
-                                          UEPView(
-                                            selectedCollegeType:
-                                            selectedCollegeType,
-                                            selectedCollege: selectedCollege,
-                                            selectedStream: selectedStream,
-                                            selectedSemester:
-                                            list[index].toString(),
-                                            isUpdate: isUpdate,
-                                            userCategory: userCategory,
-                                          ),
-                                        ));
-                                      },
-                                      child: Container(
-                                        margin: const EdgeInsets.all(10),
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                              side: const BorderSide(
-                                                  color: primaryDarkColor, width: 1.0),
-                                              borderRadius: BorderRadius.circular(4.0)),
-                                          child: ListTile(
-                                            contentPadding: const EdgeInsets.all(15),
-                                            leading: const Icon(
-                                              Icons.school_rounded,
-                                              color: primaryDarkColor,
-                                            ),
-                                            title: customTextBold(
-                                                text: list[index],
-                                                textSize: 18,
-                                                color: primaryDarkColor),
-                                            trailing: const Icon(
-                                              Icons.arrow_forward_ios,
-                                              color: primaryDarkColor,
+                          List<dynamic> list = [];
+                          list.clear();
+                          list = map.values.toList();
+                          return AnimationLimiter(
+                            child: ListView.builder(
+                                physics: BouncingScrollPhysics(
+                                    parent: AlwaysScrollableScrollPhysics()),
+                                shrinkWrap: true,
+                                itemCount: snapshot.data!.snapshot.children
+                                    .length,
+                                itemBuilder: (context, index) {
+                                  return AnimationConfiguration.staggeredList(
+                                    duration: const Duration(
+                                        milliseconds: 1000),
+                                    position: index,
+                                    child: SlideAnimation(
+                                      horizontalOffset: 50.0,
+                                      child: FadeInAnimation(
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.of(context)
+                                                .push(animatedRoute(
+                                              UEPView(
+                                                selectedCollegeType:
+                                                selectedCollegeType,
+                                                selectedCollege: selectedCollege,
+                                                selectedStream: selectedStream,
+                                                selectedSemester:
+                                                list[index].toString(),
+                                                isUpdate: isUpdate,
+                                                userCategory: userCategory,
+                                              ),
+                                            ));
+                                          },
+                                          child: Container(
+                                            margin: const EdgeInsets.all(10),
+                                            child: Card(
+                                              shape: RoundedRectangleBorder(
+                                                  side: const BorderSide(
+                                                      color: primaryDarkColor,
+                                                      width: 1.0),
+                                                  borderRadius: BorderRadius
+                                                      .circular(4.0)),
+                                              child: ListTile(
+                                                contentPadding: const EdgeInsets
+                                                    .all(15),
+                                                leading: const Icon(
+                                                  Icons.school_rounded,
+                                                  color: primaryDarkColor,
+                                                ),
+                                                title: customTextBold(
+                                                    text: list[index],
+                                                    textSize: 18,
+                                                    color: primaryDarkColor),
+                                                trailing: const Icon(
+                                                  Icons.arrow_forward_ios,
+                                                  color: primaryDarkColor,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                              );
-                            }),
-                      );
-                    }
-                  }),
+                                  );
+                                }),
+                          );
+                        }
+                      }),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    ));
+          ),
+        ));
   }
 }
 
@@ -547,14 +585,13 @@ class UEPView extends StatefulWidget {
       selectedCollegeType;
   final bool isUpdate;
 
-  const UEPView(
-      {Key? key,
-      required this.selectedCollege,
-      required this.selectedStream,
-      required this.selectedSemester,
-      required this.isUpdate,
-      required this.userCategory,
-      required this.selectedCollegeType})
+  const UEPView({Key? key,
+    required this.selectedCollege,
+    required this.selectedStream,
+    required this.selectedSemester,
+    required this.isUpdate,
+    required this.userCategory,
+    required this.selectedCollegeType})
       : super(key: key);
 
   @override
@@ -592,7 +629,7 @@ class _UEPViewState extends State<UEPView> {
         .ref('SHIKSHA_APP/SIGNUP_LIMIT/LIMIT')
         .get();
     DataSnapshot dataSnapshot2 =
-        await FirebaseDatabase.instance.ref('SHIKSHA_APP/USERS_DATA').get();
+    await FirebaseDatabase.instance.ref('SHIKSHA_APP/USERS_DATA').get();
     int limit = allowSignUpDataSnapshot.value as int;
     int usersCount = dataSnapshot2.children.length;
     if (usersCount >= limit) {
@@ -608,243 +645,208 @@ class _UEPViewState extends State<UEPView> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      backgroundColor: primaryWhiteColor,
-      appBar: AppBar(
-        toolbarHeight: 120, // Set this height
-        backgroundColor: primaryWhiteColor,
-        elevation: 0,
-        flexibleSpace: Center(
-            child: customTextBold(
-                text: "Few More Details...",
-                textSize: 28,
-                color: primaryDarkColor)),
-      ),
-      body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-          child: AnimationLimiter(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: AnimationConfiguration.toStaggeredList(
-                duration: const Duration(milliseconds: 1000),
-                childAnimationBuilder: (widget) => SlideAnimation(
-                  horizontalOffset: 50.0,
-                  child: FadeInAnimation(
-                    child: widget,
-                  ),
-                ),
-                children: [
-                  infoWidget(
-                      "Data Privacy",
-                      "We Don't Collect any Data and all this data will reside on this device only. for more info read our privacy policy.",
-                      primaryWhiteColor,
-                      primaryRedColor),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Form(
-                      key: formKeyUEP,
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            controller: controllerTextEditUSN,
-                            textCapitalization: TextCapitalization.characters,
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                                hintText: "Enter USN...",
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      width: 2, color: primaryDarkColor),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      width: 2, color: primaryDarkColor),
-                                ),
-                                icon: const Icon(
-                                  Icons.school_rounded,
-                                  color: primaryDarkColor,
-                                  size: 30,
-                                )),
-                            style: TextStyle(
-                                color: primaryDarkColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                                fontFamily: "ProductSans-Bold"),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "USN Required!";
-                              } else if (value.toString().length < 7 ||
-                                  value.toString().length > 14) {
-                                return "Enter Valid USN";
-                              } else {
-                                return null;
-                              }
-                            },
+          backgroundColor: primaryWhiteColor,
+          appBar: AppBar(
+            toolbarHeight: 120, // Set this height
+            backgroundColor: primaryWhiteColor,
+            elevation: 0,
+            flexibleSpace: Center(
+                child: customTextBold(
+                    text: "Few More Details...",
+                    textSize: 28,
+                    color: primaryDarkColor)),
+          ),
+          body: SingleChildScrollView(
+            physics: BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics()),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+              child: AnimationLimiter(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: AnimationConfiguration.toStaggeredList(
+                    duration: const Duration(milliseconds: 1000),
+                    childAnimationBuilder: (widget) =>
+                        SlideAnimation(
+                          horizontalOffset: 50.0,
+                          child: FadeInAnimation(
+                            child: widget,
                           ),
-                          const SizedBox(
-                            height: 50,
-                          ),
-                          TextFormField(
-                            controller: controllerTextEditEmail,
-                            keyboardType: TextInputType.emailAddress,
-                            decoration: InputDecoration(
-                                enabled: widget.isUpdate ? false : true,
-                                hintText: "Enter Email...",
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      width: 2, color: primaryDarkColor),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      width: 2, color: primaryDarkColor),
-                                ),
-                                icon: const Icon(
-                                  Icons.email_rounded,
-                                  color: primaryDarkColor,
-                                  size: 30,
-                                )),
-                            style: TextStyle(
-                                color: widget.isUpdate
-                                    ? primaryDarkColor.withOpacity(0.5)
-                                    : primaryDarkColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                                fontFamily: "ProductSans-Bold"),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "E-Mail Required!";
-                              }
-                              var rx = RegExp("\b*@gmail\.com\$",
-                                  caseSensitive: false);
-                              return rx.hasMatch(value)
-                                  ? null
-                                  : 'Invalid E-Mail Domain.';
-                            },
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          widget.isUpdate
-                              ? const SizedBox()
-                              : customTextBold(
+                        ),
+                    children: [
+                      infoWidget(
+                          "Data Privacy",
+                          "We Don't Collect any Data and all this data will reside on this device only. for more info read our privacy policy.",
+                          primaryWhiteColor,
+                          primaryRedColor),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      Form(
+                          key: formKeyUEP,
+                          child: Column(
+                            children: [
+                              TextFormField(
+                                controller: controllerTextEditUSN,
+                                textCapitalization: TextCapitalization
+                                    .characters,
+                                keyboardType: TextInputType.text,
+                                decoration: InputDecoration(
+                                    hintText: "Enter USN...",
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          width: 2, color: primaryDarkColor),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          width: 2, color: primaryDarkColor),
+                                    ),
+                                    icon: const Icon(
+                                      Icons.school_rounded,
+                                      color: primaryDarkColor,
+                                      size: 30,
+                                    )),
+                                style: TextStyle(
+                                    color: primaryDarkColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    fontFamily: "ProductSans-Bold"),
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "USN Required!";
+                                  } else if (value
+                                      .toString()
+                                      .length < 7 ||
+                                      value
+                                          .toString()
+                                          .length > 14) {
+                                    return "Enter Valid USN";
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                              ),
+                              const SizedBox(
+                                height: 50,
+                              ),
+                              TextFormField(
+                                controller: controllerTextEditEmail,
+                                keyboardType: TextInputType.emailAddress,
+                                decoration: InputDecoration(
+                                    enabled: widget.isUpdate ? false : true,
+                                    hintText: "Enter Email...",
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          width: 2, color: primaryDarkColor),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          width: 2, color: primaryDarkColor),
+                                    ),
+                                    icon: const Icon(
+                                      Icons.email_rounded,
+                                      color: primaryDarkColor,
+                                      size: 30,
+                                    )),
+                                style: TextStyle(
+                                    color: widget.isUpdate
+                                        ? primaryDarkColor.withOpacity(0.5)
+                                        : primaryDarkColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    fontFamily: "ProductSans-Bold"),
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "E-Mail Required!";
+                                  }
+                                  var rx = RegExp("\b*@gmail\.com\$",
+                                      caseSensitive: false);
+                                  return rx.hasMatch(value)
+                                      ? null
+                                      : 'Invalid E-Mail Domain.';
+                                },
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              widget.isUpdate
+                                  ? const SizedBox()
+                                  : customTextBold(
                                   text: "*Email Can't be Changed Later.",
                                   textSize: 12,
                                   color: primaryRedColor),
-                          const SizedBox(
-                            height: 50,
-                          ),
-                          TextFormField(
-                            controller: controllerTextEditPhone,
-                            keyboardType: TextInputType.phone,
-                            decoration: InputDecoration(
-                                enabled: widget.isUpdate ? false : true,
-                                hintText: "Enter Phone Number...",
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      width: 2, color: primaryDarkColor),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      width: 2, color: primaryDarkColor),
-                                ),
-                                icon: const Icon(
-                                  Icons.phone_android_rounded,
-                                  color: primaryDarkColor,
-                                  size: 30,
-                                )),
-                            style: TextStyle(
-                                color: widget.isUpdate
-                                    ? primaryDarkColor.withOpacity(0.5)
-                                    : primaryDarkColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                                fontFamily: "ProductSans-Bold"),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Phone Number Required!";
-                              } else if (value.toString().length != 10) {
-                                return "Enter Valid Phone Number";
-                              } else {
-                                return null;
-                              }
-                            },
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          widget.isUpdate
-                              ? const SizedBox()
-                              : customTextBold(
+                              const SizedBox(
+                                height: 50,
+                              ),
+                              TextFormField(
+                                controller: controllerTextEditPhone,
+                                keyboardType: TextInputType.phone,
+                                decoration: InputDecoration(
+                                    enabled: widget.isUpdate ? false : true,
+                                    hintText: "Enter Phone Number...",
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          width: 2, color: primaryDarkColor),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          width: 2, color: primaryDarkColor),
+                                    ),
+                                    icon: const Icon(
+                                      Icons.phone_android_rounded,
+                                      color: primaryDarkColor,
+                                      size: 30,
+                                    )),
+                                style: TextStyle(
+                                    color: widget.isUpdate
+                                        ? primaryDarkColor.withOpacity(0.5)
+                                        : primaryDarkColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    fontFamily: "ProductSans-Bold"),
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "Phone Number Required!";
+                                  } else if (value
+                                      .toString()
+                                      .length != 10) {
+                                    return "Enter Valid Phone Number";
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              widget.isUpdate
+                                  ? const SizedBox()
+                                  : customTextBold(
                                   text: "*Phone Number Can't be Changed Later.",
                                   textSize: 12,
                                   color: primaryRedColor),
-                        ],
-                      )),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  AuthButtons(
-                      buttonContext: context,
-                      buttonSize: 70,
-                      buttonText: "SUBMIT",
-                      buttonFunction: () async {
-                        if (formKeyUEP.currentState!.validate()) {
-                          if (widget.isUpdate) {
-                            try {
-                              showLoaderDialog(context, "Building Profile...");
-                              signUpModelUserData = ModelUserData(
-                                  userUID: sha1
-                                      .convert(utf8.encode(
-                                          controllerTextEditEmail.text
-                                                  .toString() +
-                                              controllerTextEditPhone.text
-                                                  .toString()))
-                                      .toString(),
-                                  userUSN: controllerTextEditUSN.text
-                                      .toUpperCase()
-                                      .toString(),
-                                  userCollege: widget.selectedCollege,
-                                  userSemester: widget.selectedSemester,
-                                  userStream: widget.selectedStream,
-                                  userEmail: modelUserData.getUserEmail,
-                                  userPhone: modelUserData.getUserPhone,
-                                  userJoiningDate:
-                                      modelUserData.getUserJoiningDate,
-                                  userCategory: widget.userCategory,
-                                  userCollegeType: widget.selectedCollegeType);
-
-                              try {
-                                sharedPrefUserData
-                                    .save('SP_SHIKSHA_USER_DATA',
-                                        signUpModelUserData)
-                                    .whenComplete(() {
-                                  Navigator.of(context).pop();
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                      animatedRoute(const MyApp()),
-                                      (Route<dynamic> route) => false);
-                                });
-                              } catch (e) {
-                                showSnackBar(
-                                    context, e.toString(), primaryRedColor);
-                              }
-                            } catch (e) {
-                              showSnackBar(
-                                  context, e.toString(), primaryRedColor);
-                            }
-                          } else {
-                            try {
-                              if (await allowSignUp()) {
+                            ],
+                          )),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      AuthButtons(
+                          buttonContext: context,
+                          buttonSize: 70,
+                          buttonText: "SUBMIT",
+                          buttonFunction: () async {
+                            if (formKeyUEP.currentState!.validate()) {
+                              if (widget.isUpdate) {
                                 try {
                                   showLoaderDialog(
                                       context, "Building Profile...");
                                   signUpModelUserData = ModelUserData(
                                       userUID: sha1
                                           .convert(utf8.encode(
-                                              controllerTextEditEmail.text
-                                                      .toString() +
-                                                  controllerTextEditPhone.text
-                                                      .toString()))
+                                          controllerTextEditEmail.text
+                                              .toString() +
+                                              controllerTextEditPhone.text
+                                                  .toString()))
                                           .toString(),
                                       userUSN: controllerTextEditUSN.text
                                           .toUpperCase()
@@ -852,95 +854,147 @@ class _UEPViewState extends State<UEPView> {
                                       userCollege: widget.selectedCollege,
                                       userSemester: widget.selectedSemester,
                                       userStream: widget.selectedStream,
-                                      userEmail: controllerTextEditEmail.text
-                                          .toString(),
-                                      userPhone: controllerTextEditPhone.text
-                                          .toString(),
+                                      userEmail: modelUserData.getUserEmail,
+                                      userPhone: modelUserData.getUserPhone,
                                       userJoiningDate:
-                                          DateTime.now().toString(),
+                                      modelUserData.getUserJoiningDate,
                                       userCategory: widget.userCategory,
-                                      userCollegeType:
-                                          widget.selectedCollegeType);
-                                  FirebaseAPI()
-                                      .firebaseDatabase
-                                      .ref(
-                                          "SHIKSHA_APP/USERS_DATA/${signUpModelUserData.getUserUID}")
-                                      .set({
-                                    "user_id": signUpModelUserData.getUserUID,
-                                    "last_active":
-                                        signUpModelUserData.getUserJoiningDate
-                                  }).whenComplete(() {
-                                    try {
-                                      sharedPrefUserData
-                                          .save('SP_SHIKSHA_USER_DATA',
-                                              signUpModelUserData)
-                                          .whenComplete(() {
-                                        Navigator.of(context).pop();
-                                        Navigator.of(context)
-                                            .pushAndRemoveUntil(
-                                                animatedRoute(const MyApp()),
-                                                (Route<dynamic> route) =>
-                                                    false);
-                                      });
-                                    } catch (e) {
-                                      showSnackBar(context, e.toString(),
-                                          primaryRedColor);
-                                    }
-                                  });
+                                      userCollegeType: widget
+                                          .selectedCollegeType);
+
+                                  try {
+                                    sharedPrefUserData
+                                        .save(CONST_SP_USER_DATA,
+                                        signUpModelUserData)
+                                        .whenComplete(() {
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                          animatedRoute(const MyApp()),
+                                              (Route<dynamic> route) => false);
+                                    });
+                                  } catch (e) {
+                                    showSnackBar(
+                                        context, e.toString(), primaryRedColor);
+                                  }
                                 } catch (e) {
                                   showSnackBar(
                                       context, e.toString(), primaryRedColor);
                                 }
                               } else {
-                                showSnackBar(
-                                    context,
-                                    "We have temporarily halted the registration due to resource constraints, we will notify once we open the registrations.",
-                                    primaryRedColor);
+                                try {
+                                  if (await allowSignUp()) {
+                                    try {
+                                      showLoaderDialog(
+                                          context, "Building Profile...");
+                                      signUpModelUserData = ModelUserData(
+                                          userUID: sha1
+                                              .convert(utf8.encode(
+                                              controllerTextEditEmail.text
+                                                  .toString() +
+                                                  controllerTextEditPhone.text
+                                                      .toString()
+                                          ))
+                                              .toString(),
+                                          userUSN: controllerTextEditUSN.text
+                                              .toUpperCase()
+                                              .toString(),
+                                          userCollege: widget.selectedCollege,
+                                          userSemester: widget.selectedSemester,
+                                          userStream: widget.selectedStream,
+                                          userEmail: controllerTextEditEmail
+                                              .text
+                                              .toString(),
+                                          userPhone: controllerTextEditPhone
+                                              .text
+                                              .toString(),
+                                          userJoiningDate:
+                                          DateTime.now().toString(),
+                                          userCategory: widget.userCategory,
+                                          userCollegeType:
+                                          widget.selectedCollegeType);
+                                      FirebaseAPI()
+                                          .firebaseDatabase
+                                          .ref(
+                                          "SHIKSHA_APP/USERS_DATA/${signUpModelUserData
+                                              .getUserUID}")
+                                          .set({
+                                        "user_id": signUpModelUserData
+                                            .getUserUID,
+                                        "last_active":
+                                        signUpModelUserData.getUserJoiningDate
+                                      }).whenComplete(() {
+                                        try {
+                                          sharedPrefUserData
+                                              .save(CONST_SP_USER_DATA,
+                                              signUpModelUserData)
+                                              .whenComplete(() {
+                                            Navigator.of(context).pop();
+                                            Navigator.of(context)
+                                                .pushAndRemoveUntil(
+                                                animatedRoute(const MyApp()),
+                                                    (Route<dynamic> route) =>
+                                                false);
+                                          });
+                                        } catch (e) {
+                                          showSnackBar(context, e.toString(),
+                                              primaryRedColor);
+                                        }
+                                      });
+                                    } catch (e) {
+                                      showSnackBar(
+                                          context, e.toString(),
+                                          primaryRedColor);
+                                    }
+                                  } else {
+                                    showSnackBar(
+                                        context,
+                                        "We have temporarily halted the registration due to resource constraints, we will notify once we open the registrations.",
+                                        primaryRedColor);
+                                  }
+                                } catch (e) {
+                                  showSnackBar(
+                                      context, e.toString(), primaryRedColor);
+                                }
                               }
-                            } catch (e) {
-                              showSnackBar(
-                                  context, e.toString(), primaryRedColor);
                             }
+                          }),
+                      const SizedBox(
+                        height: 50,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          try {
+                            launch(
+                                'https://github.com/adinath-nikam/Shiksha-Documentation/blob/main/docs/terms_and_conditions.md');
+                          } catch (e) {
+                            debugPrint(e.toString());
                           }
-                        }
-                      }),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      try {
-                        launch(
-                            'https://github.com/adinath-nikam/Shiksha-Documentation/blob/main/docs/terms_and_conditions.md');
-                      } catch (e) {
-                        debugPrint(e.toString());
-                      }
-                    },
-                    child: Column(
-                      children: [
-                        customTextRegular(
-                            text: "On Clicking Submit You Agree to our",
-                            textSize: 14,
-                            color: primaryDarkColor),
-                        const SizedBox(
-                          height: 10,
+                        },
+                        child: Column(
+                          children: [
+                            customTextRegular(
+                                text: "On Clicking Submit You Agree to our",
+                                textSize: 14,
+                                color: primaryDarkColor),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            customTextBold(
+                                text: "Terms and Conditions.",
+                                textSize: 14,
+                                color: primaryBlueColor),
+                          ],
                         ),
-                        customTextBold(
-                            text: "Terms and Conditions.",
-                            textSize: 14,
-                            color: primaryBlueColor),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(
+                        height: 100,
+                      ),
+                    ],
                   ),
-                  const SizedBox(
-                    height: 100,
-                  ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
-      ),
-    ));
+        ));
   }
 }

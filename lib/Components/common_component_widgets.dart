@@ -214,7 +214,7 @@ versionCheck(context) async {
 }
 
 Widget showVersionCode() {
-  return customTextBold(text: 'App Version 2.0.3+5', textSize: 12, color: primaryDarkColor.withOpacity(0.3));
+  return customTextBold(text: 'App Version 2.0.4+6', textSize: 12, color: primaryDarkColor.withOpacity(0.3));
 }
 
 Future<String> getUpdateURL() async {

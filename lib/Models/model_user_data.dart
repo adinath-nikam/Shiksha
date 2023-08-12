@@ -1,4 +1,4 @@
-import 'package:firebase_database/firebase_database.dart';
+import 'package:shiksha/Components/constants.dart';
 import '../Models/utilty_shared_preferences.dart';
 
 class ModelUserData {
@@ -12,9 +12,9 @@ class ModelUserData {
   late final String userPhone;
   late final String userJoiningDate;
   late final String userCollegeType;
-  bool userCanPostEvent = true;
-  bool userCanPostJob = true;
-  bool userIsAdmin = true;
+  bool userCanPostEvent = false;
+  bool userCanPostJob = false;
+  bool userIsAdmin = false;
 
   ModelUserData(
       {required this.userUID,
@@ -170,11 +170,10 @@ late ModelUserData modelUserData;
 Future<ModelUserData> getUserData() async {
   try {
     modelUserData = ModelUserData.fromJson(
-        await UtilitySharedPreferences().read('SP_SHIKSHA_USER_DATA'));
+        await UtilitySharedPreferences().read(CONST_SP_USER_DATA));
 
     return modelUserData;
   } catch (e) {
-    print(">>>"+e.toString());
     return modelUserData;
   }
 }
