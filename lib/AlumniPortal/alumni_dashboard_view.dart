@@ -229,12 +229,18 @@ class _AlumniListViewState extends State<AlumniListView>
             .doc(ALUMNI_CONSTANT)
             .collection(modelUserData.getUserCollege)
             .doc(widget.alumniBatchYear)
-            .collection(ALUMNI_CONSTANT_2).orderBy('alumni_name'),
+            .collection(ALUMNI_CONSTANT_2)
+            .orderBy('alumni_name'),
         pageSize: 10,
         loadingBuilder: (context) => progressIndicator(),
         itemBuilder: (context, doc) {
           return GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(animatedRoute(AlumniDetailView(
+                alumniProfileImgUrl: doc['alumni_profile_img_url']!,
+                worksAt: doc['alumni_work_status'],
+              )));
+            },
             child: Container(
               margin: const EdgeInsets.only(top: 20, left: 15, right: 15),
               child: Card(
@@ -284,6 +290,69 @@ class _AlumniListViewState extends State<AlumniListView>
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class AlumniDetailView extends StatelessWidget {
+  final String alumniProfileImgUrl, worksAt;
+
+  const AlumniDetailView(
+      {Key? key, required this.alumniProfileImgUrl, required this.worksAt})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: primaryWhiteColor,
+        appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(60.0),
+            child: appBarCommon(context, 'ALUMNI')),
+        body: Container(
+            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: alumniProfileImgUrl == 'nil'
+                      ? Image.asset(
+                          'assets/images/alumni_nil_icon.png',
+                          height: 100,
+                          width: 100,
+                        )
+                      : Image.network(
+                          alumniProfileImgUrl,
+                          fit: BoxFit.contain,
+                          height: 100,
+                          width: 100,
+                          loadingBuilder: (BuildContext context, Widget child,
+                              ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(
+                              child: progressIndicator(),
+                            );
+                          },
+                        ),
+                ),
+                SizedBox(
+                  height: 50,
+                ),
+                customTextBold(
+                    text: 'Adinath A. Nikam',
+                    textSize: 32,
+                    color: primaryDarkColor),
+                SizedBox(
+                  height: 25,
+                ),
+                customTextBold(
+                    text: 'Works at ${worksAt}',
+                    textSize: 16,
+                    color: primaryDarkColor.withOpacity(0.5)),
+              ],
+            )),
       ),
     );
   }
